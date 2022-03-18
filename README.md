@@ -2,7 +2,7 @@
 
 A webpage application for hospitality exchange services made using Django and Heroku with Raw SQL.
 
-Webpage link: https://app-store-it2002-test.herokuapp.com/
+Webpage link: https://thezease-app-store-opra8.herokuapp.com/
 
 ## App Functionalities (planned):
 
