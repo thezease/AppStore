@@ -3,12 +3,30 @@
     <title>Apartment Details</title>
 </head>    
 <body>
-    <h2>Details for Apartment {{ apt.0 }}</h2>
-    <a href="/search">Back to list of apartments</a>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        
+    .bg {
+        /* The image used */
+        background-image: linear-gradient(rgba(1,10,206,0.2),rgba(1,10,206,0.2)),url("../../static/app/images/home1.jpg");
+        /* Full height */
+        height: 100%; 
+        /* Center and scale the image nicely */
+        background-position: center;
+        position: relative;
+        background-size: cover;
+        }
+    </style>
+    <div class="bg">
+    <h2 style "color:white">Details for Apartment {{ apt.0 }}</h2>
+    <a  style "color:white" href="/search">Back to list of apartments</a>
     <br/><br/>
 
 
-    <table style='text-align:left'>
+    <table style='text-align:left',"color:white">
         <tr>
             <th>Host</th>
             <td>:</td>
