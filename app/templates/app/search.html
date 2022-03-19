@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Search Results</title>
+    <link rel = "stylesheet", href = "{% static '/app/style.css'%}">
 </head> 
 <body>
     <style>
@@ -22,6 +23,13 @@
         background-repeat: repeat;
         }
     </style>
+
+    <div class="topnav">
+        <a href="/">Home</a>
+        <a class="active" href="/search">Search Apartments</a>
+        <a href="/users">Users</a>
+    </div>
+
     <div class="bg">
     <h2>Search for Apartments</h2>
     <a href="/">Back to home</a>
