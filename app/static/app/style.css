@@ -49,6 +49,12 @@
 }
 
 /* Clear floats after the columns */
+.row{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-between;
+}
+
 .row:after {
   content: "";
   display: table;
