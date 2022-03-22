@@ -45,7 +45,7 @@
   float: left;
   width: 30%;
   padding: 40px;
-  position: center;
+  position: relative;
 }
 
 /* Clear floats after the columns */
