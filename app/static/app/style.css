@@ -44,7 +44,8 @@
 .column {
   float: left;
   width: 30%;
-  padding: 10px;
+  padding: 40px;
+  position: center;
 }
 
 /* Clear floats after the columns */
