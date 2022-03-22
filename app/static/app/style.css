@@ -73,7 +73,7 @@
   display: none;
 }
 
-/* Next & previous buttons */
+/* Next & previous buttons 
 .prev, .next {
   cursor: pointer;
   position: absolute;
@@ -93,7 +93,7 @@
 .next {
   right: 0;
   border-radius: 3px 0 0 3px;
-}
+}*/
 
 /* On hover, add a black background color with a little bit see-through */
 .prev:hover, .next:hover {
