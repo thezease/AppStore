@@ -59,9 +59,11 @@ Begin
 	commit;
 end;$$
   
+/*
 Call insert_users('lol', 'L''aposdly', 'lmoa@hibu.com', 'xvbtOghZyAz0', '1989-03-15', 'Singapore', 'visa', 4343679680836);
 
 Select* from users where first_name='lol';
+*/
 
 3)
 
@@ -93,9 +95,10 @@ Begin
 	commit;
 end;$$
 
-Call update_users('Filide', 'Opra8''Dreain', 'fodreain0@hibu.com', '1983-02-15', 'Bola', 'visa', 4743679680836);
+/*Call update_users('Filide', 'Opra8''Dreain', 'fodreain0@hibu.com', '1983-02-15', 'Bola', 'visa', 4743679680836);
 
 Select* from users where email= 'fodreain0@hibu.com';
+*/
 
 4)
 
@@ -141,7 +144,7 @@ AS $$
 	ORDER BY apt.price;
 $$ LANGUAGE SQL; 
 
-select * from get_apartment('China','Qingzhou','2');
+/*select * from get_apartment('China','Qingzhou','2');*/
 
 5)
 
@@ -175,7 +178,7 @@ AS $$
 	ORDER BY apt.price;
 $$ LANGUAGE SQL; 
 
-select * from get_all_apartments();
+/*select * from get_all_apartments();*/
 
 6)
 
@@ -209,4 +212,4 @@ AS $$
 	and apt_id=apartment_id; 
 $$ LANGUAGE SQL; 
 
-select * from get_selected_apt('10');
+/*select * from get_selected_apt('10');*/
