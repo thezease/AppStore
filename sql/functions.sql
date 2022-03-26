@@ -36,8 +36,6 @@ $$;
  
 /*select * from selected_rental('acullin2d@oakley.com');*/
 
-
-
 /*
 2)
 Select*
