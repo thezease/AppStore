@@ -1,6 +1,6 @@
-1)
 
 /*
+1)
 FROM apartments ap, rentals r 
 WHERE ap.apartment_id = r.apartment_id;
 and r.guest='acullin2d@oakley.com'; 
@@ -36,9 +36,10 @@ $$ LANGUAGE SQL;
 /*select * from selected_rental('acullin2d@oakley.com');*/
 
 
-2)
 
-/*Select*
+/*
+2)
+Select*
 from users;
 
 INSERT INTO users 
@@ -65,9 +66,10 @@ Call insert_users('lol', 'L''aposdly', 'lmoa@hibu.com', 'xvbtOghZyAz0', '1989-03
 Select* from users where first_name='lol';
 */
 
-3)
+
 
 /*
+3)
 UPDATE users SET 
 first_name = %s, 
 last_name = %s, 
@@ -100,9 +102,9 @@ end;$$
 Select* from users where email= 'fodreain0@hibu.com';
 */
 
-4)
 
 /*
+4)
 CREATE VIEW overall_ratings AS
 SELECT ap.apartment_id, CAST(AVG(r.rating) AS DECIMAL(2, 1)) AS avg_rating
 FROM apartments ap, rentals r
@@ -146,9 +148,9 @@ $$ LANGUAGE SQL;
 
 /*select * from get_apartment('China','Qingzhou','2');*/
 
-5)
 
 /*
+5)
 SELECT * 
 FROM apartments apt, overall_ratings rts 
 WHERE apt.apartment_id = rts.apartment_id 
@@ -180,9 +182,9 @@ $$ LANGUAGE SQL;
 
 /*select * from get_all_apartments();*/
 
-6)
 
 /*
+6)
 SELECT * 
 FROM apartments apt, overall_ratings rts 
 WHERE apt.apartment_id = rts.apartment_id 
