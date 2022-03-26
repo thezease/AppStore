@@ -66,7 +66,7 @@ WHERE email = %s;
 */
 
 CREATE or REPLACE Procedure update_users
-(f_name  VARCHAR(16), l_name VARCHAR(16), e_mail VARCHAR(64), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint) 
+(f_name  VARCHAR(16), l_name VARCHAR(16), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint, e_mail VARCHAR(64)) 
 LANGUAGE SQL
 AS
 $$
