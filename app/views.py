@@ -190,7 +190,7 @@ def checkpw(request, id):
         elif request.POST['action'] == 'Update':
             with connection.cursor() as cursor:
                 cursor.execute(
-                    "CALL insert_users(%s,%s,%s,%s,%s,%s,%s);",
+                    "CALL update_users(%s,%s,%s,%s,%s,%s,%s);",
                     [
                         request.POST['first_name'],
                         request.POST['last_name'],
