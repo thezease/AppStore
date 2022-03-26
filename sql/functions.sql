@@ -71,13 +71,13 @@ LANGUAGE SQL
 AS
 $$
     UPDATE users SET 
-	first_name = f_name, 
-	last_name = l_name, 
-	date_of_birth = dob, 
-	country = count_ry, 
-	credit_card_type = cred_card_type, 
-	credit_card_no = cred_card_no
-	WHERE email = e_mail;
+    first_name = f_name, 
+    last_name = l_name, 
+    date_of_birth = dob, 
+    country = count_ry, 
+    credit_card_type = cred_card_type, 
+    credit_card_no = cred_card_no,
+    WHERE email = e_mail;
 $$;
 
 /*Call update_users('Filide', 'Opra8''Dreain', 'fodreain0@hibu.com', '1983-02-15', 'Bola', 'visa', 4743679680836);
