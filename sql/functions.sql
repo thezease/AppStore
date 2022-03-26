@@ -49,16 +49,13 @@ VALUES ('olaf', 'poly', 'bibo0@hibu.com', 'xvbtOqhZyAz0', '1989-03-15', 'Singapo
 
 CREATE or REPLACE Procedure insert_users
 (f_name  VARCHAR(16), l_name VARCHAR(16), e_mail VARCHAR(64), pass VARCHAR(32), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint) 
-LANGUAGE 'plpgsql'
+LANGUAGE SQl
 AS
 $$
-Begin
     INSERT INTO users 
 	(first_name, last_name, email, password, date_of_birth, country, credit_card_type, credit_card_no) 
 	VALUES (f_name, l_name, e_mail, pass, dob, count_ry, cred_card_type, cred_card_no );
-	
-	commit;
-end;$$
+$$;
   
 /*
 Call insert_users('lol', 'L''aposdly', 'lmoa@hibu.com', 'xvbtOghZyAz0', '1989-03-15', 'Singapore', 'visa', 4343679680836);
@@ -82,10 +79,9 @@ WHERE email = %s;
 
 CREATE or REPLACE Procedure update_users
 (f_name  VARCHAR(16), l_name VARCHAR(16), e_mail VARCHAR(64), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint) 
-LANGUAGE 'plpgsql'
+LANGUAGE SQL
 AS
 $$
-Begin
     UPDATE users SET 
 	first_name = f_name, 
 	last_name = l_name, 
@@ -94,8 +90,7 @@ Begin
 	credit_card_type = cred_card_type, 
 	credit_card_no = cred_card_no
 	WHERE email = e_mail;
-	commit;
-end;$$
+$$;
 
 /*Call update_users('Filide', 'Opra8''Dreain', 'fodreain0@hibu.com', '1983-02-15', 'Bola', 'visa', 4743679680836);
 
