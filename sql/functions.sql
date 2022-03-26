@@ -34,9 +34,10 @@ AS $$
  	and ap.apartment_id = r.apartment_id; 
 $$; 
  
-/*select * from selected_rental('acullin2d@oakley.com');*/
-
 /*
+select * from selected_rental('acullin2d@oakley.com');
+
+
 2)
 Select*
 from users;
