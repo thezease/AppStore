@@ -89,8 +89,8 @@ def add(request):
             ## No user with same email
             if user == None:
                 ##TODO: date validation
-                cursor.callproc(
-                    'insert_users',
+                cursor.execute(
+                    "CALL insert_users(%s,%s,%s,%s,%s,%s,%s,%s);",
                     [
                         request.POST['first_name'],
                         request.POST['last_name'],
