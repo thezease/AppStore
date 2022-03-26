@@ -34,18 +34,6 @@ AS $$
  	and ap.apartment_id = r.apartment_id; 
 $$; 
  
-/*
-select * from selected_rental('acullin2d@oakley.com');
-
-
-2)
-Select*
-from users;
-
-INSERT INTO users 
-(first_name, last_name, email, password, date_of_birth, country, credit_card_type, credit_card_no) 
-VALUES ('olaf', 'poly', 'bibo0@hibu.com', 'xvbtOqhZyAz0', '1989-03-15', 'Singapore', 'visa', 4743674680836);
-*/
 
 CREATE or REPLACE Procedure insert_users
 (f_name  VARCHAR(16), l_name VARCHAR(16), e_mail VARCHAR(64), pass VARCHAR(32), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint) 
