@@ -22,6 +22,12 @@ def get_all_users():
     return records
 
 
+def get_single_user(userid):
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM users WHERE email = %s", [userid])
+        return cursor.fetchone()
+
+
 def check_user_exists(email: str) -> bool:
     with connection.cursor() as cursor:
         cursor.execute(

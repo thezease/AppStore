@@ -155,6 +155,8 @@ def checkpw(request, userid):
         if request.POST['action'] == 'enterpw':
             auth = queries.authenticate_pw(request.POST['password'], userid)
             if auth:
+                user = queries.get_single_user(userid)
+                result_dict['user'] = user
                 return render(request, "app/edit.html", result_dict)
             else:
                 status = 'Incorrect password!'
