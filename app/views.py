@@ -60,7 +60,7 @@ def view(request, id):
 
     with connection.cursor() as cursor:
         cursor.execute(
-            "Select * FROM selected_rentals WHERE r.guest= %s",
+            "Select * FROM selected_rental (%s)",
             [id])
         selected_rentals = cursor.fetchall()
 
