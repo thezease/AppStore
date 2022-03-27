@@ -211,6 +211,7 @@ def search(request):
 
         with connection.cursor() as cursor:
             cursor.execute(
+                # uses user-defined SQL function
                 "SELECT * FROM get_all_apartments()"),
             apartments = cursor.fetchall()
 
@@ -236,6 +237,14 @@ def apartment(request, apt_id):
             [apt_id])
         selected_apt = cursor.fetchone()
     result_dict['apt'] = selected_apt
+
+    if request.POST:
+        dates_avail = queries.find_apt_availability(request.POST, apt_id)
+        result_dict['dates_avail'] = {
+                                    'year': request.POST['year'],
+                                    'month': request.POST['month'],
+                                    'dates': dates_avail
+                                    }
 
     return render(request,'app/apartment.html', result_dict)
 

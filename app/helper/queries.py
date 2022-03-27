@@ -1,5 +1,5 @@
 from django.db import connection
-from django.db import IntegrityError
+from django.db import IntegrityError, DatabaseError
 
 import re
 
@@ -87,10 +87,10 @@ def insert_user(form: QueryDict) -> str:
                 )
                 status = 'Successfully inserted.'
 
-            except IntegrityError as e:
-                e_msg = str(e.__cause__)
+            except IntegrityError as ie:
+                e_msg = str(ie.__cause__)
                 # regex search to find the column that violated integrity constraint
-                constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[1]
+                constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                 status = f'Violated constraint: {constraint}. Please follow the required format.'
     
     return status
@@ -112,7 +112,7 @@ def authenticate_pw(pw:str, userid:str) -> bool:
             return res[0]
 
 
-def update_user(form: QueryDict, userid:str) -> str:
+def update_user(form:QueryDict, userid:str) -> str:
     """
     Returns status message of the update
         If update is successful: return success message
@@ -151,3 +151,39 @@ def update_user(form: QueryDict, userid:str) -> str:
             status = f'Violated constraint: {constraint}. Please follow the required format.'
 
     return status
+
+
+days_in_mth = {
+    1: 31,
+    2: 28,
+    3: 31,
+    4: 30,
+    5: 31,
+    6: 30,
+    7: 31,
+    8: 31,
+    9: 30,
+    10: 31,
+    11: 30,
+    12: 31
+}
+
+def find_apt_availability(form:QueryDict, apt_id:int) -> str:
+    dates_avail = list()
+    year = int(form['year'])
+    month = int(form['month'])
+    for day in range(1, days_in_mth[month]+1):
+        curr_day = f'{year}-{month}-{day}'
+        with connection.cursor() as cursor:
+            cursor.execute(
+                # uses user-defined function
+                """
+                SELECT check_single_date(%s, %s)
+                """,
+                [apt_id, curr_day]
+            )
+            avail = cursor.fetchone()[0]
+            if avail:
+                dates_avail.append(day)
+    return ', '.join(str(e) for e in dates_avail)
+            

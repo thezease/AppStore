@@ -6,7 +6,7 @@ WHERE ap.apartment_id = r.apartment_id;
 and r.guest='acullin2d@oakley.com'; 
 */
 
-CREATE OR Replace FUNCTION selected_rental(x varchar)  
+CREATE OR REPLACE FUNCTION selected_rental(x varchar)  
 	RETURNS TABLE( 
     	apartment_id int,  
 	host VARCHAR(64), 
@@ -35,7 +35,7 @@ AS $$
 $$; 
  
 
-CREATE or REPLACE Procedure insert_users
+CREATE OR REPLACE Procedure insert_users
 (f_name  VARCHAR(16), l_name VARCHAR(16), e_mail VARCHAR(64), pass VARCHAR(32), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint) 
 LANGUAGE SQl
 AS
@@ -76,7 +76,7 @@ $$
     date_of_birth = dob, 
     country = count_ry, 
     credit_card_type = cred_card_type, 
-    credit_card_no = cred_card_no,
+    credit_card_no = cred_card_no
     WHERE email = e_mail;
 $$;
 
@@ -201,3 +201,23 @@ AS $$
 $$; 
 
 /*select * from get_selected_apt('10');*/
+
+
+CREATE OR REPLACE FUNCTION check_single_date(apt INT, curr_date VARCHAR)
+RETURNS BOOL AS
+$$
+DECLARE rental RECORD;
+
+BEGIN
+	FOR rental IN 
+		SELECT *
+		FROM rentals
+		WHERE apartment_id = apt
+	LOOP
+		IF (rental.check_in, rental.check_out) OVERLAPS (CAST(curr_date AS DATE), CAST(curr_date AS DATE))
+		THEN RETURN FALSE;
+		END IF;
+	END LOOP;
+	RETURN TRUE;
+END;
+$$ LANGUAGE plpgsql;

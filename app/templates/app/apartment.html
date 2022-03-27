@@ -101,5 +101,59 @@
         </tr>
     </table>
 
+
+    <br/><br/>
+    <!-- Create a Form -->
+    <form method="POST">
+        <!-- Security token by Django -->
+        {% csrf_token %}
+        <!-- form -->
+
+
+        <div id="div_id_year" class="control-group">
+            <label for="id_year">
+                Year 
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="year" 
+                    class="textinput textInput" 
+                    min="2000" step="1"
+                    required="" id="id_year">
+            </div>
+        </div>
+
+
+        <div id="div_id_month" class="control-group">
+            <label for="id_month">
+                Month
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="month" 
+                    class="textinput textInput" 
+                    min="1" max="12" step="1"
+                    required="" id="id_month">
+            </div>
+        </div>
+
+
+
+        <br>
+        <a href="">
+            <button type="submit" name=action value="search">View Availability</button>
+        </a>
+    </form>
+    
+    <br/><br/>
+    <p>Days available for booking in year: {{ dates_avail.year }} month: {{ dates_avail.month }}</p>
+    <p>{{ dates_avail.dates }}</p>
+
+    </div>
+
+    
+
 </body>
 </html>
