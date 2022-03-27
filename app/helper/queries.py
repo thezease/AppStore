@@ -124,14 +124,8 @@ def update_user(form:QueryDict, userid:str) -> str:
         try:
             cursor.execute(
                 """
-                UPDATE users SET 
-                first_name = %s, 
-                last_name = %s, 
-                date_of_birth = %s, 
-                country = %s, 
-                credit_card_type = %s, 
-                credit_card_no = %s 
-                WHERE email = %s""",
+                CALL update_users(%s, %s, %s, %s, %s, %s, %s)
+                """,
                 [
                     form['first_name'],
                     form['last_name'],
