@@ -6,6 +6,8 @@ WHERE ap.apartment_id = r.apartment_id;
 and r.guest='acullin2d@oakley.com'; 
 */
 
+
+-- Function to select list of rentals that a user had rented
 CREATE OR REPLACE FUNCTION selected_rental(x varchar)  
 	RETURNS TABLE( 
     	apartment_id int,  
@@ -29,12 +31,11 @@ CREATE OR REPLACE FUNCTION selected_rental(x varchar)
 LANGUAGE SQL
 AS $$ 
     SELECT *  
- 	FROM apartments ap natural join rentals r
- 	WHERE x = r.guest 
- 	and ap.apartment_id = r.apartment_id; 
+ 	FROM apartments ap NATURAL JOIN rentals r
+ 	WHERE x = r.guest; 
 $$; 
  
-
+-- Function to insert new user
 CREATE OR REPLACE Procedure insert_users
 (f_name  VARCHAR(16), l_name VARCHAR(16), e_mail VARCHAR(64), pass VARCHAR(32), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint) 
 LANGUAGE SQl
@@ -64,8 +65,8 @@ credit_card_type = %s,
 credit_card_no = %s,
 WHERE email = %s;
 */
-
-CREATE or REPLACE Procedure update_users
+-- Procedure to update user details
+CREATE OR REPLACE PROCEDURE update_users
 (f_name  VARCHAR(16), l_name VARCHAR(16), dob DATE, count_ry VARCHAR(32), cred_card_type VARCHAR(16), cred_card_no bigint, e_mail VARCHAR(64)) 
 LANGUAGE SQL
 AS
@@ -103,7 +104,7 @@ AND apt.city = 'Qingzhou'
 AND apt.num_guests >= 2 
 ORDER BY apt.price;
 */
-
+-- Function to get list of apartments filtered by country, city, and number of guests
 CREATE OR REPLACE FUNCTION get_apartment(i varchar, j varchar, k int)  
 	RETURNS TABLE( 
     	apartment_id int,  
@@ -140,7 +141,7 @@ FROM apartments apt, overall_ratings rts
 WHERE apt.apartment_id = rts.apartment_id 
 ORDER BY apt.price;
 */
-
+-- function to get list of all apartments
 CREATE OR REPLACE FUNCTION get_all_apartments()  
 	RETURNS TABLE( 
     	apartment_id int,  
@@ -176,9 +177,9 @@ WHERE apt.apartment_id = rts.apartment_id
 AND apt.apartment_id = '10';
 */
 
-CREATE OR REPLACE FUNCTION get_selected_apt(apt_id int)  
+CREATE OR REPLACE FUNCTION get_selected_apt(apt_id INT)  
 	RETURNS TABLE( 
-    	apartment_id int,  
+    	apartment_id INT,  
 	host VARCHAR(64), 
  	country VARCHAR(16),  
  	city VARCHAR(32), 
@@ -189,15 +190,14 @@ CREATE OR REPLACE FUNCTION get_selected_apt(apt_id int)
  	property_type VARCHAR(64), 
  	amenities VARCHAR(64), 
  	house_rules VARCHAR(64), 
- 	price Varchar(64), 
- 	avg_rating Decimal(2,1)
+ 	price VARCHAR(64), 
+ 	avg_rating DECIMAL(2,1)
  	) 
 LANGUAGE SQL
 AS $$ 
     SELECT *  
- 	FROM apartments apt natural join overall_ratings rts 
- 	WHERE apt.apartment_id = rts.apartment_id
-	and apt_id=apartment_id; 
+ 	FROM apartments apt NATURAL JOIN overall_ratings rts 
+ 	WHERE apt_id=apartment_id; 
 $$; 
 
 /*select * from get_selected_apt('10');*/

@@ -144,15 +144,9 @@ def checkpw(request, userid):
     result_dict = {}
     status = ''
 
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT * FROM users WHERE email = %s",
-            [userid]
-            )
-        obj = cursor.fetchone()
-
     if request.POST:
         if request.POST['action'] == 'enterpw':
+            # auth is True is password submitted matches DB record
             auth = queries.authenticate_pw(request.POST['password'], userid)
             if auth:
                 user = queries.get_single_user(userid)
