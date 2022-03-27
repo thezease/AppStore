@@ -245,12 +245,7 @@ def search(request):
 
         with connection.cursor() as cursor:
             cursor.execute(
-                """
-                SELECT * 
-                FROM apartments apt, overall_ratings rts 
-                WHERE apt.apartment_id = rts.apartment_id 
-                ORDER BY apt.price
-                """),
+                "SELECT * FROM get_all_apartments()"),
             apartments = cursor.fetchall()
 
         result_dict = {'records': apartments}
@@ -266,12 +261,7 @@ def apartment(request, id):
     ## Use raw query to get an apartment
     with connection.cursor() as cursor:
         cursor.execute(
-            """
-            SELECT * 
-            FROM apartments apt, overall_ratings rts 
-            WHERE apt.apartment_id = rts.apartment_id 
-            AND apt.apartment_id = %s
-            """,
+            "SELECT * FROM get_selected_apt(%s)",
             [id])
         selected_apt = cursor.fetchone()
     result_dict['apt'] = selected_apt
