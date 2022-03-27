@@ -1,2 +1,2 @@
 release: python manage.py migrate
-web: gunicorn AppStore.wsgi
+web: gunicorn OPRA8.wsgi
