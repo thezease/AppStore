@@ -218,14 +218,7 @@ def search(request):
         if request.POST['action'] == 'search':
             with connection.cursor() as cursor:
                 cursor.execute(
-                """
-                SELECT * 
-                FROM apartments apt, overall_ratings rts 
-                WHERE apt.apartment_id = rts.apartment_id 
-                AND country = %s 
-                AND city = %s 
-                AND num_guests >= %s 
-                ORDER BY apt.price""",
+                 "SELECT * FROM get_apartment(%s,%s,%s)",
                 [
                     request.POST['country'],
                     request.POST['city'],
