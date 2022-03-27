@@ -64,17 +64,12 @@ def view(request, userid):
 
     with connection.cursor() as cursor:
         cursor.execute(
-<<<<<<< HEAD
             """
             SELECT * 
             FROM apartments ap, rentals r 
             WHERE ap.apartment_id = r.apartment_id 
             AND r.guest = %s""",
             [userid])
-=======
-            "Select * FROM selected_rental (%s)",
-            [id])
->>>>>>> b1766f40a93ad1a1a603e3d9f8834883e76a6554
         selected_rentals = cursor.fetchall()
 
     result_dict['records'] = selected_rentals
@@ -90,35 +85,7 @@ def add(request):
     status = ''
 
     if request.POST:
-<<<<<<< HEAD
         status = queries.insert_user(request.POST)
-=======
-        ## Check if email is already in the table
-        with connection.cursor() as cursor:
-
-            cursor.execute("SELECT * FROM users WHERE email = %s", [request.POST['email']])
-            user = cursor.fetchone()
-            ## No user with same email
-            if user == None:
-                ##TODO: date validation
-                cursor.execute(
-                    "CALL insert_users(%s,%s,%s,%s,%s,%s,%s,%s);",
-                    [
-                        request.POST['first_name'],
-                        request.POST['last_name'],
-                        request.POST['email'],
-                        request.POST['password'],
-                        request.POST['date_of_birth'],
-                        request.POST['country'],
-                        request.POST['credit_card_type'],
-                        request.POST['credit_card_no']
-                    ]
-                    )
-                return redirect('index')    
-            else:
-                status = 'User with email %s already exists' % (request.POST['email'])
-
->>>>>>> b1766f40a93ad1a1a603e3d9f8834883e76a6554
 
     context['status'] = status
  
@@ -196,26 +163,7 @@ def checkpw(request, userid):
 
 
         elif request.POST['action'] == 'Update':
-<<<<<<< HEAD
             status = queries.update_user(request.POST, userid)
-=======
-            with connection.cursor() as cursor:
-                cursor.execute(
-                  "CALL update_users(%s,%s,%s,%s,%s,%s,%s);",
-                    [
-                        request.POST['first_name'],
-                        request.POST['last_name'],
-                        request.POST['date_of_birth'],
-                        request.POST['country'],
-                        request.POST['credit_card_type'],
-                        request.POST['credit_card_no'],
-                        id
-                    ]
-                    )
-                status = 'User edited successfully!'
-                cursor.execute("SELECT * FROM users WHERE email = %s", [id])
-                obj = cursor.fetchone()
->>>>>>> b1766f40a93ad1a1a603e3d9f8834883e76a6554
 
             context = {'status': status}
             return render(request, "app/edit.html", context)
@@ -277,7 +225,6 @@ def apartment(request, apt_id):
     ## Use raw query to get an apartment
     with connection.cursor() as cursor:
         cursor.execute(
-<<<<<<< HEAD
             """
             SELECT * 
             FROM apartments apt, overall_ratings rts 
@@ -285,10 +232,6 @@ def apartment(request, apt_id):
             AND apt.apartment_id = %s
             """,
             [apt_id])
-=======
-            "SELECT * FROM get_selected_apt(%s)",
-            [id])
->>>>>>> b1766f40a93ad1a1a603e3d9f8834883e76a6554
         selected_apt = cursor.fetchone()
     result_dict['apt'] = selected_apt
 
