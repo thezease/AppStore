@@ -163,7 +163,7 @@ def find_apt_availability(form:QueryDict, apt_id:int) -> str:
             cursor.execute(
                 # uses user-defined function
                 """
-                SELECT check_single_date(%s, %s)
+                SELECT * FROM check_single_date(%s, %s)
                 """,
                 [apt_id, curr_day]
             )
