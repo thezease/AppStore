@@ -29,11 +29,7 @@ def view(request, userid):
 
     with connection.cursor() as cursor:
         cursor.execute(
-            """
-            SELECT * 
-            FROM apartments ap, rentals r 
-            WHERE ap.apartment_id = r.apartment_id 
-            AND r.guest = %s""",
+            "Select * FROM selected_rental(%s);",
             [userid])
         selected_rentals = cursor.fetchall()
 
