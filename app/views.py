@@ -29,7 +29,8 @@ def view(request, userid):
 
     with connection.cursor() as cursor:
         cursor.execute(
-            "Select * FROM selected_rental(%s);",
+            # uses user-defined SQL function
+            "Select * FROM selected_rental(%s)",
             [userid])
         selected_rentals = cursor.fetchall()
 
@@ -93,6 +94,7 @@ def search(request):
         if request.POST['action'] == 'search':
             with connection.cursor() as cursor:
                 cursor.execute(
+                 # uses user-defined SQL function
                  "SELECT * FROM get_apartment(%s,%s,%s)",
                 [
                     request.POST['country'],
@@ -137,12 +139,8 @@ def apartment(request, apt_id):
     ## Use raw query to get an apartment
     with connection.cursor() as cursor:
         cursor.execute(
-            """
-            SELECT * 
-            FROM apartments apt, overall_ratings rts 
-            WHERE apt.apartment_id = rts.apartment_id 
-            AND apt.apartment_id = %s
-            """,
+            # uses user-defined SQL function
+            "SELECT * FROM get_selected_apt(%s)",
             [apt_id])
         selected_apt = cursor.fetchone()
     result_dict['apt'] = selected_apt
