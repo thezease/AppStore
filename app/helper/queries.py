@@ -63,17 +63,8 @@ def insert_user(form: QueryDict) -> str:
             try:
                 cursor.execute(
                     """
-                    INSERT INTO users (
-                        first_name,
-                        last_name,
-                        email,
-                        password,
-                        date_of_birth,
-                        country,
-                        credit_card_type,
-                        credit_card_no
-                    ) 
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+                    CALL insert_users(%s, %s, %s, %s, %s, %s, %s, %s)
+                    """,
                     [
                         form['first_name'],
                         form['last_name'],
