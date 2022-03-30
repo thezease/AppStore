@@ -27,6 +27,7 @@ property_type VARCHAR(64) NOT NULL,
 amenities VARCHAR(64) NOT NULL,
 house_rules VARCHAR(64) NOT NULL,
 price DECIMAL(8,2) NOT NULL check (price > 0)
+listed BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE TABLE IF NOT EXISTS rentals(

@@ -18,9 +18,16 @@ from django.urls import path
 
 import app.views
 
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin_dashboard', app.admin.dashboard, name = 'admin_dashboard'),
+    path('admin_users', app.admin.users, name = 'admin_users'),
+    path('admin_users_edit/<str:id>', app.admin.users_edit, name = 'admin_users_edit'),
+    path('admin_users_view/<str:id>', app.admin.users_view, name = 'admin_users_view'),
+    path('admin_users_add', app.admin.users_add, name = 'admin_users_view'),
+    path('admin_statistics', app.admin.statistics, name = 'admin_statistics'),
+    path('admin_apartments', app.admin.apartments, name = 'admin_aparments'),
+    path('admin_apartments_edit/<str:id>', app.admin.apartments_edit, name = 'admin_apartments_edit'),
+    path('rating_rank', app.admin.rating_rank, name = 'rating_rank'),
     path('', app.views.index, name='index'),
     path('add', app.views.add, name='add'),
     path('view/<str:id>', app.views.view, name='view'),
