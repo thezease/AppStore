@@ -4,12 +4,17 @@
     <title>OPRA8 | Homepage</title>
     <link rel="stylesheet", href ="{% static 'app/style.css'%}">
     <script type="text/javascript" src="{% static 'app/index-script.js' %}"></script>
-    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
+    <style>
+        .index_bg {
+            background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url("{% static 'app/images/home1.jpg' %}");
+        }
+    </style>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     
 </head>
 
-<body id="'index_body">
+<body id="index_body">
     <div class="topnav">
         <a class="active" href="/" title="Go to homepage" id="authhome">Home</a>
         <a href="/search" title="Search all apartments" id="authapt">Apartments</a>

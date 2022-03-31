@@ -41,7 +41,7 @@ $$
 language plpgsql;
 
 -- 
-CREATE OR REPLACE TRIGGER rental
+CREATE TRIGGER rental
 AFTER UPDATE of status ON tempbookings
 FOR EACH ROW
 EXECUTE FUNCTION rentals();
@@ -66,7 +66,7 @@ $$
 LANGUAGE plpgsql;
 
 --
-CREATE OR REPLACE TRIGGER rating
+CREATE TRIGGER rating
 AFTER UPDATE of rating ON rentals
 FOR EACH ROW
-EXECUTE FUNCTION checkdate()
+EXECUTE FUNCTION checkdate();
