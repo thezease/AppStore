@@ -37,3 +37,4 @@ psql ${URI} -f sql/4_demo-dataset.sql
 psql ${URI} -f sql/5_users-data.sql
 psql ${URI} -f sql/6_apartments-data.sql
 psql ${URI} -f sql/7_rentals-data.sql
+psql ${URI} -f sql/8_tempbookings-data.sql

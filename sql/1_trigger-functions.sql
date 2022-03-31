@@ -23,7 +23,7 @@ LANGUAGE plpgsql;
 CREATE TRIGGER overlap
 BEFORE INSERT on rentals
 FOR EACH ROW
-EXECUTE FUNCTION checkoverlap()
+EXECUTE FUNCTION checkoverlap();
 
 
 -- 
@@ -41,10 +41,10 @@ $$
 language plpgsql;
 
 -- 
-CREATE TRIGGER rental
+CREATE OR REPLACE TRIGGER rental
 AFTER UPDATE of status ON tempbookings
 FOR EACH ROW
-EXECUTE FUNCTION rentals()
+EXECUTE FUNCTION rentals();
 
 
 --
@@ -66,7 +66,7 @@ $$
 LANGUAGE plpgsql;
 
 --
-CREATE TRIGGER rating
+CREATE OR REPLACE TRIGGER rating
 AFTER UPDATE of rating ON rentals
 FOR EACH ROW
 EXECUTE FUNCTION checkdate()

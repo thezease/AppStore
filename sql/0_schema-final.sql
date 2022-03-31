@@ -52,3 +52,10 @@ check_out DATE NOT NULL CHECK(check_out > check_in),
 guest VARCHAR(64) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
 rating INT CHECK (rating >= 1 and rating <= 5)
 );
+
+
+CREATE VIEW overall_ratings AS
+	SELECT ap.apartment_id, CAST(AVG(r.rating) AS DECIMAL(2, 1)) AS avg_rating
+	FROM apartments ap, rentals r
+	WHERE ap.apartment_id = r.apartment_id
+	GROUP BY ap.apartment_id;

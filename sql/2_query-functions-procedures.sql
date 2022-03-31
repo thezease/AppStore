@@ -1,5 +1,5 @@
 -- Function to select list of rentals that a user had rented
-CREATE OR REPLACE FUNCTION selected_rental(x varchar)  
+CREATE OR REPLACE FUNCTION selected_rental(x VARCHAR)  
 	RETURNS TABLE( 
     	apartment_id int,  
 		host VARCHAR(64), 
@@ -13,11 +13,11 @@ CREATE OR REPLACE FUNCTION selected_rental(x varchar)
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
 		price DECIMAL(8,2), 
-		rental_id int, 
+		listed BOOL,
+		rental_id INT, 
 		check_in VARCHAR(64), 
 		check_out VARCHAR(64), 
-		guest VARCHAR(64), 
-		total_price DECIMAL(8,2), 
+		guest VARCHAR(64),
 		rating INT
 	) 
 LANGUAGE SQL
@@ -55,7 +55,7 @@ CREATE OR REPLACE PROCEDURE update_users(
 	dob DATE,
 	count_ry VARCHAR(32),
 	cred_card_type VARCHAR(16),
-	cred_card_no bigint,
+	cred_card_no BIGINT,
 	e_mail VARCHAR(64)
 ) 
 LANGUAGE SQL
@@ -73,9 +73,9 @@ $$;
 
 
 -- Function to get list of apartments filtered by country, city, and number of guests
-CREATE OR REPLACE FUNCTION get_apartment(i varchar, j varchar, k int)  
+CREATE OR REPLACE FUNCTION get_apartment(i VARCHAR, j VARCHAR, k INT)  
 	RETURNS TABLE( 
-    	apartment_id int,  
+    	apartment_id INT,  
 		host VARCHAR(64), 
  		country VARCHAR(16),  
  		city VARCHAR(32), 
@@ -86,8 +86,9 @@ CREATE OR REPLACE FUNCTION get_apartment(i varchar, j varchar, k int)
  		property_type VARCHAR(64), 
  		amenities VARCHAR(64), 
  		house_rules VARCHAR(64), 
- 		price Varchar(64), 
- 		avg_rating Decimal(2,1)
+ 		price VARCHAR(64),
+		listed BOOL,
+ 		avg_rating DECIMAL(2,1)
  		) 
 LANGUAGE SQL
 AS $$ 
@@ -103,7 +104,7 @@ $$;
 -- function to get list of all apartments
 CREATE OR REPLACE FUNCTION get_all_apartments()  
 	RETURNS TABLE( 
-		apartment_id int,  
+		apartment_id INT,  
 		host VARCHAR(64), 
 		country VARCHAR(16),  
 		city VARCHAR(32), 
@@ -114,8 +115,9 @@ CREATE OR REPLACE FUNCTION get_all_apartments()
 		property_type VARCHAR(64), 
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
-		price Varchar(64), 
-		avg_rating Decimal(2,1)
+		price VARCHAR(64), 
+		listed BOOL,
+		avg_rating DECIMAL(2,1)
  	) 
 LANGUAGE SQL
 AS $$ 
@@ -141,6 +143,7 @@ CREATE OR REPLACE FUNCTION get_selected_apt(apt_id INT)
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
 		price VARCHAR(64), 
+		listed BOOL,
 		avg_rating DECIMAL(2,1)
  	) 
 LANGUAGE SQL
