@@ -1,3 +1,9 @@
+"""
+Functions created to mask raw SQL queries
+To be called by app/views.py
+"""
+from __future__ import annotations
+
 from django.db import connection
 from django.db import IntegrityError, DatabaseError
 
@@ -6,8 +12,13 @@ import re
 from django.http import QueryDict
 
 
-def dictfetchall_(cursor):
-    """Return all rows from a cursor as a dict"""
+def dictfetchall_(cursor: connection.cursor) -> list[dict]:
+    """
+    Helper function
+    Return all rows from a cursor as a dict that
+    allows named reference to SQL query results in html templates
+    e.g. {{ user.first_name }} instead of {{ user.0 }}
+    """
     columns = [col[0] for col in cursor.description]
     return [
         dict(zip(columns, row))
@@ -15,17 +26,17 @@ def dictfetchall_(cursor):
     ]
 
 
-def get_all_users():
+def get_all_users() -> list[dict]:
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM users ORDER BY first_name")
         records = dictfetchall_(cursor)
     return records
 
 
-def get_single_user(userid):
+def get_single_user(userid) -> dict:
     with connection.cursor() as cursor:
         cursor.execute("SELECT * FROM users WHERE email = %s", [userid])
-        return cursor.fetchone()
+        return dictfetchall_(cursor)[0]
 
 
 def check_user_exists(email: str) -> bool:
@@ -86,7 +97,8 @@ def insert_user(form: QueryDict) -> str:
     
     return status
 
-def authenticate_pw(pw:str, userid:str) -> bool:
+
+def authenticate_user(email:str, pw:str) -> bool:
     """Return True if password matches record in databse, else False"""
     with connection.cursor() as cursor:
         cursor.execute(
@@ -95,7 +107,7 @@ def authenticate_pw(pw:str, userid:str) -> bool:
             FROM users
             WHERE email = %s
             """,
-            [pw, userid])
+            [pw, email])
         res = cursor.fetchone()
         if res == None:
             return False
@@ -137,7 +149,7 @@ def update_user(form:QueryDict, userid:str) -> str:
 
     return status
 
-
+# for use in find_apt_availability()
 days_in_mth = {
     1: 31,
     2: 28,
@@ -172,3 +184,12 @@ def find_apt_availability(form:QueryDict, apt_id:int) -> str:
                 dates_avail.append(day)
     return ', '.join(str(e) for e in dates_avail)
             
+
+def get_single_apartment(apt_id:int) -> dict:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            # uses user-defined SQL function
+            "SELECT * FROM get_selected_apt(%s)",
+            [apt_id])
+        selected_apt = dictfetchall_(cursor)[0]
+    return selected_apt

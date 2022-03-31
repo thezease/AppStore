@@ -1,47 +1,41 @@
+from django.urls import reverse
 from readline import insert_text
 from django.shortcuts import render, redirect
 from django.db import connection
 
 from app.helper import queries
 
-# Create your views here.
+
 def index(request):
     """Shows the main page"""
+    context = {}
+    context['user_page'] = 'Login'
+    context['user_action'] = '/login'
 
-    return render(request, 'app/index.html')
+    return render(request, 'app/index.html', context)
 
 
+def login(request):
+    """Shows the user login page"""
+    context = {}
+    status = ''
 
-# Create your views here.
-def view(request, userid):
-    """
-    Shows the view user details page, 
-    which include user details and rental data
-    """
-    
-    result_dict = dict()
+    if request.POST:
+        email = request.POST['login_email']
+        pw = request.POST['login_password']
+        auth = queries.authenticate_user(email, pw)
+        if auth:
+            context['user_page'] = 'Me'
+            return redirect(reverse('user_index', kwargs={'email':email}))
+        else:
+            status = "Wrong email or password. Please try again."
+            context['status'] = status
 
-    ## Use raw query to get a user
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM users WHERE email = %s", [userid])
-        selected_user = cursor.fetchone()
-    result_dict['user'] = selected_user
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "Select * FROM selected_rental(%s)",
-            [userid])
-        selected_rentals = cursor.fetchall()
-
-    result_dict['records'] = selected_rentals
-
-    return render(request,'app/view.html', result_dict)
+    return render(request, "app/login.html", context)
 
 
 
-# Create your views here.
-def add(request):
+def register(request):
     """Shows the user registration page"""
     context = {}
     status = ''
@@ -51,11 +45,60 @@ def add(request):
 
     context['status'] = status
  
-    return render(request, "app/add.html", context)
+    return render(request, "app/user-registration.html", context)
 
 
 
-def checkpw(request, userid):
+
+
+def user_index(request, email):
+    """Shows user's homepage after login"""
+    context = {}
+    context['user_page'] = 'Me'
+    context['user_action'] = '/viewself'
+
+    return render(request, 'app/index.html', context)
+
+
+def user_search(request, email):
+    """Shows user's homepage after login"""
+    context = {}
+    context['user_page'] = 'Me'
+    context['user_action'] = '/viewself'
+
+    return render(request, 'app/search.html', context)
+
+
+def viewself(request, email):
+    """
+    Shows the view user details page after login, 
+    which include user details and rental data
+    """
+
+    context = {}
+    context['user_page'] = 'Me'
+    context['user_action'] = '/viewself'
+
+    ## Use raw query to get a user
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
+        selected_user = cursor.fetchone()
+    context['user'] = selected_user
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            # uses user-defined SQL function
+            "Select * FROM selected_rental(%s)",
+            [email])
+        selected_rentals = cursor.fetchall()
+
+    context['records'] = selected_rentals
+
+    return render(request,'app/viewself.html', context)
+
+
+
+def checkpw(request, email):
     """Shows page to enter password and allow user to edit own details once password matches"""
     result_dict = {}
     status = ''
@@ -63,10 +106,14 @@ def checkpw(request, userid):
     if request.POST:
         if request.POST['action'] == 'enterpw':
             # auth is True is password submitted matches DB record
-            auth = queries.authenticate_pw(request.POST['password'], userid)
+            auth = queries.authenticate_user(email, request.POST['password'])
             if auth:
-                user = queries.get_single_user(userid)
+                user = queries.get_single_user(email)
                 result_dict['user'] = user
+                result_dict['visa'] = ""
+                result_dict['americanexpress'] = ""
+                result_dict['mastercard'] = ""
+                result_dict[user['credit_card_type']] = "checked" # check radio button
                 return render(request, "app/edit.html", result_dict)
             else:
                 status = 'Incorrect password!'
@@ -75,10 +122,17 @@ def checkpw(request, userid):
 
 
         elif request.POST['action'] == 'Update':
-            status = queries.update_user(request.POST, userid)
+            status = queries.update_user(request.POST, email)
+            result_dict['status'] = status
 
-            context = {'status': status}
-            return render(request, "app/edit.html", context)
+            user = queries.get_single_user(email)
+            result_dict['user'] = user
+            result_dict['visa'] = ""
+            result_dict['americanexpress'] = ""
+            result_dict['mastercard'] = ""
+            result_dict[user['credit_card_type']] = "checked" # check radio button
+
+            return render(request, "app/edit.html", result_dict)
 
     context = {"status": status}
     return render(request, "app/checkpw.html")
@@ -136,14 +190,7 @@ def apartment(request, apt_id):
     
     result_dict = dict()
 
-    ## Use raw query to get an apartment
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "SELECT * FROM get_selected_apt(%s)",
-            [apt_id])
-        selected_apt = cursor.fetchone()
-    result_dict['apt'] = selected_apt
+    result_dict['apt'] = queries.get_single_apartment(apt_id)
 
     if request.POST:
         dates_avail = queries.find_apt_availability(request.POST, apt_id)

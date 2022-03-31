@@ -2,10 +2,19 @@
 <html>
 <head>
     <title>Edit User Details</title>
+    <link rel="stylesheet", href ="{% static 'app/style.css' %}">
+    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
 </head> 
 <body>
+    <div class="topnav">
+        <a href="/" title="Go to homepage" id="authhome">Home</a>
+        <a href="/search" title="Search all apartments" id="authapt">Apartments</a>
+        <a class="active" href="/login" title="Login here" id="authuser">Login</a>
+    </div>
+
+    <br/><br/>
+
     <h2>Edit {{user.2}}</h2>
-    <a href="/users">Back to List of Users</a>
 
     <p style="color:red">{{ status|safe }}</p>
 
@@ -24,7 +33,7 @@
             <div class="controls">
                 <input 
                     type="text" name="first_name" 
-                    value="{{user.0}}"
+                    value="{{ user.first_name }}"
                     maxlength="16" class="textinput textInput" 
                     required="" id="id_first_name">
             </div>
@@ -38,7 +47,7 @@
             <div class="controls">
                 <input
                     type="text" name="last_name" 
-                    value="{{user.1}}"
+                    value="{{ user.last_name }}"
                     maxlength="16" class="textinput textInput" 
                     required="" id="id_last_name">
             </div>
@@ -53,7 +62,7 @@
             <div class="controls">
                 <input 
                     type="text" name="date_of_birth" 
-                    value="{{user.4 | date:"Y-m-d"}}"
+                    value="{{ user.date_of_birth | date:"Y-m-d"}}"
                     class="dateinput" 
                     required="" id="id_dob">
             </div>
@@ -68,7 +77,7 @@
             <div class="controls">
                 <input 
                     type="text" name="country" 
-                    value="{{user.6}}"
+                    value="{{ user.country }}"
                     maxlength="32" class="textinput textInput" 
                     required="" id="id_country">
             </div>
@@ -83,17 +92,17 @@
             <div class="controls">
                 <input 
                     type="radio" value="mastercard"
-                    name="credit_card_type" id="id_ccard_type">
+                    name="credit_card_type" id="id_ccard_type" {{ mastercard }}>
                 <label for="mastercard">Mastercard</label>
 
                 <input 
                     type="radio" value="visa"
-                    name="credit_card_type" id="id_ccard_type">
+                    name="credit_card_type" id="id_ccard_type" {{ visa }}>
                 <label for="mastercard">Visa</label>
 
                 <input 
                     type="radio" value="americanexpress"
-                    name="credit_card_type" id="id_ccard_type">
+                    name="credit_card_type" id="id_ccard_type" {{ americanexpress }}>
                 <label for="mastercard">American Express</label>
             </div>
         </div>
@@ -107,7 +116,7 @@
             <div class="controls">
                 <input 
                     type="tel" name="credit_card_no"
-                    value="{{user.8}}"
+                    value="{{ user.credit_card_no }}"
                     inputmode="numeric" pattern="[0-9\s]{13,16}"
                     maxlength="16" class="textinput textInput" 
                     required="" id="id_ccard_no">
