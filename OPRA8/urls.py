@@ -22,10 +22,13 @@ import app.views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', app.views.index, name='index'),
-    path('add', app.views.add, name='add'),
-    path('view/<str:userid>', app.views.view, name='view'),
-    path('checkpw/<str:userid>', app.views.checkpw, name='checkpw'),
     path('search', app.views.search, name='search'),
     path('apartment/<int:apt_id>', app.views.apartment, name='apartment'),
-    path('users', app.views.users, name='users')
+    path('login', app.views.login, name='login'),
+    path('register', app.views.register, name='register'),
+    path('u=<str:email>~', app.views.user_index, name='user_index'),
+    path('u=<str:email>~/search', app.views.user_search, name='user_search'),
+    path('u=<str:email>~/viewself', app.views.viewself, name='viewself'),
+    path('u=<str:email>~/viewself-host', app.views.viewself_host, name='viewself-host'),
+    path('u=<str:email>~/checkpw', app.views.checkpw, name='checkpw')
 ]

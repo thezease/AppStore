@@ -2,11 +2,28 @@
 <html>
 <head>
     <title>User Details</title>
+    <link rel="stylesheet", href ="{% static 'app/style.css'%}">
+    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
 </head>    
 <body>
+    <div class="topnav">
+        <a href="/" title="Go to homepage" id="authhome">Home</a>
+        <a href="/search" title="Search all apartments" id="authapt">Apartments</a>
+        <a class="active" href="/login" title="Login here" id="authuser">Login</a>
+    </div>
+
+    <br/>
+
+    <div>
+        <a class="active" href="" title="View history of bookings and rentals" id="authuser1">Manage as a Guest</a>
+        <a href="" title="View your apartments and manage bookings" id="authuser2">Manage as a Host</a>
+    </div>
+
+    <br/>
+
     <h2>Details for {{user.0}} {{user.1}}</h2>
-    <a href="/users">Back to List of Users</a>
-    <br/><br/>
+    
+    <br/>
 
 
     <table style='text-align:left'>
@@ -44,6 +61,30 @@
 
     <br/><br/>
 
+    <h2>Current Bookings</h2>
+    <table border=1>
+        <thead>
+            <th>Country</th>
+            <th>City</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Total Price</th>
+            <th>Rating</th>
+        </thead>
+        {% for rental in records %}
+        <tr>
+            <td> {{ rental.2 }} </td>
+            <td> {{ rental.3 }} </td>
+            <td> {{ rental.14 }} </td>
+            <td> {{ rental.15 }} </td>
+            <td> {{ rental.17 }} </td>
+            <td> {{ rental.18 }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br/><br/>
+
     <h2>Rental History</h2>
     <table border=1>
         <thead>
@@ -65,5 +106,12 @@
         </tr>
         {% endfor %}
     </table>
+
+    <br/><br/>
+
+    <form method="POST">
+        <button type="submit" name="Delete">Delete Account</button>
+    </form>
+
 </body>
 </html>

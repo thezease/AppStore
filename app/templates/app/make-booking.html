@@ -1,7 +1,7 @@
 {% load static %}
 <html>
 <head>
-    <title>Apartment Details</title>
+    <title>Book an Apartment</title>
     <link rel = "stylesheet" href = "{% static '/app/style.css' %}">
     <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
 </head>    
@@ -12,7 +12,6 @@
         <a href="/login" title="Login here" id="authuser">Login</a>
     </div>
 
-    <div id="apartment_bg">
 
         <h2>Details for Apartment {{ apt.0 }}</h2>
 
@@ -22,62 +21,62 @@
             <tr>
                 <th>Host</th>
                 <td>:</td>
-                <td> {{ apt.host }} </td>
+                <td> {{ apt.1 }} </td>
             </tr>
             <tr>
                 <th>Country</th>
                 <td>:</td>
-                <td> {{ apt.country }} </td>
+                <td> {{ apt.2 }} </td>
             </tr>
             <tr>
                 <th>City</th>
                 <td>:</td>
-                <td> {{ apt.city }} </td>
+                <td> {{ apt.3 }} </td>
             </tr>
             <tr>
                 <th>Address</th>
                 <td>:</td>
-                <td> {{ apt.address }} </td>
+                <td> {{ apt.4 }} </td>
             </tr>
             <tr>
                 <th>Number of guests allowed</th>
                 <td>:</td>
-                <td> {{ apt.num_guests }} </td>
+                <td> {{ apt.5 }} </td>
             </tr>
             <tr>
                 <th>Number of beds</th>
                 <td>:</td>
-                <td> {{ apt.num_beds }} </td>
+                <td> {{ apt.6 }} </td>
             </tr>
             <tr>
                 <th>Number of bathrooms</th>
                 <td>:</td>
-                <td> {{ apt.num_bathrooms }} </td>
+                <td> {{ apt.7 }} </td>
             </tr>
             <tr>
                 <th>Property type</th>
                 <td>:</td>
-                <td> {{ apt.property_type }} </td>
+                <td> {{ apt.8 }} </td>
             </tr>
             <tr>
                 <th>Amenities</th>
                 <td>:</td>
-                <td> {{ apt.amenities }} </td>
+                <td> {{ apt.9 }} </td>
             </tr>
             <tr>
                 <th>House rules</th>
                 <td>:</td>
-                <td> {{ apt.house_rules }} </td>
+                <td> {{ apt.10 }} </td>
             </tr>
             <tr>
-                <th>Price per day</th>
+                <th>Price per night</th>
                 <td>:</td>
-                <td> {{ apt.price }} </td>
+                <td> {{ apt.11 }} </td>
             </tr>
             <tr>
                 <th>Overall rating</th>
                 <td>:</td>
-                <td> {{ apt.avg_rating }} </td>
+                <td> {{ apt.13 }} </td>
             </tr>
             <tr>
                 <td>
@@ -134,7 +133,7 @@
         <p>Days available for booking in year: {{ dates_avail.year }} month: {{ dates_avail.month }}</p>
         <p>{{ dates_avail.dates }}</p>
 
-    </div>
+
 
 
     

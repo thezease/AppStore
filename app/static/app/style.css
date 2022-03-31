@@ -1,15 +1,64 @@
 *{
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
-.body{
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+#index_body{
   min-height: 100vh;
   width: 100%;
-  background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url("images/home1.jpg")
-    ;
+  position: relative;
+  font-family: 'Calibri', 'sans-serif';
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.index_bg {
+  /* The image used */
+  background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url("images/home1.jpg");
+  /* Full height */
+  height: 100%; 
+  /* Center and scale the image nicely */
   background-position: center;
+  position: relative;
   background-size: cover;
-  position: relative
+}
+
+#search_bg{
+  /* The image used */
+  background-image: linear-gradient(rgba(1,1,5,0.1),rgba(1,1,5,0.1)),url("images/home3.jpg");
+  /* Full height */
+  height: 100%; 
+  /* Center and scale the image nicely */
+  background-position: center;
+  position: relative;
+  background-size: cover;
+  background-repeat: repeat;
+}
+
+#search_body{
+  height: 100%;
+  margin: 0;
+}
+
+#apartment_bg{
+  /* The image used */
+  background-image: linear-gradient(rgba(1,10,55,0.1),rgba(1,10,55,0.1)),url("../../static/app/images/home2.jpg");
+  /* Full height */
+  height: 100%; 
+  /* Center and scale the image nicely */
+  background-position: center;
+  position: relative;
+  background-size: cover;
+}
+
+.single_view {
+  text-align: left;
 }
 
 
