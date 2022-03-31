@@ -8,11 +8,7 @@ from app.helper import queries
 
 def index(request):
     """Shows the main page"""
-    context = {}
-    context['user_page'] = 'Login'
-    context['user_action'] = '/login'
-
-    return render(request, 'app/index.html', context)
+    return render(request, 'app/index.html')
 
 
 def login(request):
@@ -48,25 +44,39 @@ def register(request):
     return render(request, "app/user-registration.html", context)
 
 
-
-
-
 def user_index(request, email):
     """Shows user's homepage after login"""
-    context = {}
-    context['user_page'] = 'Me'
-    context['user_action'] = '/viewself'
-
-    return render(request, 'app/index.html', context)
+    return render(request, 'app/index.html')
 
 
 def user_search(request, email):
     """Shows user's homepage after login"""
-    context = {}
-    context['user_page'] = 'Me'
-    context['user_action'] = '/viewself'
+    if request.POST:
+        if request.POST['action'] == 'search':
+            with connection.cursor() as cursor:
+                cursor.execute(
+                 # uses user-defined SQL function
+                 "SELECT * FROM get_apartment(%s,%s,%s)",
+                [
+                    request.POST['country'],
+                    request.POST['city'],
+                    request.POST['num_guests']
+                ])                
+                apartments = cursor.fetchall()
 
-    return render(request, 'app/search.html', context)
+            result_dict = {'records': apartments}
+
+            return render(request,'app/search-apartments.html', result_dict)
+    else:
+        with connection.cursor() as cursor:
+            cursor.execute(
+                # uses user-defined SQL function
+                "SELECT * FROM get_all_apartments()"),
+            apartments = cursor.fetchall()
+
+        result_dict = {'records': apartments}
+
+        return render(request,'app/search-apartments.html', result_dict)
 
 
 def viewself(request, email):
@@ -74,10 +84,7 @@ def viewself(request, email):
     Shows the view user details page after login, 
     which include user details and rental data
     """
-
     context = {}
-    context['user_page'] = 'Me'
-    context['user_action'] = '/viewself'
 
     ## Use raw query to get a user
     with connection.cursor() as cursor:
@@ -94,7 +101,33 @@ def viewself(request, email):
 
     context['records'] = selected_rentals
 
-    return render(request,'app/viewself.html', context)
+    return render(request,'app/viewself-guest.html', context)
+
+
+
+def viewself_host(request, email):
+    """
+    Shows the view user details page after login, 
+    which include user details and rental data
+    """
+    context = {}
+
+    ## Use raw query to get a user
+    with connection.cursor() as cursor:
+        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
+        selected_user = cursor.fetchone()
+    context['user'] = selected_user
+
+    with connection.cursor() as cursor:
+        cursor.execute(
+            # uses user-defined SQL function
+            "Select * FROM selected_rental(%s)",
+            [email])
+        selected_rentals = cursor.fetchall()
+
+    context['records'] = selected_rentals
+
+    return render(request,'app/viewself-host.html', context)
 
 
 
@@ -141,9 +174,6 @@ def checkpw(request, email):
 
 def search(request):
     """Shows the search page for apartments"""
-    context = {}
-    status = ''
-
     if request.POST:
         if request.POST['action'] == 'search':
             with connection.cursor() as cursor:
@@ -159,21 +189,8 @@ def search(request):
 
             result_dict = {'records': apartments}
 
-            return render(request,'app/search.html', result_dict)
+            return render(request,'app/search-apartments.html', result_dict)
     else:
-        context['status'] = status
-        ## Use sample query to get apartments
-
-        """
-        SQL VIEW ALREADY CREATED:
-
-        CREATE VIEW overall_ratings AS
-        SELECT ap.apartment_id, CAST(AVG(r.rating) AS DECIMAL(2, 1)) AS avg_rating
-        FROM apartments ap, rentals r
-        WHERE ap.apartment_id = r.apartment_id
-        GROUP BY ap.apartment_id;
-        """
-
         with connection.cursor() as cursor:
             cursor.execute(
                 # uses user-defined SQL function
@@ -182,7 +199,7 @@ def search(request):
 
         result_dict = {'records': apartments}
 
-        return render(request,'app/search.html', result_dict)
+        return render(request,'app/search-apartments.html', result_dict)
 
 
 def apartment(request, apt_id):

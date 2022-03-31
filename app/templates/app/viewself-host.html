@@ -12,49 +12,20 @@
         <a class="active" href="/login" title="Login here" id="authuser">Login</a>
     </div>
 
-    <br/><br/>
+    <br/>
+
+    <div>
+        <a href="" title="View history of bookings and rentals" id="authuser1">Manage as a Guest</a>
+        <a class="active" href="" title="View your apartments and manage bookings" id="authuser2">Manage as a Host</a>
+    </div>
+
+    <br/>
 
     <h2>Details for {{user.0}} {{user.1}}</h2>
     
     <br/><br/>
 
-
-    <table style='text-align:left'>
-        <tr>
-            <th>Email</th>
-            <td>:</td>
-            <td> {{ user.2 }} </td>
-        </tr>
-        <tr>
-            <th>First name</th>
-            <td>:</td>
-            <td> {{ user.0 }} </td>
-        </tr>
-        <tr>
-            <th>Last name</th>
-            <td>:</td>
-            <td> {{ user.1 }} </td>
-        </tr>
-        <tr>
-            <th>Date of birth</th>
-            <td>:</td>
-            <td> {{ user.4 }} </td>
-        </tr>
-        <tr>
-            <th>Date of registration</th>
-            <td>:</td>
-            <td> {{ user.5 }} </td>
-        </tr>
-        <tr>
-            <th>Country</th>
-            <td>:</td>
-            <td> {{ user.6 }} </td>
-        </tr>
-    </table>
-
-    <br/><br/>
-
-    <h2>Current Bookings</h2>
+    <h2>My Apartments</h2>
     <table border=1>
         <thead>
             <th>Country</th>
@@ -76,7 +47,7 @@
         {% endfor %}
     </table>
 
-    <h2>Rental History</h2>
+    <h2>Approve Bookings</h2>
     <table border=1>
         <thead>
             <th>Country</th>

@@ -29,5 +29,6 @@ urlpatterns = [
     path('u=<str:email>~', app.views.user_index, name='user_index'),
     path('u=<str:email>~/search', app.views.user_search, name='user_search'),
     path('u=<str:email>~/viewself', app.views.viewself, name='viewself'),
+    path('u=<str:email>~/viewself-host', app.views.viewself_host, name='viewself-host'),
     path('u=<str:email>~/checkpw', app.views.checkpw, name='checkpw')
 ]

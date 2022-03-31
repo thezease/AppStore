@@ -26,6 +26,8 @@ function modifyLinks(email) {
     modifyHomeLink(email);
     modifyAptLink(email);
     modifyUserLink(email);
+    modifyUserGuestLink(email);
+    modifyUserHostLink(email);
     return;
 }
 
@@ -42,10 +44,21 @@ function modifyAptLink(email) {
 }
 
 function modifyUserLink(email) {
-    console.log('here');
     userLink = document.getElementById("authuser");
     userLink.setAttribute("href", '/u='+email+'~'+'/viewself');
     userLink.setAttribute("title", "View user details");
     userLink.innerHTML = "My Info";
+    return;
+}
+
+function modifyUserGuestLink(email) {
+    userLink = document.getElementById("authuser1");
+    userLink.setAttribute("href", '/u='+email+'~'+'/viewself');
+    return;
+}
+
+function modifyUserHostLink(email) {
+    userLink = document.getElementById("authuser2");
+    userLink.setAttribute("href", '/u='+email+'~'+'/viewself-host');
     return;
 }
