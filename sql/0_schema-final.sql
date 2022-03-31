@@ -1,3 +1,5 @@
+-- Creation of tables only
+
 CREATE TABLE IF NOT EXISTS users(
 first_name VARCHAR(16) NOT NULL,
 last_name VARCHAR(16) NOT NULL,
@@ -14,6 +16,7 @@ credit_card_type VARCHAR(16) NOT NULL,
 credit_card_no VARCHAR(16) UNIQUE NOT NULL
 );
 
+
 CREATE TABLE IF NOT EXISTS apartments(
 apartment_id SERIAL PRIMARY KEY,
 host VARCHAR(64) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
@@ -26,15 +29,26 @@ num_bathrooms INT NOT NULL,
 property_type VARCHAR(64) NOT NULL,
 amenities VARCHAR(64) NOT NULL,
 house_rules VARCHAR(64) NOT NULL,
-price DECIMAL(8,2) NOT NULL check (price > 0)
+price DECIMAL(8,2) NOT NULL check (price > 0),
+listed BOOLEAN NOT NULL DEFAULT TRUE
 );
+
+
+CREATE TABLE IF NOT EXISTS tempbookings(
+tempbooking_id SERIAL PRIMARY KEY,
+apartment_id INT NOT NULL REFERENCES apartments(apartment_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
+check_in DATE NOT NULL, /*rmb to add back check (check_in>current date)*/
+check_out DATE NOT NULL CHECK(check_out > check_in),
+guest VARCHAR(64) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
+status BIT NOT NULL DEFAULT '0',
+UNIQUE (check_in, check_out, guest));
+
 
 CREATE TABLE IF NOT EXISTS rentals(
 rental_id SERIAL PRIMARY KEY,
 apartment_id INT NOT NULL REFERENCES apartments(apartment_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
-check_in DATE NOT NULL CHECK (check_in > CURRENT_DATE),
+check_in DATE NOT NULL,
 check_out DATE NOT NULL CHECK(check_out > check_in),
 guest VARCHAR(64) REFERENCES users(email) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
-total_price DECIMAL(8,2) NOT NULL,
-rating INT NOT NULL CHECK (rating >= 1 and rating <= 5)
+rating INT CHECK (rating >= 1 and rating <= 5)
 );

@@ -28,10 +28,12 @@ done < ".env"
 URI="postgres://$DB_USER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 # Run the scripts to insert data.
-psql ${URI} -f sql/clean.sql
-psql ${URI} -f sql/appschema.sql
-psql ${URI} -f sql/users-data.sql
-psql ${URI} -f sql/apartments-data.sql
-psql ${URI} -f sql/rentals-data.sql
-psql ${URI} -f sql/createview.sql
-psql ${URI} -f sql/functions.sql
+psql ${URI} -f sql/99_clean.sql
+psql ${URI} -f sql/0_schema_final.sql
+psql ${URI} -f sql/1_trigger-functions.sql
+psql ${URI} -f sql/2_query-functions-procedures.sql
+psql ${URI} -f sql/3_helper-functions.sql
+psql ${URI} -f sql/4_demo-dataset.sql
+psql ${URI} -f sql/5_users-data.sql
+psql ${URI} -f sql/6_apartments-data.sql
+psql ${URI} -f sql/7_rentals-data.sql
