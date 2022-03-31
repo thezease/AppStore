@@ -1,0 +1,51 @@
+window.onload = function() {
+    checkLoginStatus();
+}
+
+function checkLoginStatus() {
+    // check login status by parsing the URL
+    url = window.location.href;
+    const re = new RegExp('(?<=u\=)[a-z0-9@._]*(?=~)');
+    // console.log(re.test('http://localhost:8000/u=abc@abc.com~'));
+
+    var matches = url.match(re);
+    // console.log(matches);
+
+    if (matches == null) {
+        // do nothing if user email is not found in url
+        return;
+    } else {
+        var email = matches[0];
+        modifyLinks(email);
+        return;
+    }
+       
+}
+
+function modifyLinks(email) {
+    modifyHomeLink(email);
+    modifyAptLink(email);
+    modifyUserLink(email);
+    return;
+}
+
+function modifyHomeLink(email) {
+    homeLink = document.getElementById("authhome");
+    homeLink.setAttribute("href", '/u='+email+'~');
+    return;
+}
+
+function modifyAptLink(email) {
+    aptLink = document.getElementById("authapt");
+    aptLink.setAttribute("href", '/u='+email+'~'+'/search');
+    return;
+}
+
+function modifyUserLink(email) {
+    console.log('here');
+    userLink = document.getElementById("authuser");
+    userLink.setAttribute("href", '/u='+email+'~'+'/viewself');
+    userLink.setAttribute("title", "View user details");
+    userLink.innerHTML = "My Info";
+    return;
+}
