@@ -19,8 +19,6 @@ html, body {
 }
 
 .index_bg {
-  /* The image used */
-  background-image: linear-gradient(rgba(4,9,30,0.7),rgba(4,9,30,0.7)),url("images/home1.jpg");
   /* Full height */
   height: 100%; 
   /* Center and scale the image nicely */
@@ -29,9 +27,7 @@ html, body {
   background-size: cover;
 }
 
-#search_bg{
-  /* The image used */
-  background-image: linear-gradient(rgba(1,1,5,0.1),rgba(1,1,5,0.1)),url("images/home3.jpg");
+.search_bg{
   /* Full height */
   height: 100%; 
   /* Center and scale the image nicely */
@@ -47,8 +43,6 @@ html, body {
 }
 
 #apartment_bg{
-  /* The image used */
-  background-image: linear-gradient(rgba(1,10,55,0.1),rgba(1,10,55,0.1)),url("../../static/app/images/home2.jpg");
   /* Full height */
   height: 100%; 
   /* Center and scale the image nicely */

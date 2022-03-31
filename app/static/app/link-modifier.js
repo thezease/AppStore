@@ -1,6 +1,6 @@
-window.onload = function() {
+window.addEventListener('load', function(){
     checkLoginStatus();
-}
+});
 
 function checkLoginStatus() {
     // check login status by parsing the URL
