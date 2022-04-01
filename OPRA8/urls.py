@@ -20,15 +20,40 @@ import app.views
 
 
 urlpatterns = [
+    # django's admin page; not used for this app
     path('admin/', admin.site.urls),
+
+    # default homepage
     path('', app.views.index, name='index'),
+
+    # list of apartments
     path('search', app.views.search, name='search'),
-    path('apartment/<int:apt_id>', app.views.apartment, name='apartment'),
-    path('login', app.views.login, name='login'),
-    path('register', app.views.register, name='register'),
-    path('u=<str:email>~', app.views.user_index, name='user_index'),
-    path('u=<str:email>~/search', app.views.user_search, name='user_search'),
+
+    # details of a single apartment
+    path('apartment/<int:apt_id>', app.views.apartment, name='apartment'), 
+    
+    # login page
+    path('login', app.views.login, name='login'), 
+
+    # new user registration
+    path('register', app.views.register, name='register'), 
+    
+    # homepage after login
+    path('u=<str:email>~', app.views.user_index, name='user_index'), 
+    
+    # list of apartments after login
+    path('u=<str:email>~/search', app.views.user_search, name='user_search'), 
+
+    # details of a single apartment after login
+    path('u=<str:email>~/apartment/<int:apt_id>', app.views.user_view_apt, name='user_view_apt'), 
+    
+    # user's personal page to show user details and rental history
     path('u=<str:email>~/viewself', app.views.viewself, name='viewself'),
+    
+    # user's personal page to manage apartments where user is the host
     path('u=<str:email>~/viewself-host', app.views.viewself_host, name='viewself-host'),
+    
+    # password check before user can edit his personal details
     path('u=<str:email>~/checkpw', app.views.checkpw, name='checkpw')
+
 ]

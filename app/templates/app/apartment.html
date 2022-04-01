@@ -5,7 +5,7 @@
     <link rel = "stylesheet" href = "{% static '/app/style.css' %}">
     <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
     <style>
-        .index_bg {
+        .apartment_bg {
             /* The image used */
             background-image: linear-gradient(rgba(1,10,55,0.1),rgba(1,10,55,0.1)),url("{% static 'app/images/home2.jpg' %}");
         }
@@ -87,7 +87,11 @@
             </tr>
             <tr>
                 <td>
-                    <button>Book this apartment</button>
+                    <form method="POST">
+                        <!-- Security token by Django -->
+                        {% csrf_token %}
+                        <button type="submit" name=action value="book">Book this Apartment</button>
+                    </form>
                 </td>
             </tr>
         </table>
@@ -110,7 +114,7 @@
                     <input 
                         type="number" name="year" 
                         class="textinput textInput" 
-                        min="2000" step="1"
+                        min="2022" step="1"
                         required="" id="id_year">
                 </div>
             </div>
@@ -132,12 +136,12 @@
 
             <br>
             <a href="">
-                <button type="submit" name=action value="search">Check Availability</button>
+                <button type="submit" name=action value="checkavail">Check Availability</button>
             </a>
         </form>
         
         <br/><br/>
-        <p>Days available for booking in year: {{ dates_avail.year }} month: {{ dates_avail.month }}</p>
+        <p>Days available for booking in {{ dates_avail.month }} {{ dates_avail.year }}:</p>
         <p>{{ dates_avail.dates }}</p>
 
     </div>

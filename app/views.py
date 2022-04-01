@@ -40,6 +40,8 @@ def register(request):
         status = queries.insert_user(request.POST)
 
     context['status'] = status
+    if status == 'Successfully registered.':
+        context['redirect_msg'] = 'You may now login to our App.'
  
     return render(request, "app/user-registration.html", context)
 
@@ -77,6 +79,22 @@ def user_search(request, email):
         result_dict = {'records': apartments}
 
         return render(request,'app/search-apartments.html', result_dict)
+
+def user_view_apt(request, email, apt_id):
+    """Shows the apartment details page"""
+    
+    result_dict = dict()
+
+    result_dict['apt'] = queries.get_single_apartment(apt_id)
+
+    if request.POST:
+        if request.POST['action'] == 'checkavail':
+            dates_avail = queries.find_apt_availability(request.POST, apt_id)
+            result_dict['dates_avail'] = dates_avail
+        if request.POST['action'] == 'book':
+            pass
+
+    return render(request,'app/apartment.html', result_dict)
 
 
 def viewself(request, email):
@@ -169,6 +187,9 @@ def checkpw(request, email):
 
     context = {"status": status}
     return render(request, "app/checkpw.html")
+
+
+
 
 
 

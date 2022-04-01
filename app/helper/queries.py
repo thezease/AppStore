@@ -87,7 +87,7 @@ def insert_user(form: QueryDict) -> str:
                         form['credit_card_no']
                     ]
                 )
-                status = 'Successfully inserted.'
+                status = 'Successfully registered.'
 
             except IntegrityError as ie:
                 e_msg = str(ie.__cause__)
@@ -149,7 +149,53 @@ def update_user(form:QueryDict, userid:str) -> str:
 
     return status
 
-# for use in find_apt_availability()
+
+def find_apt_availability(form:QueryDict, apt_id:int) -> dict:
+    res = {}
+    dates_avail = list()
+    year = int(form['year'])
+    month = int(form['month'])
+    num_days = days_in_mth[month]
+    if year % 4 == 0 and month == 2:
+        num_days += 1
+
+    for day in range(1, num_days+1):
+        curr_day = f'{year}-{month}-{day}'
+        with connection.cursor() as cursor:
+            cursor.execute(
+                # uses user-defined function
+                """
+                SELECT * FROM check_single_date(%s, %s)
+                """,
+                [apt_id, curr_day]
+            )
+            avail = cursor.fetchone()[0]
+            if avail:
+                dates_avail.append(day)
+    
+    res['year'] = str(year)
+    res['month'] = mth_num_to_text[month]
+    res['dates'] = ', '.join(str(e) for e in dates_avail)
+
+    return res
+            
+
+def get_single_apartment(apt_id:int) -> dict:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            # uses user-defined SQL function
+            "SELECT * FROM get_selected_apt(%s)",
+            [apt_id])
+        selected_apt = dictfetchall_(cursor)[0]
+    return selected_apt
+
+
+
+
+
+
+""" Reference Data """
+# for use in queries.find_apt_availability
 days_in_mth = {
     1: 31,
     2: 28,
@@ -165,31 +211,18 @@ days_in_mth = {
     12: 31
 }
 
-def find_apt_availability(form:QueryDict, apt_id:int) -> str:
-    dates_avail = list()
-    year = int(form['year'])
-    month = int(form['month'])
-    for day in range(1, days_in_mth[month]+1):
-        curr_day = f'{year}-{month}-{day}'
-        with connection.cursor() as cursor:
-            cursor.execute(
-                # uses user-defined function
-                """
-                SELECT * FROM check_single_date(%s, %s)
-                """,
-                [apt_id, curr_day]
-            )
-            avail = cursor.fetchone()[0]
-            if avail:
-                dates_avail.append(day)
-    return ', '.join(str(e) for e in dates_avail)
-            
-
-def get_single_apartment(apt_id:int) -> dict:
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "SELECT * FROM get_selected_apt(%s)",
-            [apt_id])
-        selected_apt = dictfetchall_(cursor)[0]
-    return selected_apt
+# for use in queries.find_apt_availability
+mth_num_to_text = {
+    1: 'January',
+    2: 'February',
+    3: 'March',
+    4: 'April',
+    5: 'May',
+    6: 'June',
+    7: 'July',
+    8: 'August',
+    9: 'September',
+    10: 'October',
+    11: 'November',
+    12: 'December'
+}
