@@ -62,3 +62,11 @@ function modifyUserHostLink(email) {
     userLink.setAttribute("href", '/u='+email+'~'+'/viewself-host');
     return;
 }
+
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}
