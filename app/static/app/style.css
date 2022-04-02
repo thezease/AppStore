@@ -19,7 +19,7 @@
 html, body {
   height: 100%;
   margin: 0;
-  background-color: rgba(4,9,30,0.7);
+  background-color: rgba(0,0,0,0.7);
 }
 
 #index_body{
