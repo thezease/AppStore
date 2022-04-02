@@ -14,12 +14,12 @@
     list-style-type: none;
     text-decoration: none;
     font-family: 'Poppins', sans-serif;
-    background-color: rgba(4,9,30,0.7);
 }
 
 html, body {
   height: 100%;
   margin: 0;
+  background-color: rgba(4,9,30,0.7);
 }
 
 #index_body{
