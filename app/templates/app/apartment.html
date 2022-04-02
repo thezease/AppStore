@@ -87,10 +87,71 @@
             </tr>
             <tr>
                 <td>
-                    <button>Book this apartment</button>
+                    <button class="open-button" onclick="openForm()">Book this apartment</button>
                 </td>
             </tr>
         </table>
+        
+        <div class="form-popup" id="myForm">
+        <form method="POST" class="form-container">
+            <!-- Security token by Django -->
+            {% csrf_token %}
+            <!-- form -->
+            <h1>Booking</h1>
+      
+            <div id="div_id_login_email" class="control-group">
+                <label for="id_login_email" class="control-label requiredField">
+                    User Email
+                    <span class="asteriskField">*</span> 
+                </label>
+                <div class="controls">
+                    <input 
+                        type="text" name="login_email" 
+                        maxlength="64" class="textinput textInput" 
+                        required="" id="id_login_email">
+                </div>
+            </div>
+      
+            <div id="div_id_password" class="control-group">
+                <label for="id_password" class="control-label requiredField">
+                    Enter your password
+                    <span class="asteriskField">*</span>
+                </label>
+                <div class="controls">
+                    <input 
+                        type="password" name="password" 
+                        maxlength="32" class="textinput textInput" 
+                        required="" id="id_password">
+                </div>
+            <div id="div_id_check_in" class ="control-group">
+                <label for = "id_check_in" class="control-label requiredField">
+                    Check-in date
+                    <span class = "asteriskField">*</span>
+                </label>
+                <div class="controls">
+                    <input
+                        type="text" name="check_in"
+                        class="dateinput" required=""
+                        id="id_check_in">
+                </div>
+                <div id="div_id_check_out" class ="control-group">
+                    <label for = "id_check_out" class="control-label requiredField">
+                        Check-out date
+                        <span class = "asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <input
+                            type="text" name="check_out"
+                            class="dateinput" required=""
+                            id="id_check_out">
+                    </div>
+            </div>
+            </div>
+      
+            <button type="submit" name="action " value="book" class="btn">Book</button>
+            <button type="button" class="btn cancel" onclick="closeForm()">Cancel</button>
+        </form>
+      </div>
 
 
         <br/><br/>
