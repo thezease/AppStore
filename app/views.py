@@ -228,9 +228,44 @@ def apartment(request, apt_id):
     
     result_dict = dict()
 
-    result_dict['apt'] = queries.get_single_apartment(apt_id)
+    ## Use raw query to get an apartment
+    with connection.cursor() as cursor:
+        cursor.execute(
+            # uses user-defined SQL function
+            "SELECT * FROM get_selected_apt(%s)",
+            [apt_id])
+        selected_apt = cursor.fetchone()
+    result_dict['apt'] = selected_apt
 
-    if request.POST:
+    if request.POST['action']=='book':
+        auth = queries.authenticate_user(request.POST["login_email"], request.POST['password'])
+        if auth:
+            with connection.cursor() as cursor:
+                try:
+                    cursor.execute(
+                    #uses user-defined SQL function
+                    "INSERT INTO tempbooking VALUES(%s,%s,%s,%s)",
+                    [
+                    apt_id,
+                    request.POST["check_in"],
+                    request.POST["check_out"],
+                    request.POST["login_email"]
+                    ]
+                    
+                    )
+                    status = 'Successfully inserted.'
+
+                except IntegrityError as ie:
+                    e_msg = str(ie.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    status = f'Violated constraint: {constraint}. Please follow the required format.'
+        else:
+            status = 'Wrong Email-id or Password'
+        return status
+                    
+        
+    if request.POST['action']=='search':
         dates_avail = queries.find_apt_availability(request.POST, apt_id)
         result_dict['dates_avail'] = {
                                     'year': request.POST['year'],
@@ -238,9 +273,7 @@ def apartment(request, apt_id):
                                     'dates': dates_avail
                                     }
 
-    return render(request,'app/apartment.html', result_dict)
-
-
+        return render(request,'app/apartment.html', result_dict)
 
 def users(request):
     """Shows all users in page"""
