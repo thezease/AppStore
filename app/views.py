@@ -68,7 +68,6 @@ def search(request):
                     ]
                 )                
                 apartments = queries.dictfetchall_(cursor)
-
             result_dict['records'] = apartments
             result_dict['orderby'] = 'price'
 
@@ -83,7 +82,6 @@ def search(request):
                 "SELECT * FROM get_all_apartments()"
             )
             apartments = queries.dictfetchall_(cursor)
-
         result_dict['records'] = apartments
         result_dict['orderby'] = 'price'
     
@@ -128,21 +126,15 @@ def viewself(request, email):
     which include user details and rental data
     """
     context = {}
+    
+    if request.POST:
+        if request.POST['rate']:
+            rental_id = request.POST['rate']
 
-    ## Use raw query to get a user
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
-        selected_user = cursor.fetchone()
-    context['user'] = selected_user
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "Select * FROM selected_rental(%s)",
-            [email])
-        selected_rentals = cursor.fetchall()
-
-    context['records'] = selected_rentals
+    # call method form helper module queries
+    context['user'] = queries.get_single_user(email)
+    context['bookings'] = queries.get_user_bookings(email)
+    context['rentals'] = queries.get_user_rentals(email)
 
     return render(request,'app/viewself-guest.html', context)
 

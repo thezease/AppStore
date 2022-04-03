@@ -30,32 +30,32 @@
         <tr>
             <th>Email</th>
             <td>:</td>
-            <td> {{ user.2 }} </td>
+            <td> {{ user.email }} </td>
         </tr>
         <tr>
             <th>First name</th>
             <td>:</td>
-            <td> {{ user.0 }} </td>
+            <td> {{ user.first_name }} </td>
         </tr>
         <tr>
             <th>Last name</th>
             <td>:</td>
-            <td> {{ user.1 }} </td>
+            <td> {{ user.last_name }} </td>
         </tr>
         <tr>
             <th>Date of birth</th>
             <td>:</td>
-            <td> {{ user.4 }} </td>
+            <td> {{ user.date_of_birth }} </td>
         </tr>
         <tr>
             <th>Date of registration</th>
             <td>:</td>
-            <td> {{ user.5 }} </td>
+            <td> {{ user.since }} </td>
         </tr>
         <tr>
             <th>Country</th>
             <td>:</td>
-            <td> {{ user.6 }} </td>
+            <td> {{ user.country }} </td>
         </tr>
     </table>
 
@@ -69,16 +69,16 @@
             <th>Check-In</th>
             <th>Check-Out</th>
             <th>Total Price</th>
-            <th>Rating</th>
+            <th>Action</th>
         </thead>
-        {% for rental in records %}
+        {% for bk in bookings %}
         <tr>
-            <td> {{ rental.2 }} </td>
-            <td> {{ rental.3 }} </td>
-            <td> {{ rental.14 }} </td>
-            <td> {{ rental.15 }} </td>
-            <td> {{ rental.17 }} </td>
-            <td> {{ rental.18 }} </td>
+            <td> {{ bk.country }} </td>
+            <td> {{ bk.city }} </td>
+            <td> {{ bk.check_in }} </td>
+            <td> {{ bk.check_out }} </td>
+            <td> {{ bk.total_price }} </td>
+            <td> <button>Cancel Booking</button> </td>
         </tr>
         {% endfor %}
     </table>
@@ -86,6 +86,7 @@
     <br/><br/>
 
     <h2>Rental History</h2>
+    <p style="color:red">{{ status|safe }}</p>
     <table border=1>
         <thead>
             <th>Country</th>
@@ -94,23 +95,40 @@
             <th>Check-Out</th>
             <th>Total Price</th>
             <th>Rating</th>
+            <th>Action</th>
         </thead>
-        {% for rental in records %}
+        {% for rental in rentals %}
         <tr>
-            <td> {{ rental.2 }} </td>
-            <td> {{ rental.3 }} </td>
-            <td> {{ rental.14 }} </td>
-            <td> {{ rental.15 }} </td>
-            <td> {{ rental.17 }} </td>
-            <td> {{ rental.18 }} </td>
+            <td> {{ rental.country }} </td>
+            <td> {{ rental.city }} </td>
+            <td> {{ rental.check_in }} </td>
+            <td> {{ rental.check_out }} </td>
+            <td> {{ rental.total_price }} </td>
+            <td> {{ rental.rating }} </td>
+            <td>
+                <form method="POST">
+                    {% csrf_token %}
+                    <button type="submit" name="rate" value={{ rental.rental_id }}>
+                        Add/Update Rating
+                    </button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
 
     <br/><br/>
 
+    <a href="/" title="Log out of the App"><button>Log Out</button></a>
+
+    <br/><br/>
+
     <form method="POST">
-        <button type="submit" name="Delete">Delete Account</button>
+        {% csrf_token %}
+        <button type="submit" name="Delete" title="Permanently delete your account"
+            onclick="return confirm('Are you sure you want to permanently delete your account?');">
+        Delete Account
+        </button>
     </form>
 
 </body>
