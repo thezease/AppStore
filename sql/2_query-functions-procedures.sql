@@ -1,35 +1,29 @@
 -- Function to select list of rentals that a user had rented
 CREATE OR REPLACE FUNCTION selected_rental(x VARCHAR)  
 	RETURNS TABLE( 
-    	apartment_id int,  
-		host VARCHAR(64), 
+    	rental_id int,  
 		country VARCHAR(16),  
 		city VARCHAR(32), 
-		address VARCHAR(64), 
-		num_guests INT, 
-		num_beds INT, 
-		num_bathrooms INT, 
-		property_type VARCHAR(64), 
-		amenities VARCHAR(64), 
-		house_rules VARCHAR(64), 
-		price DECIMAL(8,2), 
-		listed BOOL,
-		rental_id INT, 
 		check_in DATE, 
 		check_out DATE, 
-		guest VARCHAR(64),
+		total_price DECIMAL(8,2), 
 		rating INT
 	) 
 LANGUAGE SQL
 AS $$ 
-    SELECT *  
- 	FROM apartments ap NATURAL JOIN rentals r
- 	WHERE x = r.guest; 
+    SELECT r.rental_id, apt.country, apt.city,
+		   r.check_in, r.check_out, 
+		   apt.price * (r.check_out - r.check_in + 1) AS total_price,
+		   r.rating
+ 	FROM apartments apt NATURAL JOIN rentals r
+ 	WHERE r.guest = x
+	AND apt.listed = true
+    ORDER BY r.check_out DESC;
 $$; 
  
 
 -- Function to insert new user
-CREATE OR REPLACE Procedure insert_users(
+CREATE OR REPLACE PROCEDURE insert_users(
 	f_name VARCHAR(16),
 	l_name VARCHAR(16),
 	e_mail VARCHAR(64),

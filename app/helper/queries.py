@@ -25,6 +25,9 @@ def dictfetchall_(cursor: connection.cursor) -> list[dict]:
         for row in cursor.fetchall()
     ]
 
+def dictfetchone_(cursor: connection.cursor) -> dict:
+    return dictfetchall_(cursor)[0]
+
 
 def get_all_users() -> list[dict]:
     with connection.cursor() as cursor:
@@ -33,10 +36,16 @@ def get_all_users() -> list[dict]:
     return records
 
 
-def get_single_user(userid) -> dict:
+def get_single_user(email) -> dict:
     with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM users WHERE email = %s", [userid])
-        return dictfetchall_(cursor)[0]
+        cursor.execute(
+            """
+            SELECT email, first_name, last_name, date_of_birth, since, country 
+            FROM users WHERE email = %s
+            """, 
+            [email]
+        )
+        return dictfetchone_(cursor)
 
 
 def check_user_exists(email: str) -> bool:
@@ -115,7 +124,7 @@ def authenticate_user(email:str, pw:str) -> bool:
             return res[0]
 
 
-def update_user(form:QueryDict, userid:str) -> str:
+def update_user(form:QueryDict, email:str) -> str:
     """
     Returns status message of the update
         If update is successful: return success message
@@ -136,7 +145,7 @@ def update_user(form:QueryDict, userid:str) -> str:
                     form['country'],
                     form['credit_card_type'],
                     form['credit_card_no'],
-                    userid
+                    email
                 ]
                 )
             status = 'User edited successfully!'
@@ -156,7 +165,7 @@ def find_apt_availability(form:QueryDict, apt_id:int) -> dict:
     year = int(form['year'])
     month = int(form['month'])
     num_days = days_in_mth[month]
-    if year % 4 == 0 and month == 2:
+    if year % 4 == 0 and month == 2: # leap year
         num_days += 1
 
     for day in range(1, num_days+1):
@@ -189,6 +198,51 @@ def get_single_apartment(apt_id:int) -> dict:
         selected_apt = dictfetchall_(cursor)[0]
     return selected_apt
 
+
+def get_user_bookings(email:str) -> list[dict]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT  apt.country, apt.city, tb.check_in, tb.check_out, 
+		            apt.price * (tb.check_out - tb.check_in + 1) AS total_price
+            FROM tempbookings tb NATURAL JOIN apartments apt
+            WHERE tb.guest = %s
+            AND apt.listed = true
+            ORDER BY tb.check_in ASC
+            """,
+            [email]
+        )
+        return dictfetchall_(cursor)
+
+
+def get_user_rentals(email:str) -> list[dict]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            # uses user-defined SQL function
+            "Select * FROM selected_rental(%s)",
+            [email]
+        )
+        return dictfetchall_(cursor)
+
+
+def update_rental_rating(rental_id:int, new_rating:int) -> bool:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                UPDATE rentals
+                SET rating = %s
+                WHERE rental_id = %s
+                """,
+                [new_rating, rental_id]
+                )
+            status = 'Rating added/updated!'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
+
+    return status
 
 
 
