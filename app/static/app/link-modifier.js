@@ -54,20 +54,26 @@ function modifyUserLink(email) {
 
 function modifyUserGuestLink(email) {
     userLink = document.getElementById("authuser1");
-    userLink.setAttribute("href", '/u='+email+'~'+'/viewself');
+    if (userLink !== null){
+        userLink.setAttribute("href", '/u='+email+'~'+'/viewself');
+    }
     return;
 }
 
 function modifyUserHostLink(email) {
     userLink = document.getElementById("authuser2");
-    userLink.setAttribute("href", '/u='+email+'~'+'/viewself-host');
+    if (userLink !== null){
+        userLink.setAttribute("href", '/u='+email+'~'+'/viewself-host');
+    }
     return;
 }
 
 
 function modifyViewAptLink(email) {
     userLink = document.getElementById("viewapt");
-    userLink.setAttribute("href", '/u='+email+'~'+'/apartment/ {{ apartment.0 }}');
+    if (userLink !== null){
+        userLink.setAttribute("href", '/u='+email+'~'+'/apartment/ {{ apartment.0 }}');
+    } 
     return;
 }
 
