@@ -64,8 +64,17 @@ function modifyUserHostLink(email) {
     return;
 }
 
+
 function modifyViewAptLink(email) {
     userLink = document.getElementById("viewapt");
     userLink.setAttribute("href", '/u='+email+'~'+'/apartment/ {{ apartment.0 }}');
     return;
+}
+
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
 }

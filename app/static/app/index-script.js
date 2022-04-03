@@ -86,3 +86,11 @@ function modifyUserLink(email) {
     userLink.innerHTML = "My Info";
     return;
 }
+
+function openForm() {
+  document.getElementById("myForm").style.display = "block";
+}
+
+function closeForm() {
+  document.getElementById("myForm").style.display = "none";
+}

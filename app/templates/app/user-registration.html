@@ -1,9 +1,11 @@
 {% load static %}
 <html>
 <head>
+
     <title>User Registration</title>
     <link rel="stylesheet", href ="{% static 'app/style.css'%}">
     <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head> 
 <body>
     <div class="topnav">
@@ -14,13 +16,14 @@
 
     <h2>Register for our App</h2>
 
+
     <p style="color:red">{{ status|safe }}</p>
     <a href="/login">{{ redirect_msg|safe }}</a>
     
     <br/>
 
     <!-- Create a Form -->
-    <form method="POST">
+    <form method="POST" style="margin-left:70px">
         <!-- Security token by Django -->
         {% csrf_token %}
         <!-- form -->
@@ -74,7 +77,10 @@
 
         <div id="div_id_password" class="control-group">
             <label for="id_password" class="control-label requiredField">
+
                 Password
+
+
                 <span class="asteriskField">*</span>
             </label><br/>
             <label>
