@@ -111,6 +111,7 @@
     <br/><br/>
 
     <form method="POST">
+        {% csrf_token %}
         <button type="submit" name="Delete">Delete Account</button>
     </form>
 
