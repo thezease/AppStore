@@ -92,9 +92,24 @@ CREATE OR REPLACE FUNCTION get_apartment(i VARCHAR, j VARCHAR, k INT)
  		) 
 LANGUAGE SQL
 AS $$ 
-    SELECT *  
- 	FROM apartments apt natural join overall_ratings rts 
- 	WHERE apt.country = i
+    SELECT  apt.apartment_id,  
+		apt.host, 
+		apt.country,  
+		apt.city, 
+		apt.address, 
+		apt.num_guests, 
+		apt.num_beds, 
+		apt.num_bathrooms, 
+		apt.property_type, 
+		apt.amenities , 
+		apt.house_rules, 
+		apt.price, 
+		apt.listed,
+		COALESCE(rts.avg_rating, -1) AS avg_rating
+	FROM apartments apt LEFT JOIN overall_ratings rts
+	ON apt.apartment_id = rts.apartment_id
+	WHERE listed = true
+	AND apt.country = i
 	AND apt.city = j
 	AND apt.num_guests >= k
 	ORDER BY apt.price;
@@ -121,9 +136,23 @@ CREATE OR REPLACE FUNCTION get_all_apartments()
  	) 
 LANGUAGE SQL
 AS $$ 
-    SELECT *  
- 	FROM apartments apt natural join overall_ratings rts 
- 	WHERE apt.apartment_id = rts.apartment_id 
+	SELECT  apt.apartment_id,  
+		apt.host, 
+		apt.country,  
+		apt.city, 
+		apt.address, 
+		apt.num_guests, 
+		apt.num_beds, 
+		apt.num_bathrooms, 
+		apt.property_type, 
+		apt.amenities , 
+		apt.house_rules, 
+		apt.price, 
+		apt.listed,
+		COALESCE(rts.avg_rating, -1) AS avg_rating
+	FROM apartments apt LEFT JOIN overall_ratings rts
+	ON apt.apartment_id = rts.apartment_id
+	WHERE listed = true
 	ORDER BY apt.price;
 $$; 
 
@@ -150,7 +179,25 @@ LANGUAGE SQL
 AS $$ 
     SELECT *  
  	FROM apartments apt NATURAL JOIN overall_ratings rts 
- 	WHERE apt_id=apartment_id; 
+ 	WHERE apt_id=apartment_id;
+	
+	SELECT  apt.apartment_id,  
+		apt.host, 
+		apt.country,  
+		apt.city, 
+		apt.address, 
+		apt.num_guests, 
+		apt.num_beds, 
+		apt.num_bathrooms, 
+		apt.property_type, 
+		apt.amenities , 
+		apt.house_rules, 
+		apt.price, 
+		apt.listed,
+		COALESCE(rts.avg_rating, -1) AS avg_rating
+	FROM apartments apt LEFT JOIN overall_ratings rts
+	ON apt.apartment_id = rts.apartment_id
+	WHERE apt_id=apt.apartment_id;
 $$; 
 
 

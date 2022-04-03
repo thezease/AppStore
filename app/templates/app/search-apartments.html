@@ -81,6 +81,17 @@
     
         <h2>Search Results</h2>
         <br/>
+
+        <form method="GET">
+            <button type="submit" name="orderby" value="price" title="Order results by price">
+                By price
+            </button>
+            <span>&nbsp;|&nbsp;</span>
+            <button type="submit" name="orderby" value="rating" title="Order results by rating">
+                By rating
+            </button>
+        </form>
+
         <table border=1>
             <thead>
                 <th>Country</th>
@@ -95,21 +106,20 @@
                 <th>Overall Rating</th>
                 <th>Action</th>
             </thead>
-            {% for apartment in records %}
+            {% for apartment in records|dictsortreversed:orderby %}
             <tr>
-                <td> {{ apartment.2 }} </td>
-                <td> {{ apartment.3 }} </td>
-                <td> {{ apartment.5 }} </td>
-                <td> {{ apartment.6 }} </td>
-                <td> {{ apartment.7 }} </td>
-                <td> {{ apartment.8 }} </td>
-                <td> {{ apartment.9 }} </td>
-                <td> {{ apartment.10 }} </td>
-                <td> {{ apartment.11 }} </td>
-                <td> {{ apartment.13 }} </td>
+                <td> {{ apartment.country }} </td>
+                <td> {{ apartment.city }} </td>
+                <td> {{ apartment.num_guests }} </td>
+                <td> {{ apartment.num_beds }} </td>
+                <td> {{ apartment.num_bathrooms }} </td>
+                <td> {{ apartment.property_type }} </td>
+                <td> {{ apartment.amenities }} </td>
+                <td> {{ apartment.house_rules }} </td>
+                <td> {{ apartment.price }} </td>
+                <td> {{ apartment.avg_rating }} </td>
                 <td> 
-                    <a href="apartment/{{ apartment.0 }}" id="viewapt"><button>View</button></a> 
-                    <button>Book Apartment(to implement)</button> 
+                    <a href="apartment/{{ apartment.apartment_id }}" id="viewapt"><button>View</button></a> 
                 </td>
             </tr>
             {% endfor %}

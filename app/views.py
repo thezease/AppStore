@@ -48,37 +48,15 @@ def register(request):
 
 def user_index(request, email):
     """Shows user's homepage after login"""
-    return render(request, 'app/index.html')
+    # return render(request, 'app/index.html')
+    return index(request)
+
 
 
 def user_search(request, email):
-    """Shows user's homepage after login"""
-    if request.POST:
-        if request.POST['action'] == 'search':
-            with connection.cursor() as cursor:
-                cursor.execute(
-                 # uses user-defined SQL function
-                 "SELECT * FROM get_apartment(%s,%s,%s)",
-                [
-                    request.POST['country'],
-                    request.POST['city'],
-                    request.POST['num_guests']
-                ])                
-                apartments = cursor.fetchall()
+    return search(request)
 
-            result_dict = {'records': apartments}
 
-            return render(request,'app/search-apartments.html', result_dict)
-    else:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                # uses user-defined SQL function
-                "SELECT * FROM get_all_apartments()"),
-            apartments = cursor.fetchall()
-
-        result_dict = {'records': apartments}
-
-        return render(request,'app/search-apartments.html', result_dict)
 
 def user_view_apt(request, email, apt_id):
     """Shows the apartment details page"""
@@ -191,36 +169,48 @@ def checkpw(request, email):
 
 
 
-
-
 def search(request):
-    """Shows the search page for apartments"""
+    """Shows user's homepage after login"""
+    result_dict = {}
     if request.POST:
         if request.POST['action'] == 'search':
             with connection.cursor() as cursor:
                 cursor.execute(
-                 # uses user-defined SQL function
-                 "SELECT * FROM get_apartment(%s,%s,%s)",
-                [
-                    request.POST['country'],
-                    request.POST['city'],
-                    request.POST['num_guests']
-                ])                
-                apartments = cursor.fetchall()
+                    # uses user-defined SQL function
+                    "SELECT * FROM get_apartment(%s,%s,%s)",
+                    [
+                        request.POST['country'],
+                        request.POST['city'],
+                        request.POST['num_guests']
+                    ]
+                )                
+                apartments = queries.dictfetchall_(cursor)
 
-            result_dict = {'records': apartments}
+            result_dict['records'] = apartments
+            result_dict['orderby'] = 'price'
 
             return render(request,'app/search-apartments.html', result_dict)
+    
     else:
+        # default results with all apartments
+        # ordered by price asc
         with connection.cursor() as cursor:
             cursor.execute(
                 # uses user-defined SQL function
-                "SELECT * FROM get_all_apartments()"),
-            apartments = cursor.fetchall()
+                "SELECT * FROM get_all_apartments()"
+            )
+            apartments = queries.dictfetchall_(cursor)
 
-        result_dict = {'records': apartments}
+        result_dict['records'] = apartments
+        result_dict['orderby'] = 'price'
+    
+    if request.GET:
+        if request.GET['orderby'] == 'price':
+            result_dict['orderby'] = 'price'
+        elif request.GET['orderby'] == 'rating':
+            result_dict['orderby'] = 'avg_rating'
 
-        return render(request,'app/search-apartments.html', result_dict)
+    return render(request,'app/search-apartments.html', result_dict)
 
 
 def apartment(request, apt_id):
