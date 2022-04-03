@@ -15,8 +15,8 @@ CREATE OR REPLACE FUNCTION selected_rental(x VARCHAR)
 		price DECIMAL(8,2), 
 		listed BOOL,
 		rental_id INT, 
-		check_in VARCHAR(64), 
-		check_out VARCHAR(64), 
+		check_in DATE, 
+		check_out DATE, 
 		guest VARCHAR(64),
 		rating INT
 	) 
@@ -86,7 +86,7 @@ CREATE OR REPLACE FUNCTION get_apartment(i VARCHAR, j VARCHAR, k INT)
  		property_type VARCHAR(64), 
  		amenities VARCHAR(64), 
  		house_rules VARCHAR(64), 
- 		price VARCHAR(64),
+ 		price NUMERIC,
 		listed BOOL,
  		avg_rating DECIMAL(2,1)
  		) 
@@ -115,7 +115,7 @@ CREATE OR REPLACE FUNCTION get_all_apartments()
 		property_type VARCHAR(64), 
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
-		price VARCHAR(64), 
+		price NUMERIC, 
 		listed BOOL,
 		avg_rating DECIMAL(2,1)
  	) 
@@ -142,7 +142,7 @@ CREATE OR REPLACE FUNCTION get_selected_apt(apt_id INT)
 		property_type VARCHAR(64), 
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
-		price VARCHAR(64), 
+		price NUMERIC, 
 		listed BOOL,
 		avg_rating DECIMAL(2,1)
  	) 
