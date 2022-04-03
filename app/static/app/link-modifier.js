@@ -28,6 +28,7 @@ function modifyLinks(email) {
     modifyUserLink(email);
     modifyUserGuestLink(email);
     modifyUserHostLink(email);
+    modifyViewAptLink(email);
     return;
 }
 
@@ -60,6 +61,13 @@ function modifyUserGuestLink(email) {
 function modifyUserHostLink(email) {
     userLink = document.getElementById("authuser2");
     userLink.setAttribute("href", '/u='+email+'~'+'/viewself-host');
+    return;
+}
+
+
+function modifyViewAptLink(email) {
+    userLink = document.getElementById("viewapt");
+    userLink.setAttribute("href", '/u='+email+'~'+'/apartment/ {{ apartment.0 }}');
     return;
 }
 

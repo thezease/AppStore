@@ -1,22 +1,27 @@
 {% load static %}
 <html>
 <head>
-    <title>OPRA8 | Homepage</title>
-    <link rel = "stylesheet", href ="{% static 'app/style.css'%}">
+
+    <title>User Registration</title>
+    <link rel="stylesheet", href ="{% static 'app/style.css'%}">
+    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
-</head>
+</head> 
 <body>
     <div class="topnav">
-        <a href="/" title="Go to homepage">Home</a>
-        <a href="/search" title="Search all apartments">Search Apartments</a>
-        <a href="/login" title="Login here" id="authuser">Login</a>
+        <a href="/" title="Go to homepage" id="authhome">Home</a>
+        <a href="/search" title="Search all apartments" id="authapt">Apartments</a>
+        <a class="active" href="/login" title="Login here" id="authuser">Login</a>
     </div>
 
-    <h2 style="margin-left:70px">Add New Customer</h2>
-    <a style="margin-left:70px" href="/">Back to home</a>
+    <h2>Register for our App</h2>
+
 
     <p style="color:red">{{ status|safe }}</p>
+    <a href="/login">{{ redirect_msg|safe }}</a>
+    
+    <br/>
+
     <!-- Create a Form -->
     <form method="POST" style="margin-left:70px">
         <!-- Security token by Django -->
@@ -29,12 +34,14 @@
             </label>
             <div class="controls">
                 <input 
-                    type="text" name="first_name" 
+                    type="text" name="first_name"
+                    placeholder="Enter first name" 
                     maxlength="16" class="textinput textInput" 
                     required="" id="id_first_name">
             </div>
         </div>
         
+        <br/>
 
         <div id="div_id_last_name" class="control-group">
             <label for="id_last_name" class="control-label requiredField">
@@ -43,12 +50,14 @@
             </label>
             <div class="controls">
                 <input
-                    type="text" name="last_name" 
+                    type="text" name="last_name"
+                    placeholder="Enter last name" 
                     maxlength="16" class="textinput textInput" 
                     required="" id="id_last_name">
             </div>
         </div>
         
+        <br/>
 
         <div id="div_id_email" class="control-group">
             <label for="id_email" class="control-label requiredField">
@@ -57,40 +66,54 @@
             </label>
             <div class="controls">
                 <input 
-                    type="email" name="email" 
+                    type="email" name="email"
+                    placeholder="Enter email" 
                     maxlength="64" class="textinput textInput" 
                     required="" id="id_email">
             </div>
         </div>
-
+        
+        <br/>
 
         <div id="div_id_password" class="control-group">
             <label for="id_password" class="control-label requiredField">
-                Password (at least 8 characters consisting upper and lower case letters, and digits)
+
+                Password
+
+
                 <span class="asteriskField">*</span>
+            </label><br/>
+            <label>
+                <i>Include at least 8 characters consisting upper and lower case latters, and digits.</i>
             </label>
             <div class="controls">
                 <input 
                     type="password" name="password" 
+                    placeholder="Enter password"
                     maxlength="32" class="textinput textInput" 
                     required="" id="id_password">
             </div>
         </div>
         
+        <br/>
 
         <div id="div_id_dob" class="control-group">
             <label for="id_dob" class="control-label requiredField">
-                Date of birth (yyyy-mm-dd)
+                Date of birth
                 <span class="asteriskField">*</span>
+            </label><br/>
+            <label>
+                <i>You need to be at least 18 years old to register for our App.</i>
             </label>
             <div class="controls">
                 <input 
-                    type="text" name="date_of_birth" 
+                    type="date" name="date_of_birth" 
                     class="dateinput" 
                     required="" id="id_dob">
             </div>
         </div>
         
+        <br/>
         
         <div id="div_id_country" class="control-group">
             <label for="id_country" class="control-label requiredField">
@@ -100,11 +123,13 @@
             <div class="controls">
                 <input 
                     type="text" name="country" 
+                    placeholder="Enter country"
                     maxlength="32" class="textinput textInput" 
                     required="" id="id_country">
             </div>
         </div>
 
+        <br/>
         
         <div id="div_ccard_type" class="control-group">
             <label for="id_ccard_type" class="control-label requiredField">
@@ -129,6 +154,7 @@
             </div>
         </div>
 
+        <br/>
 
         <div id="div_ccard_no" class="control-group">
             <label for="id_ccard_no" class="control-label requiredField">
@@ -138,6 +164,7 @@
             <div class="controls">
                 <input 
                     type="tel" name="credit_card_no"
+                    placeholder="Enter credit card number"
                     inputmode="numeric" pattern="[0-9\s]{13,16}"
                     maxlength="16" class="textinput textInput" 
                     required="" id="id_ccard_no">

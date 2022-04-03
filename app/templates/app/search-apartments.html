@@ -5,9 +5,9 @@
     <link rel = "stylesheet" href = "{% static '/app/style.css' %}">
     <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
     <style>
-        .index_bg {
+        .search_bg {
              /* The image used */
-            background-image: linear-gradient(rgba(1,1,5,0.1),rgba(1,1,5,0.1)),url("{% static 'app/images/home1.jpg' %}");
+            background-image: linear-gradient(rgba(1,1,5,0.1),rgba(1,1,5,0.1)),url("{% static 'app/images/home3.jpg' %}");
         }
     </style>
 </head> 
@@ -108,7 +108,7 @@
                 <td> {{ apartment.11 }} </td>
                 <td> {{ apartment.13 }} </td>
                 <td> 
-                    <a href="apartment/{{ apartment.0 }}"><button>View</button></a> 
+                    <a href="apartment/{{ apartment.0 }}" id="viewapt"><button>View</button></a> 
                     <button>Book Apartment(to implement)</button> 
                 </td>
             </tr>
