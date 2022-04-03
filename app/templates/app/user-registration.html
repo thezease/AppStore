@@ -135,23 +135,16 @@
         </div>
         
         <br/>
-        <div id="div_id_country" class="control-group" style="position:relative;width:200px;height:25px;border:0;padding:0;margin:0;">
-            <label for="id_country" class="control-label requiredField">
-            Country
-            <span class="asteriskField">*</span> 
-            </label>
-            <div class="controls">
-            <select style="position:absolute;top:0px;left:0px;width:200px; height:25px;line-height:20px;margin:0;padding:0;"
-                    onchange="document.getElementById('displayValue').value=this.options[this.selectedIndex].text; document.getElementById('idValue').value=this.options[this.selectedIndex].value;">
-                <option></option>
-                <option value="Afghanistan">Afghanistan</option>
-                <option value="Åland Islands">Åland Islands</option>
-                <option value="Albania">Albania</option>
-            </select>
-            <input type="text" name="country" id="id_country" 
-                   placeholder="select a country" onfocus="this.select()"
-                   style="position:absolute;top:0px;left:0px;width:183px;width:180px\9;#width:180px;height:23px; height:21px\9;#height:18px;border:1px solid #556;"  >
-         </div>
+        <label>Choose a browser from this list:
+                <input list="browsers" name="myBrowser" /></label>
+                <datalist id="browsers">
+                <option value="Chrome">
+                <option value="Firefox">
+                <option value="Internet Explorer">
+                <option value="Opera">
+                <option value="Safari">
+                <option value="Microsoft Edge">
+                </datalist>
         
         <br/>
         
