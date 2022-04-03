@@ -85,7 +85,7 @@ def insert_user(form: QueryDict) -> str:
         status = 'User with email %s already exists' % (form['email'])
     
     elif credcardno_exsts:
-        status = 'User with credit_card_no %s already exists' % (form['credit_card_no'])
+        status = 'User with credit card number %s already exists' % (form['credit_card_no'])
 
     else:
         with connection.cursor() as cursor:
