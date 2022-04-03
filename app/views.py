@@ -52,13 +52,55 @@ def user_index(request, email):
     return index(request)
 
 
+def search(request):
+    """Shows user's homepage after login"""
+    result_dict = {}
+    if request.POST:
+        if request.POST['action'] == 'search':
+            with connection.cursor() as cursor:
+                cursor.execute(
+                    # uses user-defined SQL function
+                    "SELECT * FROM get_apartment(%s,%s,%s)",
+                    [
+                        request.POST['country'],
+                        request.POST['city'],
+                        request.POST['num_guests']
+                    ]
+                )                
+                apartments = queries.dictfetchall_(cursor)
+
+            result_dict['records'] = apartments
+            result_dict['orderby'] = 'price'
+
+            return render(request,'app/search-apartments.html', result_dict)
+    
+    else:
+        # default results with all apartments
+        # ordered by price asc
+        with connection.cursor() as cursor:
+            cursor.execute(
+                # uses user-defined SQL function
+                "SELECT * FROM get_all_apartments()"
+            )
+            apartments = queries.dictfetchall_(cursor)
+
+        result_dict['records'] = apartments
+        result_dict['orderby'] = 'price'
+    
+    if request.GET:
+        if request.GET['orderby'] == 'price':
+            result_dict['orderby'] = 'price'
+        elif request.GET['orderby'] == 'rating':
+            result_dict['orderby'] = 'avg_rating'
+
+    return render(request,'app/search-apartments.html', result_dict)
+
 
 def user_search(request, email):
     return search(request)
 
 
-
-def user_view_apt(request, email, apt_id):
+def apartment(request, apt_id):
     """Shows the apartment details page"""
     
     result_dict = dict()
@@ -73,6 +115,11 @@ def user_view_apt(request, email, apt_id):
             pass
 
     return render(request,'app/apartment.html', result_dict)
+
+
+def user_view_apt(request, email, apt_id):
+    """Shows the apartment details page for login user"""
+    return apartment(request, apt_id)
 
 
 def viewself(request, email):
@@ -169,84 +216,8 @@ def checkpw(request, email):
 
 
 
-def search(request):
-    """Shows user's homepage after login"""
-    result_dict = {}
-    if request.POST:
-        if request.POST['action'] == 'search':
-            with connection.cursor() as cursor:
-                cursor.execute(
-                    # uses user-defined SQL function
-                    "SELECT * FROM get_apartment(%s,%s,%s)",
-                    [
-                        request.POST['country'],
-                        request.POST['city'],
-                        request.POST['num_guests']
-                    ]
-                )                
-                apartments = queries.dictfetchall_(cursor)
-
-            result_dict['records'] = apartments
-            result_dict['orderby'] = 'price'
-
-            return render(request,'app/search-apartments.html', result_dict)
-    
-    else:
-        # default results with all apartments
-        # ordered by price asc
-        with connection.cursor() as cursor:
-            cursor.execute(
-                # uses user-defined SQL function
-                "SELECT * FROM get_all_apartments()"
-            )
-            apartments = queries.dictfetchall_(cursor)
-
-        result_dict['records'] = apartments
-        result_dict['orderby'] = 'price'
-    
-    if request.GET:
-        if request.GET['orderby'] == 'price':
-            result_dict['orderby'] = 'price'
-        elif request.GET['orderby'] == 'rating':
-            result_dict['orderby'] = 'avg_rating'
-
-    return render(request,'app/search-apartments.html', result_dict)
-
-
-def apartment(request, apt_id):
-    """Shows the apartment details page"""
-    
-    result_dict = dict()
-
-    result_dict['apt'] = queries.get_single_apartment(apt_id)
-
-    if request.POST:
-        dates_avail = queries.find_apt_availability(request.POST, apt_id)
-        result_dict['dates_avail'] = {
-                                    'year': request.POST['year'],
-                                    'month': request.POST['month'],
-                                    'dates': dates_avail
-                                    }
-
-    return render(request,'app/apartment.html', result_dict)
 
 
 
-def users(request):
-    """Shows all users in page"""
-    
-    ## Delete customer
-    if request.POST:
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM users WHERE email = %s", [request.POST['id']])
 
 
-
-    ## Call function defined in db_fns.py
-    ## which masks raw query in python function
-    users = queries.get_all_users()
-
-    result_dict = {'records': users}
-
-    return render(request,'app/users.html', result_dict)
