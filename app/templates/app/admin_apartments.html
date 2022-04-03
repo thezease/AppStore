@@ -37,11 +37,15 @@
     <div class = "main-content">
         <header>
             <div class="search-wrapper">
-                <span class="las la-search"></span>
-                <input type="search" placeholder="Search Apartment ID"/>
+                <form method="POST">
+                    {% csrf_token %}
+                    <span class="las la-search"></span>
+                    <input type="search" name="apartment" placeholder="Search Apartment ID"/>
+                    <button class = "button button1" type="submit" name="action" value="search">Search</button> 
+                </form>
             </div>
             <div>
-                <a href="admin_users_add"><button class="button button1">Add Apartments</button></a>
+                <a href="admin_apartments_add"><button class="button button1">Add Apartments</button></a>
             </div>
         </header>
         <main>
@@ -51,13 +55,7 @@
                     <th>Host</th>
                     <th>Country</th>
                     <th>City</th>
-                    <th>Address</th>
-                    <th>Number of guests</th>
-                    <th>Number of beds</th>
-                    <th>Number of bathrooms</th>
                     <th>Property type</th>
-                    <th>Amenities</th>
-                    <th>House rules</th>
                     <th>Price</th>
                 </thead>
                 {% for i in records %}
@@ -66,15 +64,10 @@
                     <td> {{ i.1 }} </td>
                     <td> {{ i.2 }} </td>
                     <td> {{ i.3 }} </td>
-                    <td> {{ i.4 }} </td>
-                    <td> {{ i.5 }} </td>
-                    <td> {{ i.6 }} </td>
-                    <td> {{ i.7 }} </td>
                     <td> {{ i.8 }} </td>
-                    <td> {{ i.9 }} </td>
-                    <td> {{ i.10 }} </td>
                     <td> {{ i.11 }} </td>
                     <td>
+                        <a href="admin_apartments_view/{{ i.0 }}"><button class = "button button1">View</button></a> |
                         <a href="admin_apartments_edit/{{ i.0 }}"><button class = "button button1">Edit</button></a> |
         
                         <form method="POST" style="display: inline;">

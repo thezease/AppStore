@@ -36,50 +36,69 @@
     </div>
     <div class = "main-content">
         <main>
-            <div class="cards card2">
-                <div class="card-single">
-                    <div>
-                        <form method="POST">
+            <div class="card-single">
+                <div>
+                    <form method="POST">
                         {% csrf_token %}
-                        <label for="statistics">Choose the statistics:</label>
-                        <select name="country" id="countries">
-                            <option value=>The income ranking in a specified country grouped by the guest nationality</option>
+                        <label for="stats">Choose the statistics to study on the apartment country:</label>
+                        <br>
+                        <br>
+                        For the apartment country:
+                        <br>
+                        <select name="stats1" id="id_stats1" style="width: 35rem">
+                            <option value=section1table1>the income ranking contributed by each guest nationality</option>
+                            <option value=section1table2>the total income of each city</option>
+                            <option value=section1table3>the number of guests from each country</option>
                         </select>
                         <br/><br/>
-                        </form>
-                        <form method="POST">
-                        {% csrf_token %}
-                        <label for="countries">Specify the country:</label>
-                        <select name="country" id="countries">
+                        <label for="id_country">Specify the apartment country:</label>
+                        <select name="country" id="id_country">
                             {% for country in records %}
-                            <option value=>{{ country.0 }}</option>
+                            <option value={{ country.0 }}>{{ country.0 }}</option>
                             {% endfor %}
                         </select>
-                        </form>
-                        <a href="admin_statistics"><button class = "button button1" type="submit" name="action" value="table1">Generate</button></a>
-                    </div>
+                        <br>
+                        <br>
+                        <button class = "button button1" name="action" type="submit" value="section1">Generate</button>
+                    </form>
                 </div>
-                <div class="card-single">
-                    <div>
-                        <form method="POST">
+            </div>
+            <br>
+            <br>
+            <div class="card-single">
+                <div>
+                    <form method="POST">
                         {% csrf_token %}
-                        <label for="statistics">Choose the statistics:</label>
-                        <select name="country" id="countries">
-                            <option value=>The income ranking in a specified country grouped by the guest nationality</option>
+                        <label for="statistics">Choose the statistics to study on credit card types:</label>
+                        <br>
+                        <br>
+                        <select name="stats2" id="id_stats2">
+                            <option value=section2table1>The total values of transactions for each credict card type partitioned by guest nationality</option>
+                            <option value=section2table2>The rank of freqency of use of each credit card type partitioned by guest nationality</option>
                         </select>
-                        <br/><br/>
-                        </form>
-                        <form method="POST">
+                        <br>
+                        <br>
+                        <button class = "button button1" name="action" type="submit" value="section2">Generate</button>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="card-single">
+                <div>
+                    <form method="POST">
                         {% csrf_token %}
-                        <label for="countries">Specify the country:</label>
-                        <select name="country" id="countries">
-                            {% for country in records %}
-                            <option value=>{{ country.0 }}</option>
-                            {% endfor %}
+                        <label for="statistics">Choose the statistics to study on all apartment countries:</label>
+                        <br>
+                        <br>
+                        <select name="stats3" id="id_stats3">
+                            <option value=section3table1>The average length of stay for all rentals in each country</option>
+                            <option value=section3table2>The total length of stay for all rentals in each country</option>
                         </select>
-                        </form>
-                        <a href="admin_statistics"><button class = "button button1" type="submit" name="action" value="table1">Generate</button></a>
-                    </div>
+                        <br>
+                        <br>
+                        <button class = "button button1" name="action" type="submit" value="section3">Generate</button>
+                    </form>
                 </div>
             </div>
         </main>

@@ -48,6 +48,30 @@
                 </div>
                 <div class="card-single">
                     <div>
+                        <h1>{{ users7_num }}</h1>
+                        <span>New users in the past week</span>
+                    </div>
+                    <div>
+                        <span class="las la-user"></span>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div>
+                        <h3>Email (Number of bookings)</h3>
+                        <h3>{{ activeGuests.0.0}} ({{ activeGuests.0.2 }})</h3>
+                        <h3>{{ activeGuests.1.0}} ({{ activeGuests.1.2 }})</h3>
+                        <h3>{{ activeGuests.2.0}} ({{ activeGuests.2.2 }})</h3>
+                        <span>Top 3 active guests (Active in booking apartments)</span>
+                        <br/><a href="admin_dashboard_activeGuest_rank"><button class="button button1">View All</button></a><br/>
+                    </div>
+                    <div>
+                        <span class="las la-user-tie"></span>
+                    </div>
+                </div>
+
+
+                <div class="card-single">
+                    <div>
                         <h1>{{ apartments_num }}</h1>
                         <span>Apartments</span>
                     </div>
@@ -55,6 +79,30 @@
                         <span class="las la-building"></span>
                     </div>
                 </div>
+                <div class="card-single">
+                    <div>
+                        <h1>{{ listedApartments_num }}</h1>
+                        <span>Active(Listed) Apartments</span>
+                    </div>
+                    <div>
+                        <span class="las la-door-open"></span>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div>
+                        <h3>Apartment ID (rating)</h3>
+                        <h3>Apartment {{ top3apartments.0.0}} ({{ top3apartments.0.1 }})</h3>
+                        <h3>Apartment {{ top3apartments.1.0}} ({{ top3apartments.1.1 }})</h3>
+                        <h3>Apartment {{ top3apartments.2.0}} ({{ top3apartments.2.1 }})</h3>
+                        <span>Top 3 apartments of best rating</span>
+                        <br/><a href="admin_dashboard_rating_rank"><button class="button button1">View All</button></a><br/>
+                    </div>
+                    <div>
+                        <span class="las la-star"></span>
+                    </div>
+                </div>
+
+
                 <div class="card-single">
                     <div>
                         <h1>{{ rentals_num }}</h1>
@@ -66,7 +114,31 @@
                 </div>
                 <div class="card-single">
                     <div>
-                        <h1>18</h1>
+                        <h1>{{ rental_sum }}</h1>
+                        <span>Total income of all rentals</span>
+                    </div>
+                    <div>
+                        <span class="las la-dollar-sign"></span>
+                    </div>
+                </div>
+                <div class="card-single">
+                    <div>
+                        <h3>Rental ID | Guest | Length of stay</h3>
+                        <h3>{{stayRank.0.0}} | {{stayRank.0.1}} | {{stayRank.0.2}}</h3>
+                        <h3>{{stayRank.1.0}} | {{stayRank.1.1}} | {{stayRank.1.2}}</h3>
+                        <h3>{{stayRank.2.0}} | {{stayRank.2.1}} | {{stayRank.2.2}}</h3>
+                        <span>Top 3 length of stays</span>
+                        <br/><a href="admin_dashboard_lengthOfStay_rank"><button class="button button1">View All</button></a><br/>
+                    </div>
+                    <div>
+                        <span class="las la-ruler"></span>
+                    </div>
+                </div>
+
+
+                <div class="card-single">
+                    <div>
+                        <h1>{{ bookings_num }}</h1>
                         <span>Unsettled bookings</span>
                     </div>
                     <div>
@@ -75,32 +147,24 @@
                 </div>
                 <div class="card-single">
                     <div>
-                        <h1>{{ users7_num }}</h1>
-                        <span>New users in the past week</span>
+                        <h1>{{ booking_sum }}</h1>
+                        <span>Total worth of unsettled bookings</span>
                     </div>
                     <div>
-                        <span class="las la-user"></span>
-                    </div>
-                </div>
-                <div class="card-single">
-                    <div>
-                        <h3>Apartment {{ top3apartments.0.0}} ({{ top3apartments.0.1 }})</h3>
-                        <h3>Apartment {{ top3apartments.1.0}} ({{ top3apartments.1.1 }})</h3>
-                        <h3>Apartment {{ top3apartments.2.0}} ({{ top3apartments.2.1 }})</h3>
-                        <span>Top 3 apartments of best rating</span>
-                        <br/><a href="rating_rank"><button class="button button1">View All</button></a><br/>
-                    </div>
-                    <div>
-                        <span class="las la-star"></span>
+                        <span class="las la-hand-holding-usd"></span>
                     </div>
                 </div>
                 <div class="card-single">
                     <div>
-                        <h1>{{ rental_sum }}</h1>
-                        <span>Total income of all rentals</span>
+                        <h3>Apartment ID | Unsettled bookings</h3>
+                        <h3>{{bookingRank.0.0}} | {{bookingRank.0.1}}</h3>
+                        <h3>{{bookingRank.1.0}} | {{bookingRank.1.1}}</h3>
+                        <h3>{{bookingRank.2.0}} | {{bookingRank.2.1}}</h3>
+                        <span>Top 3 apartments that have most unsettled bookings</span>
+                        <br/><a href="admin_dashboard_bookingNum_rank"><button class="button button1">View All</button></a><br/>
                     </div>
                     <div>
-                        <span class="las la-dollar-sign"></span>
+                        <span class="las la-list-ul"></span>
                     </div>
                 </div>
             </div>

@@ -17,7 +17,7 @@
                     <a href="admin_dashboard" ><span class="las la-igloo"></span><span>Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="" class = "active"><span class="las la-table"></span><span>Statistics</span></a>
+                    <a href="admin_statistics" class = "active"><span class="las la-table"></span><span>Statistics</span></a>
                 </li>
                 <li>
                     <a href="admin_users"><span class="las la-users"></span><span>Users</span></a>
@@ -37,18 +37,20 @@
     <div class = "main-content">
         <main>
             <a href="/admin_statistics"><button class="button button1">Back</button></a>
+            <h2>The total length of stay for all rentals in each country</h2>
+            <br>
             <div>
                 <table border=1>
                     <thead>
-                        <th>Guest nationality</th>
-                        <th>Income</th>
                         <th>Rank</th>
+                        <th>Country</th>
+                        <th>Average length of stay (days)</th>
                     </thead>
-                    {% for i in table1 %}
+                    {% for i in table %}
                     <tr>
+                        <td> {{ i.2 }} </td>
                         <td> {{ i.0 }} </td>
                         <td> {{ i.1 }} </td>
-                        <td> {{ i.2 }} </td>
                     </tr>
                     {% endfor %}
                 </table>

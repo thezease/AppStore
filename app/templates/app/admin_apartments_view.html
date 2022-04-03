@@ -20,10 +20,10 @@
                     <a href="/admin_statistics"><span class="las la-table"></span><span>Statistics</span></a>
                 </li>
                 <li>
-                    <a href="/admin_users" class = "active"><span class="las la-users"></span><span>Users</span></a>
+                    <a href="/admin_users"><span class="las la-users"></span><span>Users</span></a>
                 </li>
                 <li>
-                    <a href="/admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                    <a href="/admin_apartments" class = "active"><span class="las la-building"></span><span>Apartments</span></a>
                 </li>
                 <li>
                     <a href="/admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
@@ -36,48 +36,73 @@
     </div>
     <div class = "main-content">
         <main>
-            <a href="/admin_users"><button class="button button1">Back</button></a>
+            <a href="/admin_apartments"><button class="button button1">Back</button></a>
             <br/><br/>
             <table style='text-align:left'>
                 <tr>
-                    <th>Email</th>
+                    <th>Apartment ID</th>
                     <td>:</td>
-                    <td> {{ user.2 }} </td>
+                    <td> {{ apartment.0 }} </td>
                 </tr>
                 <tr>
-                    <th>First name</th>
+                    <th>Host Email</th>
                     <td>:</td>
-                    <td> {{ user.0 }} </td>
-                </tr>
-                <tr>
-                    <th>Last name</th>
-                    <td>:</td>
-                    <td> {{ user.1 }} </td>
-                </tr>
-                <tr>
-                    <th>Date of birth</th>
-                    <td>:</td>
-                    <td> {{ user.4 }} </td>
-                </tr>
-                <tr>
-                    <th>Date of registration</th>
-                    <td>:</td>
-                    <td> {{ user.5 }} </td>
+                    <td> {{ apartment.1 }} </td>
                 </tr>
                 <tr>
                     <th>Country</th>
                     <td>:</td>
-                    <td> {{ user.6 }} </td>
+                    <td> {{ apartment.2 }} </td>
                 </tr>
                 <tr>
-                    <th>Credit card type</th>
+                    <th>City</th>
                     <td>:</td>
-                    <td> {{ user.7 }} </td>
+                    <td> {{ apartment.3 }} </td>
                 </tr>
                 <tr>
-                    <th>Credit card number</th>
+                    <th>Address</th>
                     <td>:</td>
-                    <td> {{ user.8 }} </td>
+                    <td> {{ apartment.4 }} </td>
+                </tr>
+                <tr>
+                    <th>Number of guests</th>
+                    <td>:</td>
+                    <td> {{ apartment.5 }} </td>
+                </tr>
+                <tr>
+                    <th>Number of beds</th>
+                    <td>:</td>
+                    <td> {{ apartment.6 }} </td>
+                </tr>
+                <tr>
+                    <th>Number of bathrooms</th>
+                    <td>:</td>
+                    <td> {{ apartment.7 }} </td>
+                </tr>
+                <tr>
+                    <th>Property Type</th>
+                    <td>:</td>
+                    <td> {{ apartment.8 }} </td>
+                </tr>
+                <tr>
+                    <th>Amenities</th>
+                    <td>:</td>
+                    <td> {{ apartment.9 }} </td>
+                </tr>
+                <tr>
+                    <th>House Rules</th>
+                    <td>:</td>
+                    <td> {{ apartment.10 }} </td>
+                </tr>
+                <tr>
+                    <th>Price</th>
+                    <td>:</td>
+                    <td> {{ apartment.11 }} </td>
+                </tr>
+                <tr>
+                    <th>Listed</th>
+                    <td>:</td>
+                    <td> {{ apartment.12 }} </td>
                 </tr>
             </table>
         
@@ -86,25 +111,21 @@
             <h2>Rental History</h2>
             <table border=1>
                 <thead>
-                    <th>Apartment ID</th>
-                    <th>Host Email</th>
-                    <th>Country</th>
-                    <th>City</th>
+                    <th>Rental ID</th>
                     <th>Check-In</th>
                     <th>Check-Out</th>
                     <th>Total Price</th>
+                    <th>Guest Email</th>
                     <th>Rating</th>
                 </thead>
                 {% for rental in records %}
                 <tr>
                     <td> {{ rental.0 }} </td>
-                    <td> {{ rental.1 }} </td>
                     <td> {{ rental.2 }} </td>
                     <td> {{ rental.3 }} </td>
+                    <td> {{ rental.6 }}</td>
                     <td> {{ rental.4 }} </td>
                     <td> {{ rental.5 }} </td>
-                    <td> {{ rental.6 }} </td>
-                    <td> {{ rental.7 }} </td>
                 </tr>
                 {% endfor %}
             </table>

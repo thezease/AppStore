@@ -40,15 +40,16 @@ WHERE rental_id = '';
 
 -- -- rentals statistics
 -- total income of all rentals
-SELECT SUM(total_price)
-FROM rentals;
-
--- the total income in each city of each country
-SELECT a.country, a.city, ROUND(SUM(r.total_price),2)
+SELECT SUM((r.check_out - r.check_in)*a.price)
 FROM rentals r, apartments a
-WHERE r.apartment_id = a.apartment_id
-GROUP BY a.country, a.city
-ORDER BY ROUND(SUM(r.total_price),2) DESC;
+WHERE r.apartment_id = a.apartment_id;
+
+-- the total income in each city of the country
+SELECT a.city, ROUND(SUM((r.check_out - r.check_in)*a.price),2) AS su,
+ROW_NUMBER() over (ORDER BY ROUND(SUM((r.check_out - r.check_in)*a.price),2) DESC) AS country_rank 
+FROM rentals r, apartments a
+WHERE r.apartment_id = a.apartment_id AND a.country = 'China'
+GROUP BY a.city
 
 -- the total income in each country
 SELECT a.country, ROUND(SUM(r.total_price),2)
@@ -95,20 +96,24 @@ HAVING ROUND(AVG(r.rating),1) >= ALL(
 	GROUP BY a2.country, a2.apartment_id
 );
 
--- average length of stay for all rentals of each apartment DESC
-SELECT a.country, a.city, a.address, a.apartment_id, ROUND(AVG(r.check_out-r.check_in),1) AS average_length_of_stay
+-- average length of stay for all rentals in each country DESC
+SELECT a.country, ROUND(AVG(r.check_out-r.check_in),1) AS average_length_of_stay,
+ROW_NUMBER() over (ORDER BY ROUND(AVG(r.check_out-r.check_in),1) DESC) AS rank 
 FROM rentals r, apartments a
 WHERE r.apartment_id = a.apartment_id
-GROUP BY a.country, a.city, a.apartment_id
-ORDER BY average_length_of_stay DESC;
+GROUP BY a.country;
 
--- sum of length of stay for all rentals of each apartment DESC
-SELECT a.country, a.city, a.address, a.apartment_id, SUM(r.check_out-r.check_in) AS total_length_of_stay
+-- sum of length of stay for all rentals in each country DESC
+SELECT a.country, SUM(r.check_out-r.check_in) AS total_length_of_stay,
+ROW_NUMBER() over (ORDER BY SUM(r.check_out-r.check_in) DESC) AS rank 
 FROM rentals r, apartments a
 WHERE r.apartment_id = a.apartment_id
-GROUP BY a.country, a.city, a.apartment_id
-ORDER BY total_length_of_stay DESC;
+GROUP BY a.country;
 
+-- lengths of stay ranking for all rentals
+SELECT rental_id, guest, (check_out-check_in) AS length_of_stay
+FROM rentals
+ORDER BY length_of_stay DESC;
 
 -- -- apartments statistics
 -- number of available apartments for each property type in each country DESC
@@ -174,14 +179,25 @@ SELECT COUNT(*)
 FROM users
 WHERE since >= (CURRENT_DATE - 30);
 
+-- -- Booking statistics
+-- Rank of number of unsettled bookings by apartment
+SELECT apartment_id, COUNT(*),
+ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) AS rank
+FROM tempbookings
+GROUP BY apartment_id;
+
+-- Total worth of all unsettled bookings
+SELECT SUM((t.check_out - t.check_in)*a.price)
+FROM tempbookings t, apartments a
+WHERE t.apartment_id = a.apartment_id;
+
 -- -- mixed tables statistics
 -- for each country of apartments, count the number of guests grouped by aparment country and guest nationality
-SELECT a.country AS apartment_country, u.country AS guest_nationality, COUNT(*) AS number_of_guests,
-ROW_NUMBER() OVER (PARTITION BY a.country ORDER BY COUNT(*) DESC) AS rank
+SELECT u.country AS guest_nationality, COUNT(*) AS number_of_guests,
+ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) AS rank
 FROM apartments a, rentals r, users u
-WHERE a.apartment_id = r.apartment_id
-AND r.guest = u.email
-GROUP BY apartment_country, guest_nationality;
+WHERE a.apartment_id = r.apartment_id AND r.guest = u.email AND a.country = 'China'
+GROUP BY guest_nationality;
 
 -- the total income of each aparment country grouped by guest nationality
 SELECT a.country AS apartment_country, u.country AS guest_nationality, ROUND(SUM(r.total_price), 2) AS income,
@@ -194,21 +210,58 @@ GROUP BY apartment_country, guest_nationality;
 -- continued: to select one specific country
 SELECT ranks.guest_nationality, ranks.income, ranks.rank
 FROM (
-	SELECT a.country AS apartment_country, u.country AS guest_nationality, ROUND(SUM(r.total_price), 2) AS income,
-	ROW_NUMBER() OVER (PARTITION BY a.country ORDER BY ROUND(SUM(r.total_price), 2) DESC) AS rank
+	SELECT a.country AS apartment_country, u.country AS guest_nationality, ROUND(SUM((r.check_out - r.check_in)*a.price), 2) AS income,
+	ROW_NUMBER() OVER (PARTITION BY a.country ORDER BY ROUND(SUM((r.check_out - r.check_in)*a.price), 2) DESC) AS rank
 	FROM apartments a, rentals r, users u
 	WHERE a.apartment_id = r.apartment_id
 	AND r.guest = u.email
 	GROUP BY apartment_country, guest_nationality
 ) AS ranks
-WHERE ranks.apartment_country = 'China';
+WHERE ranks.apartment_country = 'Malaysia';
 
--- the total values of transaction for each credict card type and each guest nationality
-SELECT u.country AS guest_nationality, u.credit_card_type, ROUND(SUM(r.total_price), 2),
-ROW_NUMBER() OVER (PARTITION BY u.country ORDER BY ROUND(SUM(r.total_price), 2) DESC) AS rank
-FROM users u , rentals r
-WHERE u.email = r.guest
+-- the total values of transaction for each credict card type partitioned by guest nationality
+SELECT u.country AS guest_nationality, u.credit_card_type, ROUND(SUM((r.check_out - r.check_in)*a.price), 2) AS income,
+ROW_NUMBER() OVER (PARTITION BY u.country ORDER BY ROUND(SUM((r.check_out - r.check_in)*a.price), 2) DESC) AS rank
+FROM users u , rentals r, apartments a
+WHERE u.email = r.guest AND a.apartment_id = r.apartment_id
 GROUP BY guest_nationality, u.credit_card_type;
+
+-- The rank of freqency of use of each credit card type partitioned by country
+SELECT u.country, u.credit_card_type, COUNT(*),
+ROW_NUMBER() OVER (PARTITION BY u.country ORDER BY COUNT(*) DESC) AS rank
+FROM users u, rentals r
+WHERE u.email = r.guest
+GROUP BY u.country, u.credit_card_type;
+
+SELECT MAX(apartment_id)
+FROM apartments;
+
+SELECT r.*
+FROM apartments ap, rentals r 
+WHERE ap.apartment_id = r.apartment_id 
+AND r.apartment_id = 1
+
+SELECT r.apartment_id, ap.host, ap.country, ap.city, r.check_in, r.check_out, ROUND((r.check_out - r.check_in)*ap.price, 2) AS total_price, r.rating
+FROM apartments ap, rentals r 
+WHERE ap.apartment_id = r.apartment_id 
+AND r.guest = 'alonsbrough26@walmart.com'
+
+			
+	
+SELECT r.*, ROUND((r.check_out - r.check_in)*a.price, 2)
+FROM rentals r, apartments a
+WHERE r.apartment_id = a.apartment_id
+ORDER BY rental_id;
+
+SELECT r.guest, u.country, COUNT(*),
+ROW_NUMBER() OVER (ORDER BY COUNT(*) DESC) AS rank
+FROM users u, rentals r
+WHERE r.guest = u.email
+GROUP BY r.guest, u.country;
+
+SELECT COUNT(*)
+FROM apartments
+WHERE listed = true;
 
 
 

@@ -59,29 +59,27 @@
                     <th>Rating</th>
                     <th>Total Price</th>
                 </thead>
-                {% for i in records %}
                 <tr>
-                    <td> {{ i.0 }} </td>
-                    <td> {{ i.1 }} </td>
-                    <td> {{ i.2 }} </td>
-                    <td> {{ i.3 }} </td>
-                    <td> {{ i.4 }} </td>
-                    <td> {{ i.5 }} </td>
-                    <td> {{ i.6 }} </td>
+                    <td> {{ rental.0 }} </td>
+                    <td> {{ rental.1 }} </td>
+                    <td> {{ rental.2 }} </td>
+                    <td> {{ rental.3 }} </td>
+                    <td> {{ rental.4 }} </td>
+                    <td> {{ rental.5 }} </td>
+                    <td> {{ rental.6 }} </td>
                     <td>
-                        <a href="admin_rentals_edit/{{ i.0 }}"><button class = "button button1">Edit</button></a> |
+                        <a href="admin_rentals_edit/{{ rental.0 }}"><button class = "button button1">Edit</button></a> |
         
                         <form method="POST" style="display: inline;">
                         {% csrf_token %}
-                            <input type="hidden" name="id" value="{{ i.0 }}"/>
+                            <input type="hidden" name="id" value="{{ rental.0 }}"/>
                             <button
-                            onclick="return confirm('Are you sure you want to delete rental record {{ i.0 }}?');" 
+                            onclick="return confirm('Are you sure you want to delete rental record {{ rental.0 }}?');" 
                             class = "button button1"
                             type="submit" name="action" value="delete">Delete</button> 
                         </form>
                     </td>
                 </tr>
-                {% endfor %}
             </table>
         </main>
     </div>

@@ -14,22 +14,22 @@
         <div class = "sidebar-menu">
             <ul>
                 <li>
-                    <a href="admin_dashboard"><span class="las la-igloo"></span><span>Dashboard</span></a>
+                    <a href="/admin_dashboard"><span class="las la-igloo"></span><span>Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="admin_stats"><span class="las la-table"></span><span>Statistics</span></a>
+                    <a href="/admin_stats"><span class="las la-table"></span><span>Statistics</span></a>
                 </li>
                 <li>
-                    <a href="admin_users" class = "active"><span class="las la-users"></span><span>Users</span></a>
+                    <a href="/admin_users" class = "active"><span class="las la-users"></span><span>Users</span></a>
                 </li>
                 <li>
-                    <a href="admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                    <a href="/admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
                 </li>
                 <li>
-                    <a href="admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
+                    <a href="/admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
                 </li>
                 <li>
-                    <a href="admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
+                    <a href="/admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
                 </li>
             </ul>
         </div>
@@ -56,7 +56,6 @@
                     </div>
                 </div>
                 
-
                 <div id="div_id_last_name" class="control-group">
                     <label for="id_last_name" class="control-label requiredField">
                         Last name
@@ -69,36 +68,8 @@
                             required="" id="id_last_name">
                     </div>
                 </div>
-                
-
-                <div id="div_id_email" class="control-group">
-                    <label for="id_email" class="control-label requiredField">
-                        Email
-                        <span class="asteriskField">*</span>
-                    </label>
-                    <div class="controls">
-                        <input 
-                            type="text" name="email" 
-                            maxlength="64" class="textinput textInput" 
-                            required="" id="id_email">
-                    </div>
-                </div>
-
-
-                <div id="div_id_password" class="control-group">
-                    <label for="id_password" class="control-label requiredField">
-                        Password (at least 8 characters consisting upper and lower case latters, and digits)
-                        <span class="asteriskField">*</span>
-                    </label>
-                    <div class="controls">
-                        <input 
-                            type="password" name="password" 
-                            maxlength="32" class="textinput textInput" 
-                            required="" id="id_password">
-                    </div>
-                </div>
-                
-
+        
+        
                 <div id="div_id_dob" class="control-group">
                     <label for="id_dob" class="control-label requiredField">
                         Date of birth (yyyy-mm-dd)
@@ -107,7 +78,9 @@
                     <div class="controls">
                         <input 
                             type="text" name="date_of_birth" 
-                            class="dateinput" 
+                            class="dateinput"
+                            minlength="10"
+                            maxlength="10"
                             required="" id="id_dob">
                     </div>
                 </div>
@@ -121,11 +94,12 @@
                     <div class="controls">
                         <input 
                             type="text" name="country" 
+                            minlength="2"
                             maxlength="32" class="textinput textInput" 
                             required="" id="id_country">
                     </div>
                 </div>
-
+        
                 
                 <div id="div_ccard_type" class="control-group">
                     <label for="id_ccard_type" class="control-label requiredField">
@@ -135,22 +109,22 @@
                     <div class="controls">
                         <input 
                             type="radio" value="mastercard"
-                            name="credit_card_type" id="id_ccard_type">
+                            name="credit_card_type" id="id_ccard_type" {{ mastercard }}>
                         <label for="mastercard">Mastercard</label>
-
+        
                         <input 
                             type="radio" value="visa"
-                            name="credit_card_type" id="id_ccard_type">
-                        <label for="mastercard">Visa</label>
-
+                            name="credit_card_type" id="id_ccard_type" {{ visa }}>
+                        <label for="visa">Visa</label>
+        
                         <input 
                             type="radio" value="americanexpress"
-                            name="credit_card_type" id="id_ccard_type">
-                        <label for="mastercard">American Express</label>
+                            name="credit_card_type" id="id_ccard_type" {{ americanexpress }}>
+                        <label for="americanexpress">American Express</label>
                     </div>
                 </div>
-
-
+        
+        
                 <div id="div_ccard_no" class="control-group">
                     <label for="id_ccard_no" class="control-label requiredField">
                         Credit card number
@@ -160,13 +134,14 @@
                         <input 
                             type="tel" name="credit_card_no"
                             inputmode="numeric" pattern="[0-9\s]{13,16}"
+                            minlength="16"
                             maxlength="16" class="textinput textInput" 
                             required="" id="id_ccard_no">
                     </div>
                 </div>
 
                 <br>
-                <button class = "button button1" type="submit" value="Add">Add</button>
+                <button class = "button button1" name="action" type="submit" value="Add">Add</button>
             </form>
         </main>
     </div>    

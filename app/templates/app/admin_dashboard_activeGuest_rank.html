@@ -35,26 +35,24 @@
         </div>
     </div>
     <div class = "main-content">
-        <header class = "rating_rank_header">
-            Rating rank of all apartments in descending order
+        <header class = "activeGuest_rank_header">
+            Rank of active guests in descending order
             <br/><a href="admin_dashboard"><button class = "button button1">Back</button></a></br>
         </header>
         <main>
             <table border=1>
                 <thead>
-                    <th>Country</th>
-                    <th>City</th>
-                    <th>Address</th>
-                    <th>Apartment ID</th>
-                    <th>Rating</th>
+                    <th>Rank</th>
+                    <th>Guest Email</th>
+                    <th>Guest Nationality</th>
+                    <th>Number of Bookings</th>
                 </thead>
-                {% for ratingRank in Records %}
+                {% for activeGuests in Records %}
                 <tr>
-                    <td> {{ ratingRank.0 }} </td>
-                    <td> {{ ratingRank.1 }} </td>
-                    <td> {{ ratingRank.2 }} </td>
-                    <td> {{ ratingRank.3 }} </td>
-                    <td> {{ ratingRank.4 }} </td>
+                    <td> {{ activeGuests.3 }} </td>
+                    <td> {{ activeGuests.0 }} </td>
+                    <td> {{ activeGuests.1 }} </td>
+                    <td> {{ activeGuests.2 }} </td>
                 </tr>
                 {% endfor %}
             </table>

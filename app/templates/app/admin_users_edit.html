@@ -14,22 +14,22 @@
         <div class = "sidebar-menu">
             <ul>
                 <li>
-                    <a href="admin_dashboard"><span class="las la-igloo"></span><span>Dashboard</span></a>
+                    <a href="/admin_dashboard"><span class="las la-igloo"></span><span>Dashboard</span></a>
                 </li>
                 <li>
-                    <a href="admin_stats"><span class="las la-table"></span><span>Statistics</span></a>
+                    <a href="/admin_statistics"><span class="las la-table"></span><span>Statistics</span></a>
                 </li>
                 <li>
-                    <a href="admin_users" class = "active"><span class="las la-users"></span><span>Users</span></a>
+                    <a href="/admin_users" class = "active"><span class="las la-users"></span><span>Users</span></a>
                 </li>
                 <li>
-                    <a href="admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                    <a href="/admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
                 </li>
                 <li>
-                    <a href="admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
+                    <a href="/admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
                 </li>
                 <li>
-                    <a href="admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
+                    <a href="/admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
                 </li>
             </ul>
         </div>
@@ -84,7 +84,9 @@
                         <input 
                             type="text" name="date_of_birth" 
                             value="{{user.4 | date:"Y-m-d"}}"
-                            class="dateinput" 
+                            class="dateinput"
+                            minlength="10"
+                            maxlength="10"
                             required="" id="id_dob">
                     </div>
                 </div>
@@ -99,6 +101,7 @@
                         <input 
                             type="text" name="country" 
                             value="{{user.6}}"
+                            minlength="2"
                             maxlength="32" class="textinput textInput" 
                             required="" id="id_country">
                     </div>
@@ -139,6 +142,7 @@
                             type="tel" name="credit_card_no"
                             value="{{user.8}}"
                             inputmode="numeric" pattern="[0-9\s]{13,16}"
+                            minlength="16"
                             maxlength="16" class="textinput textInput" 
                             required="" id="id_ccard_no">
                     </div>

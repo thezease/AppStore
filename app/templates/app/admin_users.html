@@ -37,8 +37,12 @@
     <div class = "main-content">
         <header>
             <div class="search-wrapper">
-                <span class="las la-search"></span>
-                <input type="search" placeholder="Search user email"/>
+                <form method="POST">
+                    {% csrf_token %}
+                    <span class="las la-search"></span>
+                    <input type="search" name="email" placeholder="Search user email"/>
+                    <button class = "button button1" type="submit" name="action" value="search">Search</button> 
+                </form>
             </div>
             <div>
                 <a href="admin_users_add"><button class="button button1">Add User</button></a>

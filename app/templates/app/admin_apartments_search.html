@@ -23,10 +23,10 @@
                     <a href="admin_users" ><span class="las la-users"></span><span>Users</span></a>
                 </li>
                 <li>
-                    <a href="admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                    <a href="" class = "active"><span class="las la-building"></span><span>Apartments</span></a>
                 </li>
                 <li>
-                    <a href="" class = "active"><span class="las la-comment-dollar"></span><span>Rentals</span></a>
+                    <a href="admin_rentals"><span class="las la-comment-dollar"></span><span>Rentals</span></a>
                 </li>
                 <li>
                     <a href="admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
@@ -40,48 +40,45 @@
                 <form method="POST">
                     {% csrf_token %}
                     <span class="las la-search"></span>
-                    <input type="search" name="rental" placeholder="Search Rental ID"/>
+                    <input type="search" name="apartment" placeholder="Search Apartment ID"/>
                     <button class = "button button1" type="submit" name="action" value="search">Search</button> 
                 </form>
             </div>
             <div>
-                <a href="admin_rentals_add"><button class="button button1">Add Rental</button></a>
+                <a href="admin_apartments_add"><button class="button button1">Add Apartments</button></a>
             </div>
         </header>
         <main>
             <table border=1>
                 <thead>
-                    <th>Rental ID</th>
                     <th>Apartment ID</th>
-                    <th>Check-in Date</th>
-                    <th>Check-out Date</th>
-                    <th>Guest Email</th>
-                    <th>Rating</th>
-                    <th>Total Price</th>
+                    <th>Host</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th>Property type</th>
+                    <th>Price</th>
                 </thead>
-                {% for i in records %}
                 <tr>
-                    <td> {{ i.0 }} </td>
-                    <td> {{ i.1 }} </td>
-                    <td> {{ i.2 }} </td>
-                    <td> {{ i.3 }} </td>
-                    <td> {{ i.4 }} </td>
-                    <td> {{ i.5 }} </td>
-                    <td> {{ i.6 }} </td>
+                    <td> {{ apartment.0 }} </td>
+                    <td> {{ apartment.1 }} </td>
+                    <td> {{ apartment.2 }} </td>
+                    <td> {{ apartment.3 }} </td>
+                    <td> {{ apartment.8 }} </td>
+                    <td> {{ apartment.11 }} </td>
                     <td>
-                        <a href="admin_rentals_edit/{{ i.0 }}"><button class = "button button1">Edit</button></a> |
+                        <a href="admin_apartments_view/{{ apartment.0 }}"><button class = "button button1">View</button></a> |
+                        <a href="admin_apartments_edit/{{ apartment.0 }}"><button class = "button button1">Edit</button></a> |
         
                         <form method="POST" style="display: inline;">
                         {% csrf_token %}
-                            <input type="hidden" name="id" value="{{ i.0 }}"/>
+                            <input type="hidden" name="id" value="{{ apartment.0 }}"/>
                             <button
-                            onclick="return confirm('Are you sure you want to delete rental record {{ i.0 }}?');" 
+                            onclick="return confirm('Are you sure you want to delete apartment {{ apartment.0 }}?');" 
                             class = "button button1"
                             type="submit" name="action" value="delete">Delete</button> 
                         </form>
                     </td>
                 </tr>
-                {% endfor %}
             </table>
         </main>
     </div>
