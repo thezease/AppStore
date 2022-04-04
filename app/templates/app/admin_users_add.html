@@ -50,7 +50,8 @@
                     </label>
                     <div class="controls">
                         <input 
-                            type="text" name="first_name" 
+                            type="text" name="first_name"
+                            minlength="1"
                             maxlength="16" class="textinput textInput" 
                             required="" id="id_first_name">
                     </div>
@@ -63,13 +64,43 @@
                     </label>
                     <div class="controls">
                         <input
-                            type="text" name="last_name" 
+                            type="text" name="last_name"
+                            minlength="1"
                             maxlength="16" class="textinput textInput" 
                             required="" id="id_last_name">
                     </div>
                 </div>
         
-        
+                <div id="div_id_email" class="control-group">
+                    <label for="id_email" class="control-label requiredField">
+                        Email
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <input
+                            type="text" name="email"
+                            minlength="1"
+                            maxlength="64" class="textinput textInput" 
+                            required="" id="id_email">
+                    </div>
+                </div>
+
+
+                <div id="div_id_password" class="control-group">
+                    <label for="id_password" class="control-label requiredField">
+                        Password
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <input
+                            type="text" name="password"
+                            minlength="8"
+                            maxlength="32" class="textinput textInput" 
+                            required="" id="id_password">
+                    </div>
+                </div>
+
+
                 <div id="div_id_dob" class="control-group">
                     <label for="id_dob" class="control-label requiredField">
                         Date of birth (yyyy-mm-dd)

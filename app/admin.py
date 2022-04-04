@@ -592,11 +592,15 @@ def apartments_add(request):
 
     if request.POST:
         if request.POST['action'] == 'Add':
+            if 'listed' in request.POST:
+                    listed = "TRUE"
+            else:
+                listed = "FALSE"
             with connection.cursor() as cursor:
                 cursor.execute(
                     """
-                    INSERT INTO apartments (host, country, city, address, num_guests, num_beds, num_bathrooms, property_type, amenities, house_rules, price) 
-                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
+                    INSERT INTO apartments (host, country, city, address, num_guests, num_beds, num_bathrooms, property_type, amenities, house_rules, price, listed) 
+                    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
                     [
                         request.POST['host'],
                         request.POST['country'],
@@ -608,7 +612,8 @@ def apartments_add(request):
                         request.POST['property_type'],
                         request.POST['amenities'],
                         request.POST['house_rules'],
-                        request.POST['price']
+                        request.POST['price'],
+                        listed
                     ]
                     )
                 return redirect('/admin_apartments')    
