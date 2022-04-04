@@ -1,0 +1,213 @@
+{% load static %}
+<html>
+<head>
+    <title>Add Apartment</title>
+    <link rel="stylesheet", href ="{% static 'app/style.css'%}">
+    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
+</head>    
+<body>
+    <div class="topnav">
+        <a href="/" title="Go to homepage" id="authhome">Home</a>
+        <a href="/search" title="Search all apartments" id="authapt">Apartments</a>
+        <a class="active" href="/login" title="Login here" id="authuser">Login</a>
+        <a href="/" title ="Logout" id="authout">Logout</a>
+    </div>
+
+    <a href="/u={{ email }}~/viewself-host">Back</a>
+
+    <p style="color:red">{{ status|safe }}</p>
+
+    <h2>Add an Apartment</h2>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div id="div_id_apt_country" class="control-group">
+            <label for="id_apt_country" class="control-label requiredField">
+                <b>Country</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="text" name="country"
+                    placeholder="Country" 
+                    value="{{ apartment.country }}""
+                    maxlength="16" class="textinput textInput" 
+                    required="" id="id_apt_country">
+            </div>
+        </div>
+
+        <div id="div_id_apt_city" class="control-group">
+            <label for="id_apt_city" class="control-label requiredField">
+                <b>City</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input
+                    type="text" name="city"
+                    placeholder="City" 
+                    value="{{ apartment.city }}""
+                    maxlength="32" class="textinput textInput" 
+                    required="" id="id_apt_city">
+            </div>
+        </div>
+
+        <div id="div_id_apt_address" class="control-group">
+            <label for="id_apt_address" class="control-label requiredField">
+                <b>Address</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="address" name="address"
+                    placeholder="Street address" 
+                    value="{{ apartment.address }}""
+                    maxlength="64" class="textinput textInput" 
+                    required="" id="id_apt_address">
+            </div>
+        </div>
+
+        <div id="div_id_apt_num_guests" class="control-group">
+            <label for="id_apt_num_guests" class="control-label requiredField">
+                <b>Number of guests allowed</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="num_guests" 
+                    min="1" max="20" step="1"
+                    value={{ apartment.num_guests }}
+                    required="" id="id_apt_num_guests">
+            </div>
+        </div>
+
+        <div id="div_id_apt_num_beds" class="control-group">
+            <label for="id_apt_num_beds" class="control-label requiredField">
+                <b>Number of beds available</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="num_beds" 
+                    min="1" max="20" step="1"
+                    value={{ apartment.num_beds }}
+                    required="" id="id_apt_num_beds">
+            </div>
+        </div>
+
+        <div id="div_id_apt_num_bathrooms" class="control-group">
+            <label for="id_apt_num_bathrooms" class="control-label requiredField">
+                <b>Number of bathrooms available</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="num_bathrooms" 
+                    min="1" max="20" step="1" 
+                    value={{ apartment.num_bathrooms }}
+                    required="" id="id_apt_num_bathrooms">
+            </div>
+        </div>
+        
+        <div id="div_property_type" class="control-group">
+            <label for="id_property_type" class="control-label requiredField">
+                <b>Property type</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="radio" value="Luxury Apartment" {{ t1 }}
+                    name="property_type" id="id_property_type">
+                <label for="Luxury Apartment">Luxury Apartment</label>
+
+                <input 
+                    type="radio" value="Bungalow" {{ t2 }}
+                    name="property_type" id="id_property_type">
+                <label for="Bungalow">Bungalow</label>
+
+                <input 
+                    type="radio" value="Apartment" {{ t3 }}
+                    name="property_type" id="id_property_type">
+                <label for="Apartment">Apartment</label>
+            </div>
+        </div>
+
+        <div id="div_amenities" class="control-group">
+            <label for="id_amenities" class="control-label requiredField">
+                <b>Amenities</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="radio" value="Free Wifi/Washing Machine and Dryer"
+                    name="amenities" id="id_amenities" {{ am1 }}>
+                <label for="Free Wifi/Washing Machine and Dryer">
+                    Free Wifi/Washing Machine and Dryer
+                </label>
+
+                <input 
+                    type="radio" value="Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer"
+                    name="amenities" id="id_amenities" {{ am2 }}>
+                <label for="Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer">
+                    Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer
+                </label>
+
+                <input 
+                    type="radio" value="Free Wifi/Parking/Washing Machine and Dryer"
+                    name="amenities" id="id_amenities" {{ am3 }}>
+                <label for="Free Wifi/Parking/Washing Machine and Dryer">
+                    Free Wifi/Parking/Washing Machine and Dryer
+                </label>
+            </div>
+        </div>
+
+        <div id="div_house_rules" class="control-group">
+            <label for="id_house_rules" class="control-label requiredField">
+                <b>House Rules</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="radio" value="No Pets" {{ hr1 }}
+                    name="house_rules" id="id_house_rules">
+                <label for="No Pets">
+                    No Pets
+                </label>
+
+                <input 
+                    type="radio" value="No Smoking" {{ hr2 }}
+                    name="house_rules" id="id_house_rules">
+                <label for="No Smoking">
+                    No Smoking
+                </label>
+
+                <input 
+                    type="radio" value="No Smoking/No Pets" {{ hr3 }}
+                    name="house_rules" id="id_house_rules">
+                <label for="No Smoking/No Pets">
+                    No Smoking/No Pets
+                </label>
+            </div>
+        </div>
+
+        <div id="div_id_apt_price" class="control-group">
+            <label for="id_apt_price" class="control-label requiredField">
+                <b>Price per day of stay</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="price" 
+                    min="1" max="1000" step="1"
+                    value={{ apartment.price }}
+                    required="" id="id_apt_price">
+            </div>
+        </div>
+
+        <button type="submit" name="action" value="newapt">{{ operation }}</button>
+
+    </form>
+
+
+</body>
+</html>

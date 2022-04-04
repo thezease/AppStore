@@ -52,6 +52,12 @@ urlpatterns = [
     
     # user's personal page to manage apartments where user is the host
     path('u=<str:email>~/viewself-host', app.views.viewself_host, name='viewself-host'),
+
+    # user's to add an apartment
+    path('u=<str:email>~/new-apt', app.views.new_apt, name='new-apt'),
+
+    # user's to edit an apartment
+    path('u=<str:email>~/edit-apt/<int:apt_id>', app.views.edit_apt, name='edit-apt'),
     
     # password check before user can edit his personal details
     path('u=<str:email>~/checkpw', app.views.checkpw, name='checkpw'),
