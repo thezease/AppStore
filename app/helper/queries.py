@@ -41,7 +41,7 @@ def get_single_user(email) -> dict:
         cursor.execute(
             """
             SELECT email, first_name, last_name, date_of_birth, since, 
-            country, credit_card_type, credit_card_no
+                   country, credit_card_type, credit_card_no
             FROM users WHERE email = %s
             """, 
             [email]
@@ -53,7 +53,7 @@ def check_user_exists(email: str) -> bool:
     with connection.cursor() as cursor:
         cursor.execute(
             """
-            SELECT *
+            SELECT 1
             FROM users
             WHERE email = %s
             """,
@@ -99,7 +99,6 @@ def insert_user(form: QueryDict) -> str:
 
     else:
         with connection.cursor() as cursor:
-            ##TODO: date validation
             try:
                 cursor.execute(
                     """
@@ -269,6 +268,7 @@ def get_host_apartments(email:str) -> list[dict]:
         cursor.execute(
                 """
                 SELECT 
+                    apt.apartment_id,
                     apt.country, 
                     apt.city, 
                     apt.address, 
@@ -369,6 +369,47 @@ def host_new_apt(form:QueryDict, email:str) -> str:
                 ]
                 )
             status = 'Apartment added successfully!'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
+    
+    return status
+
+def host_edit_apt(form:QueryDict, apt_id:int) -> str:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                UPDATE apartments
+                SET 
+                    country = %s,
+                    city = %s,
+                    address = %s,
+                    num_guests = %s,
+                    num_beds = %s,
+                    num_bathrooms = %s,
+                    property_type = %s,
+                    amenities = %s,
+                    house_rules = %s,
+                    price = %s
+                WHERE apartment_id = %s;
+                """,
+                [
+                    form['country'],
+                    form['city'],
+                    form['address'],
+                    form['num_guests'],
+                    form['num_beds'],
+                    form['num_bathrooms'],
+                    form['property_type'],
+                    form['amenities'],
+                    form['house_rules'],
+                    form['price'],
+                    apt_id,
+                ]
+                )
+            status = 'Apartment details updated!'
        
         except IntegrityError as e:
             status = str(e.__cause__)

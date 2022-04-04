@@ -147,23 +147,67 @@ def viewself_host(request, email):
     """
     context = {}
     if request.POST:
-        if request.POST['action'] == 'newapt':
-            status = queries.host_new_apt(request.POST, email)
-            context['status'] = status
-
-        elif request.POST['action'] == 'approve':
+        if request.POST['action'] == 'approve':
             status = queries.host_approve_booking(request.POST['tempbooking_id'])
             context['status'] = status
 
         elif request.POST['action'] == 'delete':
             status = queries.host_delete_booking(request.POST['tempbooking_id'])
             context['status'] = status
+        
+        elif request.POST['action'] == 'edit-apt':
+            return redirect(reverse('edit-apt', kwargs={
+                'email':email, 'apt_id':request.POST['apartment_id']
+            }))
 
     context['apartments'] = queries.get_host_apartments(email)
     context['bookings'] = queries.get_host_bookings(email)
     context['rentals'] = queries.get_host_rentals(email)
 
     return render(request,'app/viewself-host.html', context)
+
+def new_apt(request, email):
+    context = {}
+    context['email'] = email
+    context['operation'] = 'Add'
+    if request.POST:
+        if request.POST['action'] == 'newapt':
+            status = queries.host_new_apt(request.POST, email)
+            context['status'] = status
+    return render(request, 'app/new-apartment.html', context)
+
+def edit_apt(request, email, apt_id):
+    context = {}
+    context['email'] = email
+    context['operation'] = 'Update'
+    apartment = queries.get_single_apartment(apt_id)
+    context['apartment'] = apartment
+
+    # check radio buttons according to info from database query
+    property_types = {
+        "Luxury Apartment": 't1',
+        "Bungalow": 't2',
+        "Apartment": 't3',
+    }
+    context = radio_helper(context, property_types, apartment['property_type'])
+    amenities = {
+        "Free Wifi/Washing Machine and Dryer": 'am1',
+        "Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer": 'am2',
+        "Free Wifi/Parking/Washing Machine and Dryer": 'am3',
+    }
+    context = radio_helper(context, amenities, apartment['amenities'])
+    house_rules = {
+        "No Pets": 'hr1',
+        "No Smoking": 'hr2',
+        "No Smoking/No Pets": 'hr3',
+    }
+    context = radio_helper(context, house_rules, apartment['house_rules'])
+
+    if request.POST:
+        if request.POST['action'] == 'newapt':
+            status = queries.host_edit_apt(request.POST, apt_id)
+            context['status'] = status
+    return render(request, 'app/new-apartment.html', context)
 
 
 
@@ -179,10 +223,12 @@ def checkpw(request, email):
             if auth:
                 user = queries.get_single_user(email)
                 result_dict['user'] = user
-                result_dict['visa'] = ""
-                result_dict['americanexpress'] = ""
-                result_dict['mastercard'] = ""
-                result_dict[user['credit_card_type']] = "checked" # check radio button
+                card_types = {
+                    'visa': 'visa',
+                    'americanexpress': 'americanexpress',
+                    'mastercard': 'mastercard',
+                }
+                context = radio_helper(context, card_types, user['credit_card_type'])
                 return render(request, "app/edit.html", result_dict)
             else:
                 status = 'Incorrect password!'
@@ -196,10 +242,12 @@ def checkpw(request, email):
 
             user = queries.get_single_user(email)
             result_dict['user'] = user
-            result_dict['visa'] = ""
-            result_dict['americanexpress'] = ""
-            result_dict['mastercard'] = ""
-            result_dict[user['credit_card_type']] = "checked" # check radio button
+            card_types = {
+                    'visa': 'visa',
+                    'americanexpress': 'americanexpress',
+                    'mastercard': 'mastercard',
+                }
+            context = radio_helper(context, card_types, user['credit_card_type'])
 
             return render(request, "app/edit.html", result_dict)
 
@@ -207,3 +255,17 @@ def checkpw(request, email):
     result_dict["email"] = email
     return render(request, "app/checkpw.html", result_dict)
 
+
+
+def radio_helper(context:dict, types:dict, val:str):
+    """
+    Helper function to ensure radio buttons are checked accordingly
+    Use in views where user edits his details
+    """
+    assert len(types) == 3
+    for k, v in types.items():
+        context[k] = ''
+    for k, v in types.items():
+        if k == val:
+            context[v] = "checked" # check radio button
+    return context
