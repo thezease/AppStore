@@ -19,59 +19,294 @@
         <a class="active" href="" title="View your apartments and manage bookings" id="authuser2">Manage as a Host</a>
     </div>
 
-    <br/>
+    <p style="color:red">{{ status|safe }}</p>
 
-    <h2>Details for {{user.0}} {{user.1}}</h2>
-    
-    <br/><br/>
+    <br/>
 
     <h2>My Apartments</h2>
     <table border=1>
         <thead>
             <th>Country</th>
             <th>City</th>
-            <th>Check-In</th>
-            <th>Check-Out</th>
-            <th>Total Price</th>
+            <th>Address</th>
+            <th>Price</th>
             <th>Rating</th>
+            <th>Total Earning</th>
+            <th>Listed</th>
+            <th>Action</th>
         </thead>
-        {% for rental in records %}
+        {% for apt in apartments %}
         <tr>
-            <td> {{ rental.2 }} </td>
-            <td> {{ rental.3 }} </td>
-            <td> {{ rental.14 }} </td>
-            <td> {{ rental.15 }} </td>
-            <td> {{ rental.17 }} </td>
-            <td> {{ rental.18 }} </td>
+            <td> {{ apt.country }} </td>
+            <td> {{ apt.city }} </td>
+            <td> {{ apt.address }} </td>
+            <td> {{ apt.price }} </td>
+            <td> {{ apt.avg_rating }} </td>
+            <td> {{ apt.earning }} </td>
+            <td> {{ apt.listed }} </td>
+            <td>
+                <a><button>View</button></a>
+                <a><button>Edit</button></a>
+                <button>Unlist</button>
+            </td>
         </tr>
         {% endfor %}
     </table>
+
+    <br/>
 
     <h2>Approve Bookings</h2>
     <table border=1>
         <thead>
             <th>Country</th>
             <th>City</th>
+            <th>Address</th>
             <th>Check-In</th>
             <th>Check-Out</th>
             <th>Total Price</th>
-            <th>Rating</th>
+            <th>Action</th>
         </thead>
-        {% for rental in records %}
+        {% for bk in bookings %}
         <tr>
-            <td> {{ rental.2 }} </td>
-            <td> {{ rental.3 }} </td>
-            <td> {{ rental.14 }} </td>
-            <td> {{ rental.15 }} </td>
-            <td> {{ rental.17 }} </td>
-            <td> {{ rental.18 }} </td>
+            <td> {{ bk.country }} </td>
+            <td> {{ bk.city }} </td>
+            <td> {{ bk.address }} </td>
+            <td> {{ bk.check_in }} </td>
+            <td> {{ bk.check_out }} </td>
+            <td> {{ bk.total_price }} </td>
+            <td>
+                <table>
+                <tr>
+                <td>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="tempbooking_id" value={{ bk.tempbooking_id }}>
+                        <button name="action" value="approve">Approve</button>
+                    </form> 
+                </td>
+                <td>
+                    <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="tempbooking_id" value={{ bk.tempbooking_id }}>
+                    <button name="action" value="delete">Delete</button>
+                </form>
+                </td>
+                </tr>
+                </table> 
+            </td>
         </tr>
         {% endfor %}
     </table>
 
+    <br/>
+
+    <h2>Upcoming Rentals</h2>
+    <table border=1>
+        <thead>
+            <th>Country</th>
+            <th>City</th>
+            <th>Address</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Total Price</th>
+        </thead>
+        {% for rental in rentals %}
+        <tr>
+            <td> {{ rental.country }} </td>
+            <td> {{ rental.city }} </td>
+            <td> {{ rental.address }} </td>
+            <td> {{ rental.check_in }} </td>
+            <td> {{ rental.check_out }} </td>
+            <td> {{ rental.total_price }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br/>
+
+    <h2>Add an Apartment</h2>
+
     <form method="POST">
-        <button type="submit" name="Delete">Delete Account</button>
+        {% csrf_token %}
+        <div id="div_id_apt_country" class="control-group">
+            <label for="id_apt_country" class="control-label requiredField">
+                <b>Country</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="text" name="country"
+                    placeholder="Country" 
+                    maxlength="16" class="textinput textInput" 
+                    required="" id="id_apt_country">
+            </div>
+        </div>
+
+        <div id="div_id_apt_city" class="control-group">
+            <label for="id_apt_city" class="control-label requiredField">
+                <b>City</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input
+                    type="text" name="city"
+                    placeholder="City" 
+                    maxlength="32" class="textinput textInput" 
+                    required="" id="id_apt_city">
+            </div>
+        </div>
+
+        <div id="div_id_apt_address" class="control-group">
+            <label for="id_apt_address" class="control-label requiredField">
+                <b>Address</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="address" name="address"
+                    placeholder="Street address" 
+                    maxlength="64" class="textinput textInput" 
+                    required="" id="id_apt_address">
+            </div>
+        </div>
+
+        <div id="div_id_apt_num_guests" class="control-group">
+            <label for="id_apt_num_guests" class="control-label requiredField">
+                <b>Number of guests allowed</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="num_guests" 
+                    min="1" max="20" step="1"
+                    required="" id="id_apt_num_guests">
+            </div>
+        </div>
+
+        <div id="div_id_apt_num_beds" class="control-group">
+            <label for="id_apt_num_beds" class="control-label requiredField">
+                <b>Number of beds available</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="num_beds" 
+                    min="1" max="20" step="1"
+                    required="" id="id_apt_num_beds">
+            </div>
+        </div>
+
+        <div id="div_id_apt_num_bathrooms" class="control-group">
+            <label for="id_apt_num_bathrooms" class="control-label requiredField">
+                <b>Number of bathrooms available</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="num_bathrooms" 
+                    min="1" max="20" step="1"
+                    required="" id="id_apt_num_bathrooms">
+            </div>
+        </div>
+        
+        <div id="div_property_type" class="control-group">
+            <label for="id_property_type" class="control-label requiredField">
+                <b>Property type</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="radio" value="Luxury Apartment"
+                    name="property_type" id="id_property_type">
+                <label for="Luxury Apartment">Luxury Apartment</label>
+
+                <input 
+                    type="radio" value="Bungalow"
+                    name="property_type" id="id_property_type">
+                <label for="Bungalow">Bungalow</label>
+
+                <input 
+                    type="radio" value="Apartment"
+                    name="property_type" id="id_property_type">
+                <label for="Apartment">Apartment</label>
+            </div>
+        </div>
+
+        <div id="div_amenities" class="control-group">
+            <label for="id_amenities" class="control-label requiredField">
+                <b>Amenities</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="radio" value="Free Wifi/Washing Machine and Dryer"
+                    name="amenities" id="id_amenities">
+                <label for="Free Wifi/Washing Machine and Dryer">
+                    Free Wifi/Washing Machine and Dryer
+                </label>
+
+                <input 
+                    type="radio" value="Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer"
+                    name="amenities" id="id_amenities">
+                <label for="Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer">
+                    Free Wifi/Parking/Gym/Pool/Washing Machine and Dryer
+                </label>
+
+                <input 
+                    type="radio" value="Free Wifi/Parking/Washing Machine and Dryer"
+                    name="amenities" id="id_amenities">
+                <label for="Free Wifi/Parking/Washing Machine and Dryer">
+                    Free Wifi/Parking/Washing Machine and Dryer
+                </label>
+            </div>
+        </div>
+
+        <div id="div_house_rules" class="control-group">
+            <label for="id_house_rules" class="control-label requiredField">
+                <b>House Rules</b>
+                <span class="asteriskField">*</span> 
+            </label>
+            <div class="controls">
+                <input 
+                    type="radio" value="No Pets"
+                    name="house_rules" id="id_house_rules">
+                <label for="No Pets">
+                    No Pets
+                </label>
+
+                <input 
+                    type="radio" value="No Smoking"
+                    name="house_rules" id="id_house_rules">
+                <label for="No Smoking">
+                    No Smoking
+                </label>
+
+                <input 
+                    type="radio" value="No Smoking/No Pets"
+                    name="house_rules" id="id_house_rules">
+                <label for="No Smoking/No Pets">
+                    No Smoking/No Pets
+                </label>
+            </div>
+        </div>
+
+        <div id="div_id_apt_price" class="control-group">
+            <label for="id_apt_price" class="control-label requiredField">
+                <b>Price per day of stay</b>
+                <span class="asteriskField">*</span>
+            </label>
+            <div class="controls">
+                <input 
+                    type="number" name="price" 
+                    min="1" max="1000" step="1"
+                    required="" id="id_apt_price">
+            </div>
+        </div>
+
+        <button type="submit" name="action" value="newapt">Submit</button>
+
     </form>
+
 
 </body>
 </html>

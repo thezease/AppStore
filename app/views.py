@@ -146,21 +146,22 @@ def viewself_host(request, email):
     which include user details and rental data
     """
     context = {}
+    if request.POST:
+        if request.POST['action'] == 'newapt':
+            status = queries.host_new_apt(request.POST, email)
+            context['status'] = status
 
-    ## Use raw query to get a user
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
-        selected_user = cursor.fetchone()
-    context['user'] = selected_user
+        elif request.POST['action'] == 'approve':
+            status = queries.host_approve_booking(request.POST['tempbooking_id'])
+            context['status'] = status
 
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "Select * FROM selected_rental(%s)",
-            [email])
-        selected_rentals = cursor.fetchall()
+        elif request.POST['action'] == 'delete':
+            status = queries.host_delete_booking(request.POST['tempbooking_id'])
+            context['status'] = status
 
-    context['records'] = selected_rentals
+    context['apartments'] = queries.get_host_apartments(email)
+    context['bookings'] = queries.get_host_bookings(email)
+    context['rentals'] = queries.get_host_rentals(email)
 
     return render(request,'app/viewself-host.html', context)
 

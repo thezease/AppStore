@@ -245,7 +245,157 @@ def update_rental_rating(rental_id:int, new_rating:int) -> bool:
 
     return status
 
+def get_host_apartments(email:str) -> list[dict]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+                """
+                SELECT 
+                    apt.country, 
+                    apt.city, 
+                    apt.address, 
+                    apt.num_guests, 
+                    apt.num_beds,
+                    apt.num_bathrooms,
+                    apt.property_type,
+                    apt.amenities,
+                    apt.house_rules,
+                    apt.price,
+                    apt.listed,
+                    apt.avg_rating,
+                    COALESCE(earning.earning, 0) AS earning
+                FROM get_all_apartments() apt LEFT JOIN (
+                    SELECT apartment_id,  SUM(tp.stay_price) AS earning
+                    FROM (
+                        SELECT apartment_id, apt.price * (r.check_out - r.check_in + 1) AS stay_price
+                        FROM rentals r NATURAL JOIN apartments apt
+                    ) AS tp
+                    GROUP BY apartment_id
+                ) AS earning
+                ON apt.apartment_id = earning.apartment_id
+                WHERE host = %s
+                ORDER BY apt.apartment_id ASC;
+                """,
+                [email]
+        )
+        apartments = dictfetchall_(cursor)
+    return apartments
 
+def get_host_bookings(email:str) -> list[dict]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+                """
+                SELECT  apt.country, apt.city, apt.address, tb.check_in, tb.check_out, 
+                        apt.price * (tb.check_out - tb.check_in + 1) AS total_price,
+                        tb.tempbooking_id
+                FROM tempbookings tb NATURAL JOIN apartments apt
+                WHERE host = %s
+                ORDER BY tb.check_in ASC;
+                """,
+                [email]
+        )
+        bookings = dictfetchall_(cursor)
+    return bookings
+
+def get_host_rentals(email:str) -> list[dict]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+                """
+                SELECT  apt.country, apt.city, apt.address, r.check_in, r.check_out, 
+                        apt.price * (r.check_out - r.check_in + 1) AS total_price
+                FROM rentals r NATURAL JOIN apartments apt
+                WHERE host = %s
+                ORDER BY r.check_in ASC;
+                """,
+                [email]
+        )
+        rentals = dictfetchall_(cursor)
+    return rentals
+
+def host_new_apt(form:QueryDict, email:str) -> str:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                INSERT INTO apartments (
+                    host,
+                    country,
+                    city,
+                    address,
+                    num_guests,
+                    num_beds,
+                    num_bathrooms,
+                    property_type,
+                    amenities,
+                    house_rules,
+                    price
+                ) VALUES (
+                    %s, %s, %s, %s, %s,
+                    %s, %s, %s, %s, %s,
+                    %s
+                )
+                """,
+                [
+                    email,
+                    form['country'],
+                    form['city'],
+                    form['address'],
+                    form['num_guests'],
+                    form['num_beds'],
+                    form['num_bathrooms'],
+                    form['property_type'],
+                    form['amenities'],
+                    form['house_rules'],
+                    form['price'],
+                ]
+                )
+            status = 'Apartment added successfully!'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
+    
+    return status
+
+def host_approve_booking(tempbooking_id:int) -> str:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                UPDATE tempbookings
+                SET status = CAST(1 AS BIT)
+                WHERE tempbooking_id = %s
+                """,
+                [
+                    tempbooking_id
+                ]
+            )
+            status = 'Booking approved!'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
+    
+    return status
+
+def host_delete_booking(tempbooking_id:int) -> str:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                DELETE FROM tempbookings
+                WHERE tempbooking_id = %s
+                """,
+                [
+                    tempbooking_id
+                ]
+            )
+            status = 'Booking deleted.'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
+    
+    return status
 
 
 
