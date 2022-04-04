@@ -1,0 +1,67 @@
+{% load static %}
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>App Admin Portal</title>
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+        <link rel="stylesheet" href="{% static '/app/style_admin.css'%}">
+</head>
+<body>
+    <div class = "sidebar">
+        <div class = "sidebar-brand">
+            <hl>Admin Portal</hl>
+        </div>
+        <div class = "sidebar-menu">
+            <ul>
+                <li>
+                    <a href="admin_dashboard" class = "active"><span class="las la-igloo"></span><span>Dashboard</span></a>
+                </li>
+                <li>
+                    <a href="admin_stats"><span class="las la-table"></span><span>Statistics</span></a>
+                </li>
+                <li>
+                    <a href="admin_statistics"><span class="las la-users"></span><span>Users</span></a>
+                </li>
+                <li>
+                    <a href="admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                </li>
+                <li>
+                    <a href="admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
+                </li>
+                <li>
+                    <a href="admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class = "main-content">
+        <header class = "rating_rank_header">
+            Rating rank of all apartments in descending order
+            <br/><a href="admin_dashboard"><button class = "button button1">Back</button></a></br>
+        </header>
+        <main>
+            <table border=1>
+                <thead>
+                    <th>Rank</th>
+                    <th>Country</th>
+                    <th>City</th>
+                    <th>Address</th>
+                    <th>Apartment ID</th>
+                    <th>Rating</th>
+                </thead>
+                {% for ratingRank in Records %}
+                <tr>
+                    <td> {{ ratingRank.5 }} </td>
+                    <td> {{ ratingRank.0 }} </td>
+                    <td> {{ ratingRank.1 }} </td>
+                    <td> {{ ratingRank.2 }} </td>
+                    <td> {{ ratingRank.3 }} </td>
+                    <td> {{ ratingRank.4 }} </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </main>
+    </div>
+
+</body>
+</html>

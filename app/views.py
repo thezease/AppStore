@@ -207,11 +207,3 @@ def checkpw(request, email):
     result_dict["email"] = email
     return render(request, "app/checkpw.html", result_dict)
 
-
-
-
-
-
-
-
-

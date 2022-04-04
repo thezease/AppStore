@@ -1,0 +1,85 @@
+{% load static %}
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>App Admin Portal</title>
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+        <link rel="stylesheet" href="{% static '/app/style_admin.css'%}">
+</head>
+<body>
+    <div class = "sidebar">
+        <div class = "sidebar-brand">
+            <hl>Admin Portal</hl>
+        </div>
+        <div class = "sidebar-menu">
+            <ul>
+                <li>
+                    <a href="admin_dashboard" ><span class="las la-igloo"></span><span>Dashboard</span></a>
+                </li>
+                <li>
+                    <a href="admin_statistics"><span class="las la-table"></span><span>Statistics</span></a>
+                </li>
+                <li>
+                    <a href="" class = "active"><span class="las la-users"></span><span>Users</span></a>
+                </li>
+                <li>
+                    <a href="admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                </li>
+                <li>
+                    <a href="admin_rentals"><span class="las la-comment-dollar"></span><span>Rentals</span></a>
+                </li>
+                <li>
+                    <a href="admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class = "main-content">
+        <header>
+            <div class="search-wrapper">
+                <form method="POST">
+                    {% csrf_token %}
+                    <span class="las la-search"></span>
+                    <input type="search" name="email" placeholder="Search user email"/>
+                    <button class = "button button1" type="submit" name="action" value="search">Search</button> 
+                </form>
+            </div>
+            <div>
+                <a href="admin_users_add"><button class="button button1">Add User</button></a>
+            </div>
+        </header>
+        <main>
+            <table border=1>
+                <thead>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Action</th>
+                </thead>
+                {% for user in records %}
+                <tr>
+                    <td> {{ user.2 }} </td>
+                    <td> {{ user.0 }} </td>
+                    <td> {{ user.1 }} </td>
+                    <td>
+                        <a href="admin_users_view/{{ user.2 }}"><button class = "button button1">View</button></a> |
+        
+                        <a href="admin_users_edit/{{ user.2 }}"><button class = "button button1">Edit</button></a> |
+        
+                        <form method="POST" style="display: inline;">
+                        {% csrf_token %}
+                            <input type="hidden" name="id" value="{{ user.2 }}"/>
+                            <button
+                            onclick="return confirm('Are you sure you want to delete {{ user.2 }}?');" 
+                            class = "button button1"
+                            type="submit" name="action" value="delete">Delete</button> 
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </main>
+    </div>
+
+</body>
+</html>

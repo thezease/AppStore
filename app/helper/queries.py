@@ -64,6 +64,20 @@ def check_user_exists(email: str) -> bool:
         if user == None: return False
         else: return True
 
+def check_user_cardno(credit_card_no: str) -> bool:
+    with connection.cursor() as cursor:
+        cursor.execute(
+            """
+            SELECT *
+            FROM users
+            WHERE credit_card_no = %s
+            """,
+            [credit_card_no])
+        
+        user = cursor.fetchone()
+
+        if user == None: return False
+        else: return True
 
 
 def insert_user(form: QueryDict) -> str:
@@ -75,8 +89,13 @@ def insert_user(form: QueryDict) -> str:
     status = ''
 
     user_exsts = check_user_exists(form['email'])
+    credcardno_exsts = check_user_cardno(form['credit_card_no'])
+    
     if user_exsts:
         status = 'User with email %s already exists' % (form['email'])
+    
+    elif credcardno_exsts:
+        status = 'User with credit card number %s already exists' % (form['credit_card_no'])
 
     else:
         with connection.cursor() as cursor:

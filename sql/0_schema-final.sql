@@ -29,7 +29,11 @@ num_bathrooms INT NOT NULL,
 property_type VARCHAR(64) NOT NULL,
 amenities VARCHAR(64) NOT NULL,
 house_rules VARCHAR(64) NOT NULL,
+<<<<<<<< HEAD:sql/0_schema-final.sql
 price DECIMAL(8,2) NOT NULL check (price > 0),
+========
+price DECIMAL(8,2) NOT NULL check (price > 0)
+>>>>>>>> jialong-batch:sql/appschema.sql
 listed BOOLEAN NOT NULL DEFAULT TRUE
 );
 

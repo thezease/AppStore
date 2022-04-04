@@ -1,0 +1,106 @@
+{% load static %}
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>App Admin Portal</title>
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+        <link rel="stylesheet" href="{% static '/app/style_admin.css'%}">
+</head>
+<body>
+    <div class = "sidebar">
+        <div class = "sidebar-brand">
+            <hl>Admin Portal</hl>
+        </div>
+        <div class = "sidebar-menu">
+            <ul>
+                <li>
+                    <a href="admin_dashboard" ><span class="las la-igloo"></span><span>Dashboard</span></a>
+                </li>
+                <li>
+                    <a href="" class = "active"><span class="las la-table"></span><span>Statistics</span></a>
+                </li>
+                <li>
+                    <a href="admin_users"><span class="las la-users"></span><span>Users</span></a>
+                </li>
+                <li>
+                    <a href="admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                </li>
+                <li>
+                    <a href="admin_rentals"><span class="las la-comment-dollar"></span><span>Rentals</span></a>
+                </li>
+                <li>
+                    <a href="admin_bookings"><span class="las la-calendar-check"></span><span>Bookings</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class = "main-content">
+        <main>
+            <div class="card-single">
+                <div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label for="stats">Choose the statistics to study on the apartment country:</label>
+                        <br>
+                        <br>
+                        For the apartment country:
+                        <br>
+                        <select name="stats1" id="id_stats1" style="width: 35rem">
+                            <option value=section1table1>the income ranking contributed by each guest nationality</option>
+                            <option value=section1table2>the total income of each city</option>
+                            <option value=section1table3>the number of guests from each country</option>
+                        </select>
+                        <br/><br/>
+                        <label for="id_country">Specify the apartment country:</label>
+                        <select name="country" id="id_country">
+                            {% for country in records %}
+                            <option value={{ country.0 }}>{{ country.0 }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <br>
+                        <button class = "button button1" name="action" type="submit" value="section1">Generate</button>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="card-single">
+                <div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label for="statistics">Choose the statistics to study on credit card types:</label>
+                        <br>
+                        <br>
+                        <select name="stats2" id="id_stats2">
+                            <option value=section2table1>The total values of transactions for each credict card type partitioned by guest nationality</option>
+                            <option value=section2table2>The rank of freqency of use of each credit card type partitioned by guest nationality</option>
+                        </select>
+                        <br>
+                        <br>
+                        <button class = "button button1" name="action" type="submit" value="section2">Generate</button>
+                    </form>
+                </div>
+            </div>
+            <br>
+            <br>
+            <div class="card-single">
+                <div>
+                    <form method="POST">
+                        {% csrf_token %}
+                        <label for="statistics">Choose the statistics to study on all apartment countries:</label>
+                        <br>
+                        <br>
+                        <select name="stats3" id="id_stats3">
+                            <option value=section3table1>The average length of stay for all rentals in each country</option>
+                            <option value=section3table2>The total length of stay for all rentals in each country</option>
+                        </select>
+                        <br>
+                        <br>
+                        <button class = "button button1" name="action" type="submit" value="section3">Generate</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+</body>
+</html>
