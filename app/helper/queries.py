@@ -40,7 +40,8 @@ def get_single_user(email) -> dict:
     with connection.cursor() as cursor:
         cursor.execute(
             """
-            SELECT email, first_name, last_name, date_of_birth, since, country 
+            SELECT email, first_name, last_name, date_of_birth, since, 
+            country, credit_card_type, credit_card_no
             FROM users WHERE email = %s
             """, 
             [email]

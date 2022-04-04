@@ -202,8 +202,9 @@ def checkpw(request, email):
 
             return render(request, "app/edit.html", result_dict)
 
-    context = {"status": status}
-    return render(request, "app/checkpw.html")
+    result_dict["status"] = status
+    result_dict["email"] = email
+    return render(request, "app/checkpw.html", result_dict)
 
 
 

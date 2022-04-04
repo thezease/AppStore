@@ -1,12 +1,19 @@
 {% load static %}
 <html>
 <head>
-    <title>Enter password for {{ obj.2 }}</title>
+    <title>Editing Details</title>
+    <link rel="stylesheet", href ="{% static 'app/style.css'%}">
+    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
 </head> 
 <body>
-    <a href="/">Back to home</a>
-    <br/><br/>
-    <h2>Enter password for {{ obj.2 }}</h2>
+    <div class="topnav">
+        <a href="/" title="Go to homepage" id="authhome">Home</a>
+        <a href="/search" title="Search all apartments" id="authapt">Apartments</a>
+        <a class="active" href="/login" title="Login here" id="authuser">Login</a>
+    </div>
+
+    <br/>
+    <h2>Enter password for {{ email }}</h2>
 
     <p style="color:red">{{ status|safe }}</p>
 
