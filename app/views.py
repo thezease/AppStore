@@ -48,39 +48,57 @@ def register(request):
 
 def user_index(request, email):
     """Shows user's homepage after login"""
-    return render(request, 'app/index.html')
+    # return render(request, 'app/index.html')
+    return index(request)
 
 
-def user_search(request, email):
+def search(request):
     """Shows user's homepage after login"""
+    result_dict = {}
     if request.POST:
         if request.POST['action'] == 'search':
             with connection.cursor() as cursor:
                 cursor.execute(
-                 # uses user-defined SQL function
-                 "SELECT * FROM get_apartment(%s,%s,%s)",
-                [
-                    request.POST['country'],
-                    request.POST['city'],
-                    request.POST['num_guests']
-                ])                
-                apartments = cursor.fetchall()
-
-            result_dict = {'records': apartments}
+                    # uses user-defined SQL function
+                    "SELECT * FROM get_apartment(%s,%s,%s)",
+                    [
+                        request.POST['country'],
+                        request.POST['city'],
+                        request.POST['num_guests']
+                    ]
+                )                
+                apartments = queries.dictfetchall_(cursor)
+            result_dict['records'] = apartments
+            result_dict['orderby'] = 'price'
 
             return render(request,'app/search-apartments.html', result_dict)
+    
     else:
+        # default results with all apartments
+        # ordered by price asc
         with connection.cursor() as cursor:
             cursor.execute(
                 # uses user-defined SQL function
-                "SELECT * FROM get_all_apartments()"),
-            apartments = cursor.fetchall()
+                "SELECT * FROM get_all_apartments()"
+            )
+            apartments = queries.dictfetchall_(cursor)
+        result_dict['records'] = apartments
+        result_dict['orderby'] = 'price'
+    
+    if request.GET:
+        if request.GET['orderby'] == 'price':
+            result_dict['orderby'] = 'price'
+        elif request.GET['orderby'] == 'rating':
+            result_dict['orderby'] = 'avg_rating'
 
-        result_dict = {'records': apartments}
+    return render(request,'app/search-apartments.html', result_dict)
 
-        return render(request,'app/search-apartments.html', result_dict)
 
-def user_view_apt(request, email, apt_id):
+def user_search(request, email):
+    return search(request)
+
+
+def apartment(request, apt_id):
     """Shows the apartment details page"""
     
     result_dict = dict()
@@ -97,27 +115,26 @@ def user_view_apt(request, email, apt_id):
     return render(request,'app/apartment.html', result_dict)
 
 
+def user_view_apt(request, email, apt_id):
+    """Shows the apartment details page for login user"""
+    return apartment(request, apt_id)
+
+
 def viewself(request, email):
     """
     Shows the view user details page after login, 
     which include user details and rental data
     """
     context = {}
+    
+    if request.POST:
+        if request.POST['rate']:
+            rental_id = request.POST['rate']
 
-    ## Use raw query to get a user
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
-        selected_user = cursor.fetchone()
-    context['user'] = selected_user
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "Select * FROM selected_rental(%s)",
-            [email])
-        selected_rentals = cursor.fetchall()
-
-    context['records'] = selected_rentals
+    # call method form helper module queries
+    context['user'] = queries.get_single_user(email)
+    context['bookings'] = queries.get_user_bookings(email)
+    context['rentals'] = queries.get_user_rentals(email)
 
     return render(request,'app/viewself-guest.html', context)
 
@@ -129,21 +146,22 @@ def viewself_host(request, email):
     which include user details and rental data
     """
     context = {}
+    if request.POST:
+        if request.POST['action'] == 'newapt':
+            status = queries.host_new_apt(request.POST, email)
+            context['status'] = status
 
-    ## Use raw query to get a user
-    with connection.cursor() as cursor:
-        cursor.execute("SELECT * FROM users WHERE email = %s", [email])
-        selected_user = cursor.fetchone()
-    context['user'] = selected_user
+        elif request.POST['action'] == 'approve':
+            status = queries.host_approve_booking(request.POST['tempbooking_id'])
+            context['status'] = status
 
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "Select * FROM selected_rental(%s)",
-            [email])
-        selected_rentals = cursor.fetchall()
+        elif request.POST['action'] == 'delete':
+            status = queries.host_delete_booking(request.POST['tempbooking_id'])
+            context['status'] = status
 
-    context['records'] = selected_rentals
+    context['apartments'] = queries.get_host_apartments(email)
+    context['bookings'] = queries.get_host_bookings(email)
+    context['rentals'] = queries.get_host_rentals(email)
 
     return render(request,'app/viewself-host.html', context)
 
@@ -185,111 +203,7 @@ def checkpw(request, email):
 
             return render(request, "app/edit.html", result_dict)
 
-    context = {"status": status}
-    return render(request, "app/checkpw.html")
+    result_dict["status"] = status
+    result_dict["email"] = email
+    return render(request, "app/checkpw.html", result_dict)
 
-
-
-
-
-
-def search(request):
-    """Shows the search page for apartments"""
-    if request.POST:
-        if request.POST['action'] == 'search':
-            with connection.cursor() as cursor:
-                cursor.execute(
-                 # uses user-defined SQL function
-                 "SELECT * FROM get_apartment(%s,%s,%s)",
-                [
-                    request.POST['country'],
-                    request.POST['city'],
-                    request.POST['num_guests']
-                ])                
-                apartments = cursor.fetchall()
-
-            result_dict = {'records': apartments}
-
-            return render(request,'app/search-apartments.html', result_dict)
-    else:
-        with connection.cursor() as cursor:
-            cursor.execute(
-                # uses user-defined SQL function
-                "SELECT * FROM get_all_apartments()"),
-            apartments = cursor.fetchall()
-
-        result_dict = {'records': apartments}
-
-        return render(request,'app/search-apartments.html', result_dict)
-
-
-def apartment(request, apt_id):
-    """Shows the apartment details page"""
-    
-    result_dict = dict()
-
-    ## Use raw query to get an apartment
-    with connection.cursor() as cursor:
-        cursor.execute(
-            # uses user-defined SQL function
-            "SELECT * FROM get_selected_apt(%s)",
-            [apt_id])
-        selected_apt = cursor.fetchone()
-    result_dict['apt'] = selected_apt
-
-    if request.POST['action']=='book':
-        auth = queries.authenticate_user(request.POST["login_email"], request.POST['password'])
-        if auth:
-            with connection.cursor() as cursor:
-                try:
-                    cursor.execute(
-                    #uses user-defined SQL function
-                    "INSERT INTO tempbooking VALUES(%s,%s,%s,%s)",
-                    [
-                    apt_id,
-                    request.POST["check_in"],
-                    request.POST["check_out"],
-                    request.POST["login_email"]
-                    ]
-                    
-                    )
-                    status = 'Successfully inserted.'
-
-                except IntegrityError as ie:
-                    e_msg = str(ie.__cause__)
-                    # regex search to find the column that violated integrity constraint
-                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    status = f'Violated constraint: {constraint}. Please follow the required format.'
-        else:
-            status = 'Wrong Email-id or Password'
-        return status
-                    
-        
-    if request.POST['action']=='search':
-        dates_avail = queries.find_apt_availability(request.POST, apt_id)
-        result_dict['dates_avail'] = {
-                                    'year': request.POST['year'],
-                                    'month': request.POST['month'],
-                                    'dates': dates_avail
-                                    }
-
-        return render(request,'app/apartment.html', result_dict)
-
-def users(request):
-    """Shows all users in page"""
-    
-    ## Delete customer
-    if request.POST:
-        if request.POST['action'] == 'delete':
-            with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM users WHERE email = %s", [request.POST['id']])
-
-
-
-    ## Call function defined in db_fns.py
-    ## which masks raw query in python function
-    users = queries.get_all_users()
-
-    result_dict = {'records': users}
-
-    return render(request,'app/users.html', result_dict)

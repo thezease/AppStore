@@ -1,35 +1,29 @@
 -- Function to select list of rentals that a user had rented
 CREATE OR REPLACE FUNCTION selected_rental(x VARCHAR)  
 	RETURNS TABLE( 
-    	apartment_id int,  
-		host VARCHAR(64), 
+    	rental_id int,  
 		country VARCHAR(16),  
 		city VARCHAR(32), 
-		address VARCHAR(64), 
-		num_guests INT, 
-		num_beds INT, 
-		num_bathrooms INT, 
-		property_type VARCHAR(64), 
-		amenities VARCHAR(64), 
-		house_rules VARCHAR(64), 
-		price DECIMAL(8,2), 
-		listed BOOL,
-		rental_id INT, 
-		check_in VARCHAR(64), 
-		check_out VARCHAR(64), 
-		guest VARCHAR(64),
+		check_in DATE, 
+		check_out DATE, 
+		total_price DECIMAL(8,2), 
 		rating INT
 	) 
 LANGUAGE SQL
 AS $$ 
-    SELECT *  
- 	FROM apartments ap NATURAL JOIN rentals r
- 	WHERE x = r.guest; 
+    SELECT r.rental_id, apt.country, apt.city,
+		   r.check_in, r.check_out, 
+		   apt.price * (r.check_out - r.check_in + 1) AS total_price,
+		   r.rating
+ 	FROM apartments apt NATURAL JOIN rentals r
+ 	WHERE r.guest = x
+	AND apt.listed = true
+    ORDER BY r.check_out DESC;
 $$; 
  
 
 -- Function to insert new user
-CREATE OR REPLACE Procedure insert_users(
+CREATE OR REPLACE PROCEDURE insert_users(
 	f_name VARCHAR(16),
 	l_name VARCHAR(16),
 	e_mail VARCHAR(64),
@@ -86,15 +80,30 @@ CREATE OR REPLACE FUNCTION get_apartment(i VARCHAR, j VARCHAR, k INT)
  		property_type VARCHAR(64), 
  		amenities VARCHAR(64), 
  		house_rules VARCHAR(64), 
- 		price VARCHAR(64),
+ 		price NUMERIC,
 		listed BOOL,
  		avg_rating DECIMAL(2,1)
  		) 
 LANGUAGE SQL
 AS $$ 
-    SELECT *  
- 	FROM apartments apt natural join overall_ratings rts 
- 	WHERE apt.country = i
+    SELECT  apt.apartment_id,  
+		apt.host, 
+		apt.country,  
+		apt.city, 
+		apt.address, 
+		apt.num_guests, 
+		apt.num_beds, 
+		apt.num_bathrooms, 
+		apt.property_type, 
+		apt.amenities , 
+		apt.house_rules, 
+		apt.price, 
+		apt.listed,
+		COALESCE(rts.avg_rating, -1) AS avg_rating
+	FROM apartments apt LEFT JOIN overall_ratings rts
+	ON apt.apartment_id = rts.apartment_id
+	WHERE listed = true
+	AND apt.country = i
 	AND apt.city = j
 	AND apt.num_guests >= k
 	ORDER BY apt.price;
@@ -115,15 +124,29 @@ CREATE OR REPLACE FUNCTION get_all_apartments()
 		property_type VARCHAR(64), 
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
-		price VARCHAR(64), 
+		price NUMERIC, 
 		listed BOOL,
 		avg_rating DECIMAL(2,1)
  	) 
 LANGUAGE SQL
 AS $$ 
-    SELECT *  
- 	FROM apartments apt natural join overall_ratings rts 
- 	WHERE apt.apartment_id = rts.apartment_id 
+	SELECT  apt.apartment_id,  
+		apt.host, 
+		apt.country,  
+		apt.city, 
+		apt.address, 
+		apt.num_guests, 
+		apt.num_beds, 
+		apt.num_bathrooms, 
+		apt.property_type, 
+		apt.amenities , 
+		apt.house_rules, 
+		apt.price, 
+		apt.listed,
+		COALESCE(rts.avg_rating, -1) AS avg_rating
+	FROM apartments apt LEFT JOIN overall_ratings rts
+	ON apt.apartment_id = rts.apartment_id
+	WHERE listed = true
 	ORDER BY apt.price;
 $$; 
 
@@ -142,7 +165,7 @@ CREATE OR REPLACE FUNCTION get_selected_apt(apt_id INT)
 		property_type VARCHAR(64), 
 		amenities VARCHAR(64), 
 		house_rules VARCHAR(64), 
-		price VARCHAR(64), 
+		price NUMERIC, 
 		listed BOOL,
 		avg_rating DECIMAL(2,1)
  	) 
@@ -150,7 +173,25 @@ LANGUAGE SQL
 AS $$ 
     SELECT *  
  	FROM apartments apt NATURAL JOIN overall_ratings rts 
- 	WHERE apt_id=apartment_id; 
+ 	WHERE apt_id=apartment_id;
+	
+	SELECT  apt.apartment_id,  
+		apt.host, 
+		apt.country,  
+		apt.city, 
+		apt.address, 
+		apt.num_guests, 
+		apt.num_beds, 
+		apt.num_bathrooms, 
+		apt.property_type, 
+		apt.amenities , 
+		apt.house_rules, 
+		apt.price, 
+		apt.listed,
+		COALESCE(rts.avg_rating, -1) AS avg_rating
+	FROM apartments apt LEFT JOIN overall_ratings rts
+	ON apt.apartment_id = rts.apartment_id
+	WHERE apt_id=apt.apartment_id;
 $$; 
 
 

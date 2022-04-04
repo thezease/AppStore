@@ -3,7 +3,7 @@ var slideIndex = 1;
 window.addEventListener('load', function(){
     checkLoginStatus();
     showSlides(slideIndex);
-    console.log('1');
+    // console.log('1');
 });
 
 // window.addEventListener('load', function(){
@@ -42,7 +42,7 @@ function showSlides(n) {
 function checkLoginStatus() {
     // check login status by parsing the URL
     url = window.location.href;
-    console.log(url);
+    // console.log(url);
     const re = new RegExp('(?<=u\=)[a-z0-9@._]*(?=~)');
     // console.log(re.test('http://localhost:8000/u=abc@abc.com~'));
 
@@ -53,7 +53,7 @@ function checkLoginStatus() {
         // do nothing if user email is not found in url
         return;
     } else {
-        console.log('ok');
+        // console.log('ok');
         var email = matches[0];
         modifyLinks(email);
         return;
