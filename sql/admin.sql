@@ -1,7 +1,8 @@
 SELECT *
 FROM rentals;
 SELECT *
-FROM users;
+FROM users
+ORDER BY first_name;
 SELECT *
 FROM apartments order by apartment_id;
 -- create new user, new rental and new apartment
