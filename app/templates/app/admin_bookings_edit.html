@@ -1,0 +1,111 @@
+{% load static %}
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <title>App Admin Portal</title>
+        <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+        <link rel="stylesheet" href="{% static '/app/style_admin.css'%}">
+</head>
+<body>
+    <div class = "sidebar">
+        <div class = "sidebar-brand">
+            <hl>Admin Portal</hl>
+        </div>
+        <div class = "sidebar-menu">
+            <ul>
+                <li>
+                    <a href="/admin_dashboard"><span class="las la-igloo"></span><span>Dashboard</span></a>
+                </li>
+                <li>
+                    <a href="/admin_statistics"><span class="las la-table"></span><span>Statistics</span></a>
+                </li>
+                <li>
+                    <a href="/admin_users"><span class="las la-users"></span><span>Users</span></a>
+                </li>
+                <li>
+                    <a href="/admin_apartments"><span class="las la-building"></span><span>Apartments</span></a>
+                </li>
+                <li>
+                    <a href="/admin_rentals"><span class="las la-file-invoice-dollar"></span><span>Rentals</span></a>
+                </li>
+                <li>
+                    <a href="/admin_bookings" class = "active"><span class="las la-calendar-check"></span><span>Bookings</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class = "main-content">
+        <main>
+            <a href="/admin_bookings"><button class="button button1">Back</button></a>
+            <br/><br/>
+            <h2>Editing booking {{booking.0}}</h2>
+            <br/><br/>
+            <form method="POST">
+                <!-- Security token by Django -->
+                {% csrf_token %}
+                <!-- form -->
+                <div id="div_id_apartment_id" class="control-group">
+                    <label for="id_apartment_id" class="control-label requiredField">
+                        Apartment ID
+                        <span class="asteriskField">*</span> 
+                    </label>
+                    <div class="controls">
+                        <input 
+                            type="text" name="apartment_id" 
+                            value="{{booking.1}}"
+                            maxlength="32" class="textinput textInput"
+                            size="32"
+                            required="" id="id_apartment_id">
+                    </div>
+                </div>
+                
+                <div id="div_id_check_in" class="control-group">
+                    <label for="id_check_in" class="control-label requiredField">
+                        Check-in Date (yyyy-mm-dd)
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <input
+                            type="text" name="check_in" 
+                            value="{{booking.2 | date:"Y-m-d"}}"
+                            class="dateinput" 
+                            required="" id="id_check_in">
+                    </div>
+                </div>
+        
+        
+                <div id="div_id_check_out" class="control-group">
+                    <label for="id_check_out" class="control-label requiredField">
+                        Check-out Date (yyyy-mm-dd)
+                        <span class="asteriskField">*</span>
+                    </label>
+                    <div class="controls">
+                        <input 
+                            type="text" name="check_out" 
+                            value="{{booking.3 | date:"Y-m-d"}}"
+                            class="dateinput" 
+                            required="" id="id_check_out">
+                    </div>
+                </div>
+                
+                
+                <div id="div_id_guest" class="control-group">
+                    <label for="id_guest" class="control-label requiredField">
+                        Guest Email
+                        <span class="asteriskField">*</span> 
+                    </label>
+                    <div class="controls">
+                        <input 
+                            type="text" name="guest" 
+                            value="{{booking.4}}"
+                            maxlength="64" class="textinput textInput"
+                            size="64"
+                            required="" id="id_guest">
+                    </div>
+                </div>
+
+                <br>
+                <button class = "button button1" type="submit" name="action" value="Update">Update</button>
+            </form>
+        </main>
+    </div>
