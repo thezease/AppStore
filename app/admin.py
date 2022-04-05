@@ -565,22 +565,23 @@ def apartments_edit(request, id):
     if request.POST:
         if request.POST['action'] == 'Update':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    UPDATE apartments
-                    SET host = %s, 
-                    country = %s,
-                    city = %s,
-                    address = %s,
-                    num_guests = %s,
-                    num_beds = %s,
-                    num_bathrooms = %s,
-                    property_type = %s,
-                    amenities = %s, 
-                    house_rules = %s, 
-                    price = %s
-                    WHERE apartment_id = %s;""",
-                    [
+                try:
+                    cursor.execute(
+                        """
+                        UPDATE apartments
+                        SET host = %s, 
+                        country = %s,
+                        city = %s,
+                        address = %s,
+                        num_guests = %s,
+                        num_beds = %s,
+                        num_bathrooms = %s,
+                        property_type = %s,
+                        amenities = %s, 
+                        house_rules = %s, 
+                        price = %s
+                        WHERE apartment_id = %s;""",
+                        [
                         request.POST['host'],
                         request.POST['country'],
                         request.POST['city'],
@@ -593,8 +594,21 @@ def apartments_edit(request, id):
                         request.POST['house_rules'],
                         request.POST['price'],
                         id
-                    ]
-                    )
+                        ]
+                        )
+                except IntegrityError as ie:
+                    e_msg = str(ie.__cause__)
+                    #regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    if str(constraint) == 'apartments_host_fkey':
+                        status = f'Violated constraint: {constraint}. Email in use.Please type in a valid email.'
+                        result_dict['status'] = status
+                    else:
+                        status = f'Violated constraint: {constraint}. Please follow the required format.'
+                        result_dict['status'] = status 
+                    
+                    return render(request, "app/admin_apartments_edit.html", result_dict)
+
             return redirect("/admin_apartments")
     return render(request, "app/admin_apartments_edit.html", result_dict)
 
