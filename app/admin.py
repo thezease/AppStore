@@ -356,7 +356,7 @@ def users_add(request):
                             context['status'] = status                        
                         
                         else:
-                            status = f'Violated constraint: {constraint}. Please follow the required format.'
+                            status = f'Violated constraint: {constraint}. Please follow the required format.Include at least 8 characters consisting upper and lower case latters, and digits.'
                             context['status'] = status
                         
                         return render(request, "app/admin_users_add.html", context)
