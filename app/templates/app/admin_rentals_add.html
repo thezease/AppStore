@@ -65,6 +65,7 @@
                     <div class="controls">
                         <input
                             type="text" name="check_in" 
+                            value="{{rental.2 | date:"Y-m-d"}}"
                             class="dateinput" 
                             required="" id="id_check_in">
                     </div>
@@ -79,6 +80,7 @@
                     <div class="controls">
                         <input 
                             type="text" name="check_out" 
+                            value="{{rental.3 | date:"Y-m-d"}}"
                             class="dateinput" 
                             required="" id="id_check_out">
                     </div>
