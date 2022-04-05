@@ -878,6 +878,7 @@ def bookings(request):
 def bookings_edit(request, id):
     """Shows the bookings edit page"""
 
+    status = ''
     result_dict = {}
     with connection.cursor() as cursor:
         cursor.execute(
@@ -947,8 +948,8 @@ def bookings_edit(request, id):
 
 def bookings_add(request):
     """Add bookings"""
-    context = {}
     status = ''
+    result_dict = {}
 
     if request.POST:
         if request.POST['action'] == 'Add':
@@ -995,4 +996,4 @@ def bookings_add(request):
                         result_dict['status'] = status
                     return render(request, "app/admin_bookings_add.html", result_dict)
                 return redirect('/admin_bookings')    
-    return render(request, "app/admin_bookings_add.html", context)
+    return render(request, "app/admin_bookings_add.html", result_dict)
