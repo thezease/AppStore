@@ -823,7 +823,7 @@ def rentals_add(request):
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
                   
-               except DatabaseError as err:
+                except DatabaseError as err:
                     e_msg = str(err.__cause__)
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                     if constraint == 'datestyle':
@@ -831,7 +831,7 @@ def rentals_add(request):
                         result_dict['status'] = status
                     else:
                         status = f'Violated constraint: {constraint}. There is already a prior booking.'
-                        result_dict['status'] = stat
+                        result_dict['status'] = status
 
                     return render(request, "app/admin_rentals_add.html", result_dict)
             return redirect('/admin_rentals')    
