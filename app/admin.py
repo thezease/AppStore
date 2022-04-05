@@ -1,4 +1,3 @@
-from ast import Constant
 from readline import insert_text
 from django.shortcuts import render, redirect
 from django.db import connection
@@ -764,10 +763,22 @@ def rentals_edit(request, id):
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
-
                     return render(request, "app/admin_rentals_edit.html", result_dict)
+
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    if constraint == 'datestyle':
+                        status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                        result_dict['status'] = status
+                    else:
+                        status = f'Violated constraint: {constraint}. There is already a prior booking.'
+                        result_dict['status'] = status
+                    return render(request, "app/admin_rentals_edit.html", result_dict)
+                    
             return redirect("/admin_rentals")
     return render(request, "app/admin_rentals_edit.html", result_dict)
+
 
 def rentals_add(request):
     """Add Rental"""
@@ -790,7 +801,7 @@ def rentals_add(request):
                             request.POST['rating']
                         ]
                         )
-                    
+            
                 except IntegrityError as e:
                     e_msg = str(e.__cause__)
                     # regex search to find the column that violated integrity constraint
@@ -813,19 +824,21 @@ def rentals_add(request):
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
-                    return render(request, "app/admin_rentals_add.html", result_dict)
-                except DatabaseError as e:
-                    e_msg = str(e.__cause__)
-                    if "prior booking present" in e_msg:
-                        status = f'Violated constraint: there is already a prior booking.'
+                  
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    if constraint == 'datestyle':
+                        status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
                         result_dict['status'] = status
                     else:
-                        constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                        status = f'Violated constraint: {constraint}. Invalid date. Please enter a valid date.'
+                        status = f'Violated constraint: {constraint}. There is already a prior booking.'
                         result_dict['status'] = status
                     return render(request, "app/admin_rentals_add.html", result_dict)
+
             return redirect('/admin_rentals')    
     return render(request, "app/admin_rentals_add.html", result_dict)
+
 
 
 ## Admin Bookings Panel
@@ -877,24 +890,52 @@ def bookings_edit(request, id):
     if request.POST:
         if request.POST['action'] == 'Update':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    UPDATE tempbookings
-                    SET apartment_id = %s, 
-                    check_in = %s, 
-                    check_out = %s, 
-                    guest = %s
-                    WHERE tempbooking_id = %s;""",
-                    [
-                        request.POST['apartment_id'],
-                        request.POST['check_in'],
-                        request.POST['check_out'],
-                        request.POST['guest'],
-                        id
-                    ]
-                    )
+                try:
+                    cursor.execute(
+                        """
+                        UPDATE tempbookings
+                        SET apartment_id = %s, 
+                        check_in = %s, 
+                        check_out = %s, 
+                        guest = %s
+                        WHERE tempbooking_id = %s;""",
+                        [
+                            request.POST['apartment_id'],
+                            request.POST['check_in'],
+                            request.POST['check_out'],
+                            request.POST['guest'],
+                            id
+                        ]
+                        )
+
+                except IntegrityError as e:
+                    e_msg = str(e.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    if constraint == 'tempbookings_check':
+                        status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
+                        result_dict['status'] = status        
+                    elif constraint == 'apartments':
+                        status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
+                        result_dict['status'] = status
+                    elif constraint == 'users':
+                        status = f'Violated constraint: {constraint}. Invalid user.Please enter a registered user.'
+                        result_dict['status'] = status                  
+                    else:
+                        status = f'Violated constraint: {constraint}. Please follow the required format.'
+                        result_dict['status'] = status     
+                    return render(request, "app/admin_bookings_edit.html", result_dict)
+
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    constraint == 'datestyle'
+                    status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                    result_dict['status'] = status
+                    return render(request, "app/admin_bookings_edit.html", result_dict)
             return redirect("/admin_bookings")
     return render(request, "app/admin_bookings_edit.html", result_dict)
+
 
 def bookings_add(request):
     """Add bookings"""
@@ -904,19 +945,43 @@ def bookings_add(request):
     if request.POST:
         if request.POST['action'] == 'Add':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO tempbookings (apartment_id, check_in, check_out, guest, status)
-                    VALUES (%s, %s, %s, %s, %s)""",
-                    [
-                        request.POST['apartment_id'],
-                        request.POST['check_in'],
-                        request.POST['check_out'],
-                        request.POST['guest'],
-                        '0'
-                    ]
-                    )
-                return redirect('/admin_bookings')    
+                try:
+                    cursor.execute(
+                        """
+                        INSERT INTO tempbookings (apartment_id, check_in, check_out, guest, status)
+                        VALUES (%s, %s, %s, %s, %s)""",
+                        [
+                            request.POST['apartment_id'],
+                            request.POST['check_in'],
+                            request.POST['check_out'],
+                            request.POST['guest'],
+                            '0'
+                        ]
+                        )
+                except IntegrityError as e:
+                    e_msg = str(e.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    if constraint == 'tempbookings_check':
+                        status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
+                        result_dict['status'] = status     
+                    elif constraint == 'apartments':
+                        status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
+                        result_dict['status'] = status
+                    elif constraint == 'users':
+                        status = f'Violated constraint: {constraint}. Invalid user.Please enter a registered user.'
+                        result_dict['status'] = status                  
+                    else:
+                        status = f'Violated constraint: {constraint}. Please follow the required format.'
+                        result_dict['status'] = status     
+                    return render(request, "app/admin_bookings_add.html", result_dict)
 
-    context['status'] = status
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    constraint == 'datestyle'
+                    status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                    result_dict['status'] = status
+                    return render(request, "app/admin_bookings_add.html", result_dict)
+                return redirect('/admin_bookings')    
     return render(request, "app/admin_bookings_add.html", context)
