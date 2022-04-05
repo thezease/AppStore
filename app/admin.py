@@ -1,6 +1,7 @@
 from readline import insert_text
 from django.shortcuts import render, redirect
 from django.db import connection
+from django.db import IntegrityError, DatabaseError
 import re
 
 ## Admin Login Panel
