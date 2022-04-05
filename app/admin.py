@@ -827,12 +827,14 @@ def rentals_add(request):
                   
                 except DatabaseError as err:
                     e_msg = str(err.__cause__)
-                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    if constraint == 'datestyle':
-                        status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                    
+                    if 'prior booking' in e_msg:
+                        status = f'Violated constraint: There is already a prior booking.'
                         result_dict['status'] = status
+                        
                     else:
-                        status = f'Violated constraint: {constraint}. There is already a prior booking.'
+                        constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                        status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
                         result_dict['status'] = status
                     return render(request, "app/admin_rentals_add.html", result_dict)
 
