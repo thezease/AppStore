@@ -789,7 +789,10 @@ def rentals_add(request):
                             request.POST['rating']
                         ]
                         )
-                    
+                except DatabaseError as err:
+                    status = f'Violated checkoverlap() function. There is already a prior booking.'
+                    result_dict['status'] = status
+            
                 except IntegrityError as e:
                     e_msg = str(e.__cause__)
                     # regex search to find the column that violated integrity constraint
@@ -816,6 +819,7 @@ def rentals_add(request):
                     return render(request, "app/admin_rentals_add.html", result_dict)
             return redirect('/admin_rentals')    
     return render(request, "app/admin_rentals_add.html", result_dict)
+
 
 
 ## Admin Bookings Panel
