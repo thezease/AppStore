@@ -38,6 +38,8 @@
         <main>
             <a href="/admin_apartments"><button class="button button1">Back</button></a>
             <br/><br/>
+                
+            <p style="color:red">{{ status|safe }}</p>
             <!-- Create a Form -->
             <form method="POST">
                 <!-- Security token by Django -->
