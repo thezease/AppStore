@@ -39,6 +39,7 @@
             <a href="/admin_rentals"><button class="button button1">Back</button></a>
             <br/><br/>
             <h2>Editing {{user.0}}</h2>
+            <p style="color:red">{{ status|safe }}</p>
             <br/><br/>
             <form method="POST">
                 <!-- Security token by Django -->
