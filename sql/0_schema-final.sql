@@ -48,7 +48,7 @@ status BIT NOT NULL DEFAULT '0',
 UNIQUE (check_in, check_out, guest));
 
 
-CREATE TABLE or REPLACE VIEW rentals(
+CREATE TABLE IF NOT EXISTS rentals(
 rental_id SERIAL PRIMARY KEY,
 apartment_id INT NOT NULL REFERENCES apartments(apartment_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
 check_in DATE NOT NULL,
@@ -58,7 +58,7 @@ rating INT CHECK (rating >= 1 and rating <= 5)
 );
 
 
-CREATE VIEW overall_ratings AS
+CREATE or REPLACE VIEW overall_ratings AS
 	SELECT ap.apartment_id, CAST(AVG(r.rating) AS DECIMAL(2, 1)) AS avg_rating
 	FROM apartments ap, rentals r
 	WHERE ap.apartment_id = r.apartment_id
