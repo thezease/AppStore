@@ -150,6 +150,7 @@ def dashboard_rating_rank(request):
                         ROW_NUMBER() OVER (ORDER BY ROUND(AVG(r.rating),1) DESC) AS rank \
                         FROM rentals r, apartments a \
                         WHERE r.apartment_id = a.apartment_id \
+                        AND r.rating IS NOT NULL \
                         GROUP BY a.country, a.city, a.apartment_id")
         ratingRank = cursor.fetchall()
 
