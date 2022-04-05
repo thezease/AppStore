@@ -40,6 +40,7 @@
             <br/><br/>
             <h2>Editing apartment {{apartment.0}}</h2>
             <br/><br/>
+            <p style="color:red">{{ status|safe }}</p>
             <form method="POST">
                 <!-- Security token by Django -->
                 {% csrf_token %}
