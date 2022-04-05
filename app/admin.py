@@ -896,24 +896,34 @@ def bookings_edit(request, id):
     if request.POST:
         if request.POST['action'] == 'Update':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    UPDATE tempbookings
-                    SET apartment_id = %s, 
-                    check_in = %s, 
-                    check_out = %s, 
-                    guest = %s
-                    WHERE tempbooking_id = %s;""",
-                    [
-                        request.POST['apartment_id'],
-                        request.POST['check_in'],
-                        request.POST['check_out'],
-                        request.POST['guest'],
-                        id
-                    ]
-                    )
+                try:
+                    cursor.execute(
+                        """
+                        UPDATE tempbookings
+                        SET apartment_id = %s, 
+                        check_in = %s, 
+                        check_out = %s, 
+                        guest = %s
+                        WHERE tempbooking_id = %s;""",
+                        [
+                            request.POST['apartment_id'],
+                            request.POST['check_in'],
+                            request.POST['check_out'],
+                            request.POST['guest'],
+                            id
+                        ]
+                        )
+
+                except IntegrityError as e:
+                    e_msg = str(e.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
+                    result_dict['status'] = status        
+                    return render(request, "app/admin_bookings_edit.html", result_dict)
             return redirect("/admin_bookings")
     return render(request, "app/admin_bookings_edit.html", result_dict)
+
 
 def bookings_add(request):
     """Add bookings"""
