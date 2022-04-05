@@ -67,6 +67,7 @@ def dashboard(request):
         cursor.execute("SELECT a.apartment_id, ROUND(AVG(r.rating),1) \
                         FROM rentals r, apartments a \
                         WHERE r.apartment_id = a.apartment_id \
+                        AND r.rating IS NOT NULL \
                         GROUP BY a.country, a.city, a.apartment_id \
                         ORDER BY ROUND(AVG(r.rating),1) DESC \
                         LIMIT 3;")
