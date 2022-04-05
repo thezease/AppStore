@@ -739,8 +739,6 @@ def rentals_edit(request, id):
                             id
                         ]
                         )
-                    status = 'Rental edited successfully!'
-                    result_dict['status'] = status
 
                 except IntegrityError as e:
                     e_msg = str(e.__cause__)
