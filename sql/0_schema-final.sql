@@ -48,7 +48,7 @@ status BIT NOT NULL DEFAULT '0',
 UNIQUE (check_in, check_out, guest));
 
 
-CREATE TABLE IF NOT EXISTS rentals(
+CREATE TABLE or REPLACE VIEW rentals(
 rental_id SERIAL PRIMARY KEY,
 apartment_id INT NOT NULL REFERENCES apartments(apartment_id) ON UPDATE CASCADE ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED,
 check_in DATE NOT NULL,
