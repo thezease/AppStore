@@ -118,12 +118,12 @@
                     </label>
                     <div class="controls">
                         <input 
-                            type="tel" name="num_guests" 
+                            type="number" name="num_guests" 
                             inputmode="numeric"
                             value="{{apartment.5}}"
                             minlength="1"
                             maxlength="5" class="textinput textInput"
-                            size = 5
+                            min="1" step="1"
                             required="" id="id_num_guests">
                     </div>
                 </div>
