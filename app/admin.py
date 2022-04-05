@@ -912,8 +912,26 @@ def bookings_edit(request, id):
                     e_msg = str(e.__cause__)
                     # regex search to find the column that violated integrity constraint
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
-                    result_dict['status'] = status        
+                    if constraint == 'tempbookings_check':
+                        status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
+                        result_dict['status'] = status        
+                    elif constraint == 'apartments':
+                        status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
+                        result_dict['status'] = status
+                    elif constraint == 'users':
+                        status = f'Violated constraint: {constraint}. Invalid user.Please enter a registered user.'
+                        result_dict['status'] = status                  
+                    else:
+                        status = f'Violated constraint: {constraint}. Please follow the required format.'
+                        result_dict['status'] = status     
+                    return render(request, "app/admin_bookings_edit.html", result_dict)
+
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    constraint == 'datestyle'
+                    status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                    result_dict['status'] = status
                     return render(request, "app/admin_bookings_edit.html", result_dict)
             return redirect("/admin_bookings")
     return render(request, "app/admin_bookings_edit.html", result_dict)
