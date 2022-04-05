@@ -272,6 +272,9 @@ def users_edit(request, id):
                     if constraint == 'users_credit_card_no_key':
                         status = f'Violated constraint: {constraint}. Card in use.Please type in a valid credit card number.'
                         result_dict['status'] = status
+                    elif constraint == 'users_date_of_birth_check':
+                        status = f'Violated constraint: {constraint}. Invalid Date of Birth.Users must be at least 18 years old.'
+                        result_dict['status'] = status                        
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
@@ -344,7 +347,19 @@ def users_add(request):
                         # regex search to find the column that violated integrity constraint
                         constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
-                        return status
+                        if constraint == 'users_credit_card_no_key':
+                            status = f'Violated constraint: {constraint}. Card in use.Please type in a valid credit card number.'
+                            context['status'] = status
+                        
+                        elif constraint == 'users_date_of_birth_check':
+                            status = f'Violated constraint: {constraint}. Invalid Date of Birth.Users must be at least 18 years old.'
+                            context['status'] = status                        
+                        
+                        else:
+                            status = f'Violated constraint: {constraint}. Please follow the required format.'
+                            context['status'] = status
+                        
+                        return render(request, "app/admin_users_add.html", context)
 
                     return redirect('admin_users')    
                 else:
