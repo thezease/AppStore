@@ -779,11 +779,9 @@ def rentals_add(request):
                     status = f'Violated constraint: {constraint}. Please follow the required format.'
                     context['status'] = status
                     return render(request, "app/admin_rentals_add.html", context)
-                return redirect('/admin_rentals')    
+            return redirect('/admin_rentals')    
 
-    context['status'] = status
     return render(request, "app/admin_rentals_add.html", context)
-
 
 ## Admin Bookings Panel
 def bookings(request):
