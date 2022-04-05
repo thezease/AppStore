@@ -767,16 +767,20 @@ def rentals_edit(request, id):
 
                 except DatabaseError as err:
                     e_msg = str(err.__cause__)
-                    if e_msg == 'datestyle':
-                        status = f'Violated constraint datestyle. Invalid date.Please enter a valid date.'
-                        result_dict['status'] = status
-                    else:
-                        status = f'Violated constraint booking. There is already a prior booking.'
-                        result_dict['status'] = status
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    constraint == 'datestyle'
+                    status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                    result_dict['status'] = status
+                
+                except DatabaseError as e:
+                    e_msg = str(e.__cause__)
+                    status = f'Violated constraint. There is already a prior booking.'
+                    result_dict['status'] = status
 
                     return render(request, "app/admin_rentals_edit.html", result_dict)
             return redirect("/admin_rentals")
     return render(request, "app/admin_rentals_edit.html", result_dict)
+
 
 def rentals_add(request):
     """Add Rental"""
