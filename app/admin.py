@@ -240,26 +240,33 @@ def users_edit(request, id):
     if request.POST:
         if request.POST['action'] == 'Update':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    UPDATE users SET 
-                    first_name = %s, 
-                    last_name = %s, 
-                    date_of_birth = %s, 
-                    country = %s, 
-                    credit_card_type = %s, 
-                    credit_card_no = %s 
-                    WHERE email = %s""",
-                    [
-                        request.POST['first_name'],
-                        request.POST['last_name'],
-                        request.POST['date_of_birth'],
-                        request.POST['country'],
-                        request.POST['credit_card_type'],
-                        request.POST['credit_card_no'],
-                        id
-                    ]
-                    )
+                try:
+                    cursor.execute(
+                        """
+                        UPDATE users SET 
+                        first_name = %s, 
+                        last_name = %s, 
+                        date_of_birth = %s, 
+                        country = %s, 
+                        credit_card_type = %s, 
+                        credit_card_no = %s 
+                        WHERE email = %s""",
+                        [
+                            request.POST['first_name'],
+                            request.POST['last_name'],
+                            request.POST['date_of_birth'],
+                            request.POST['country'],
+                            request.POST['credit_card_type'],
+                            request.POST['credit_card_no'],
+                            id
+                            ]
+                            )
+                except IntegrityError as ie:
+                    e_msg = str(ie.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    status = f'Violated constraint: {constraint}. Please follow the required format.'
+                    return status
             return redirect("admin_users")
     return render(request, "app/admin_users_edit.html", result_dict)
  
@@ -305,22 +312,30 @@ def users_add(request):
                 user = cursor.fetchone()
                 ## No user with same email
                 if user == None:
-                    cursor.execute(
-                        """
-                        INSERT INTO users 
-                        (first_name, last_name, email, password, date_of_birth, country, credit_card_type, credit_card_no) 
-                        VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
-                        [
-                            request.POST['first_name'],
-                            request.POST['last_name'],
-                            request.POST['email'],
-                            request.POST['password'],
-                            request.POST['date_of_birth'],
-                            request.POST['country'],
-                            request.POST['credit_card_type'],
-                            request.POST['credit_card_no']
-                        ]
-                        )
+                    try:
+                        cursor.execute(
+                            """
+                            INSERT INTO users 
+                            (first_name, last_name, email, password, date_of_birth, country, credit_card_type, credit_card_no) 
+                            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)""",
+                            [
+                                request.POST['first_name'],
+                                request.POST['last_name'],
+                                request.POST['email'],
+                                request.POST['password'],
+                                request.POST['date_of_birth'],
+                                request.POST['country'],
+                                request.POST['credit_card_type'],
+                                request.POST['credit_card_no']
+                            ]
+                            )
+                    except IntegrityError as ie:
+                        e_msg = str(ie.__cause__)
+                        # regex search to find the column that violated integrity constraint
+                        constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                        status = f'Violated constraint: {constraint}. Please follow the required format.'
+                        return status
+
                     return redirect('admin_users')    
                 else:
                     status = 'User with email %s already exists' % (request.POST['email'])
