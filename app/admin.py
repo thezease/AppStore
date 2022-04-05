@@ -771,9 +771,7 @@ def rentals_add(request):
                             request.POST['rating']
                         ]
                         )
-                        status = 'Rental edited successfully!'
-                        context['status'] = status
-
+                    
                 except IntegrityError as e:
                     e_msg = str(e.__cause__)
                     # regex search to find the column that violated integrity constraint
