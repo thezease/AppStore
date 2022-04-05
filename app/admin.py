@@ -1,3 +1,4 @@
+from ast import Constant
 from readline import insert_text
 from django.shortcuts import render, redirect
 from django.db import connection
@@ -812,7 +813,16 @@ def rentals_add(request):
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
-
+                    return render(request, "app/admin_rentals_add.html", result_dict)
+                except DatabaseError as e:
+                    e_msg = str(e.__cause__)
+                    if "prior booking present" in e_msg:
+                        status = f'Violated constraint: there is already a prior booking.'
+                        result_dict['status'] = status
+                    else:
+                        constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                        status = f'Violated constraint: {constraint}. Invalid date. Please enter a valid date.'
+                        result_dict['status'] = status
                     return render(request, "app/admin_rentals_add.html", result_dict)
             return redirect('/admin_rentals')    
     return render(request, "app/admin_rentals_add.html", result_dict)
