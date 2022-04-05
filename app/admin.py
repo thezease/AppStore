@@ -753,7 +753,13 @@ def rentals_edit(request, id):
                         result_dict['status'] = status
                     elif constraint == 'rentals_apartment_id_fkey':
                         status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
-                        result_dict['status'] = status                         
+                        result_dict['status'] = status          
+                    elif constraint == 'apartments':
+                        status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
+                        result_dict['status'] = status
+                    elif constraint == 'users':
+                        status = f'Violated constraint: {constraint}. Invalid user.Please enter a registered user.'
+                        result_dict['status'] = status                  
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
