@@ -269,7 +269,7 @@ def users_edit(request, id):
                     e_msg = str(ie.__cause__)
                     #regex search to find the column that violated integrity constraint
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    if constraint = users_credit_card_no_key:
+                    if constraint == users_credit_card_no_key:
                         status = f'Violated constraint: {constraint}. Card in use.Please type in a valid credit card number.'
                         result_dict['status'] = status
                     else:
