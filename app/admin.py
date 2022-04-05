@@ -691,8 +691,9 @@ def rentals(request):
 
 def rentals_edit(request, id):
     """Shows the rental edit page"""
-
+    status = ''
     result_dict = {}
+    
     with connection.cursor() as cursor:
         cursor.execute(
             "SELECT * FROM rentals WHERE rental_id = %s",
@@ -704,24 +705,34 @@ def rentals_edit(request, id):
     if request.POST:
         if request.POST['action'] == 'Update':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    UPDATE rentals
-                    SET apartment_id = %s, 
-                    check_in = %s, 
-                    check_out = %s, 
-                    guest = %s,
-                    rating = %s
-                    WHERE rental_id = %s;""",
-                    [
-                        request.POST['apartment_id'],
-                        request.POST['check_in'],
-                        request.POST['check_out'],
-                        request.POST['guest'],
-                        request.POST['rating'],
-                        id
-                    ]
-                    )
+                try:
+                    cursor.execute(
+                        """
+                        UPDATE rentals
+                        SET apartment_id = %s, 
+                        check_in = %s, 
+                        check_out = %s, 
+                        guest = %s,
+                        rating = %s
+                        WHERE rental_id = %s;""",
+                        [
+                            request.POST['apartment_id'],
+                            request.POST['check_in'],
+                            request.POST['check_out'],
+                            request.POST['guest'],
+                            request.POST['rating'],
+                            id
+                        ]
+                        )
+                    status = 'Rental edited successfully!'
+                    result_dict['status'] = status
+
+                except IntegrityError as e:
+                    e_msg = str(e.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[1]
+                    status = f'Violated constraint: {constraint}. Please follow the required format.'
+                    result_dict['status'] = status
             return redirect("/admin_rentals")
     return render(request, "app/admin_rentals_edit.html", result_dict)
 
