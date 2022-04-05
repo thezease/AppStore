@@ -760,18 +760,29 @@ def rentals_add(request):
     if request.POST:
         if request.POST['action'] == 'Add':
             with connection.cursor() as cursor:
-                cursor.execute(
-                    """
-                    INSERT INTO rentals (apartment_id, check_in, check_out, guest, rating)
-                    VALUES (%s, %s, %s, %s, %s)""",
-                    [
-                        request.POST['apartment_id'],
-                        request.POST['check_in'],
-                        request.POST['check_out'],
-                        request.POST['guest'],
-                        request.POST['rating']
-                    ]
-                    )
+                try:
+                    cursor.execute(
+                        """
+                        INSERT INTO rentals (apartment_id, check_in, check_out, guest, rating)
+                        VALUES (%s, %s, %s, %s, %s)""",
+                        [
+                            request.POST['apartment_id'],
+                            request.POST['check_in'],
+                            request.POST['check_out'],
+                            request.POST['guest'],
+                            request.POST['rating']
+                        ]
+                        )
+                        status = 'Rental edited successfully!'
+                        context['status'] = status
+
+                except IntegrityError as e:
+                    e_msg = str(e.__cause__)
+                    # regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[1]
+                    status = f'Violated constraint: {constraint}. Please follow the required format.'
+                    context['status'] = status
+                    return render(request, "app/admin_rentals_add.html", context)
                 return redirect('/admin_rentals')    
 
     context['status'] = status
