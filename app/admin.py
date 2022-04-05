@@ -704,6 +704,7 @@ def rentals(request):
 
     return render(request,'app/admin_rentals.html', result_dict)
 
+
  def rentals_edit(request, id):
     """Shows the rental edit page"""
     status = ''
