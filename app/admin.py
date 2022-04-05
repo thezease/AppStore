@@ -932,7 +932,7 @@ def bookings_edit(request, id):
                         result_dict['status'] = status     
                     return render(request, "app/admin_bookings_edit.html", result_dict)
 
-                 except DatabaseError as err:
+                except DatabaseError as err:
                     e_msg = str(err.__cause__)
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                     if constraint == 'datestyle':
