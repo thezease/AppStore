@@ -271,7 +271,7 @@ def users_edit(request, id):
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                     status = f'Violated constraint: {constraint}. Please follow the required format.'
                     result_dict['status'] = status
-                    return render(request, "app/admin_users_edit.html", result_dict['status'])
+                    return render(request, "app/admin_users_edit.html", result_dict)
             return redirect("admin_users")
     return render(request, "app/admin_users_edit.html", result_dict)
  
