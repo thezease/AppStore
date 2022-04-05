@@ -771,6 +771,7 @@ def rentals_edit(request, id):
                     constraint == 'datestyle'
                     status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
                     result_dict['status'] = status
+                    return render(request, "app/admin_rentals_edit.html", result_dict)
                 
                 except DatabaseError as e:
                     e_msg = str(e.__cause__)
