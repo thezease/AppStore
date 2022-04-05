@@ -914,7 +914,13 @@ def bookings_edit(request, id):
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                     if constraint == 'tempbookings_check':
                         status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
-                        result_dict['status'] = status        
+                        result_dict['status'] = status
+                    elif constraint == 'rentals_guest_fkey':
+                        status = f'Violated constraint: {constraint}. Invalid user.Please enter a registered user.'
+                        result_dict['status'] = status
+                    elif constraint == 'rentals_apartment_id_fkey':
+                        status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
+                        result_dict['status'] = status          
                     elif constraint == 'apartments':
                         status = f'Violated constraint: {constraint}. Invalid rental id.Please enter a valid rental id.'
                         result_dict['status'] = status
@@ -926,16 +932,18 @@ def bookings_edit(request, id):
                         result_dict['status'] = status     
                     return render(request, "app/admin_bookings_edit.html", result_dict)
 
-                except DatabaseError as err:
+                 except DatabaseError as err:
                     e_msg = str(err.__cause__)
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    constraint == 'datestyle'
-                    status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
-                    result_dict['status'] = status
+                    if constraint == 'datestyle':
+                        status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                        result_dict['status'] = status
+                    else:
+                        status = f'Violated constraint: {constraint}. There is already a prior booking.'
+                        result_dict['status'] = status
                     return render(request, "app/admin_bookings_edit.html", result_dict)
             return redirect("/admin_bookings")
     return render(request, "app/admin_bookings_edit.html", result_dict)
-
 
 def bookings_add(request):
     """Add bookings"""
@@ -979,9 +987,12 @@ def bookings_add(request):
                 except DatabaseError as err:
                     e_msg = str(err.__cause__)
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    constraint == 'datestyle'
-                    status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
-                    result_dict['status'] = status
+                    if constraint == 'datestyle':
+                        status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
+                        result_dict['status'] = status
+                    else:
+                        status = f'Violated constraint: {constraint}. There is already a prior booking.'
+                        result_dict['status'] = status
                     return render(request, "app/admin_bookings_add.html", result_dict)
                 return redirect('/admin_bookings')    
     return render(request, "app/admin_bookings_add.html", context)
