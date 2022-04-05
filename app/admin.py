@@ -265,11 +265,11 @@ def users_edit(request, id):
                             ]
                             )
                 except IntegrityError as ie:
-                    e_msg = str(ie.__cause__)
+                    return ie.__cause__
                     # regex search to find the column that violated integrity constraint
                     #constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                     #status = f'Violated constraint: {constraint}. Please follow the required format.'
-                    return e_msg
+                    #return e_msg
             return redirect("admin_users")
     return render(request, "app/admin_users_edit.html", result_dict)
  
