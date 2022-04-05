@@ -789,9 +789,6 @@ def rentals_add(request):
                             request.POST['rating']
                         ]
                         )
-                except DatabaseError as err:
-                    status = f'Violated checkoverlap() function. There is already a prior booking.'
-                    result_dict['status'] = status
             
                 except IntegrityError as e:
                     e_msg = str(e.__cause__)
@@ -815,6 +812,12 @@ def rentals_add(request):
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
+                  
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    status = f'Violated constraint: {constraint}. There is already a prior booking.'
+                    result_dict['status'] = status
 
                     return render(request, "app/admin_rentals_add.html", result_dict)
             return redirect('/admin_rentals')    
