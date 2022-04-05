@@ -55,7 +55,7 @@ BEGIN
   THEN
     RAISE EXCEPTION 'unable to rate before staying';
 	END IF;
-	CREATE VIEW overall_ratings AS
+	CREATE or REPLACE VIEW overall_ratings AS
         SELECT ap.apartment_id, CAST(AVG(r.rating) AS DECIMAL(2, 1)) AS avg_rating
         FROM apartments ap, rentals r
         WHERE ap.apartment_id = r.apartment_id
