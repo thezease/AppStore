@@ -44,7 +44,7 @@ language plpgsql;
 CREATE TRIGGER rental
 AFTER UPDATE of status ON tempbookings
 FOR EACH ROW
-EXECUTE FUNCTION rentals();
+EXECUTE FUNCTION add_to_rentals();
 
 
 --
