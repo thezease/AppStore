@@ -744,7 +744,7 @@ def rentals_edit(request, id):
                 except IntegrityError as e:
                     e_msg = str(e.__cause__)
                     # regex search to find the column that violated integrity constraint
-                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[1]
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                     if constraint == 'rentals_check':
                         status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
                         result_dict['status'] = status
