@@ -336,7 +336,7 @@ def get_host_bookings(email:str) -> list[dict]:
         bookings = dictfetchall_(cursor)
     return bookings
 
-def get_host_rentals(email:str) -> list[dict]:
+def host_upcoming_rentals(email:str) -> list[dict]:
     with connection.cursor() as cursor:
         cursor.execute(
                 """
@@ -344,6 +344,24 @@ def get_host_rentals(email:str) -> list[dict]:
                         apt.price * (r.check_out - r.check_in + 1) AS total_price
                 FROM rentals r NATURAL JOIN apartments apt
                 WHERE host = %s
+                AND r.check_in > CURRENT_DATE
+                ORDER BY r.check_in ASC;
+                """,
+                [email]
+        )
+        rentals = dictfetchall_(cursor)
+    return rentals
+
+def host_past_rentals(email:str) -> list[dict]:
+    with connection.cursor() as cursor:
+        cursor.execute(
+                """
+                SELECT  apt.country, apt.city, apt.address, r.check_in, r.check_out, 
+                        apt.price * (r.check_out - r.check_in + 1) AS total_price,
+                        COALESCE(r.rating, -1) AS rating
+                FROM rentals r NATURAL JOIN apartments apt
+                WHERE host = %s
+                AND r.check_out < CURRENT_DATE
                 ORDER BY r.check_in ASC;
                 """,
                 [email]

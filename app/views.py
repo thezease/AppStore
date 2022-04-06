@@ -174,7 +174,8 @@ def viewself_host(request, email):
 
     context['apartments'] = queries.get_host_apartments(email)
     context['bookings'] = queries.get_host_bookings(email)
-    context['rentals'] = queries.get_host_rentals(email)
+    context['upcoming_rentals'] = queries.host_upcoming_rentals(email)
+    context['past_rentals'] = queries.host_past_rentals(email)
 
     return render(request,'app/viewself-host.html', context)
 
