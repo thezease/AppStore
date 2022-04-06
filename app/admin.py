@@ -796,14 +796,8 @@ def rentals_edit(request, id):
                         result_dict['status'] = status
                     return render(request, "app/admin_rentals_edit.html", result_dict)
 
-                except DatabaseError as err:
-                    e_msg = str(err.__cause__)
-                    
-                    if 'prior booking' in e_msg:
-                        status = f'Violated constraint: There is already a prior booking.'
-                        result_dict['status'] = status
-                        
-                except InternalError as error:
+                except InternalError as errr:
+                    e_msg = str(errr.__cause__)
                     with connection.cursor() as cursor:
                         cursor.execute(
                             """
@@ -824,11 +818,20 @@ def rentals_edit(request, id):
                             )
                         status = f'Data edited successfully.'
                         result_dict['status'] = status
+                    return render(request, "app/admin_rentals_edit.html", result_dict)
+                
+                except DatabaseError as err:
+                    e_msg = str(err.__cause__)
                     
+                    if 'prior booking' in e_msg:
+                        status = f'Violated constraint: There is already a prior booking.'
+                        result_dict['status'] = status
+                        
+                
                 
                 return render(request, "app/admin_rentals_edit.html", result_dict)
                     
-            return redirect("/admin_rentals")
+        return redirect("/admin_rentals")
     return render(request, "app/admin_rentals_edit.html", result_dict)
 
 
