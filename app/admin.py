@@ -1,7 +1,7 @@
 from readline import insert_text
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.db import IntegrityError, DatabaseError, AttributeError
+from django.db import IntegrityError, DatabaseError
 from django.http import HttpResponse
 
 import re
@@ -804,47 +804,11 @@ def rentals_edit(request, id):
                         result_dict['status'] = status
                         
                     else:
-                        with connection.cursor as cursor:
-                            cursor.execute(
-                                """
-                                UPDATE rentals
-                                SET apartment_id = %s, 
-                                check_in = %s, 
-                                check_out = %s, 
-                                guest = %s,
-                                WHERE rental_id = %s;""",
-                                [
-                                request.POST['apartment_id'],
-                                request.POST['check_in'],
-                                request.POST['check_out'],
-                                request.POST['guest'],
-                                id
-                                ]
-                                )
-                        status = 'Unable to rate before staying. Details updated successfully'
+                        
+                        status = f'Violated constraint: Wrong format. Please follow the required format.'
                         result_dict['status'] = status
                     
-                except AttributeError as error:
-                    e_msg = str(error.__cause__)
-                    with connection.cursor as cursor:
-                        cursor.execute(
-                            """
-                            UPDATE rentals
-                            SET apartment_id = %s, 
-                            check_in = %s, 
-                            check_out = %s, 
-                            guest = %s,
-                            WHERE rental_id = %s;""",
-                            [
-                            request.POST['apartment_id'],
-                            request.POST['check_in'],
-                            request.POST['check_out'],
-                            request.POST['guest'],
-                            id
-                            ]
-                            )
-                        status = 'Unable to rate before staying. Details updated successfully'
-                        result_dict['status'] = status
+                
                 return render(request, "app/admin_rentals_edit.html", result_dict)
                     
             return redirect("/admin_rentals")
