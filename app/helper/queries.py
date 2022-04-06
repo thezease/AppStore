@@ -226,7 +226,7 @@ def get_user_bookings(email:str) -> list[dict]:
 		            apt.price * (tb.check_out - tb.check_in + 1) AS total_price
             FROM tempbookings tb NATURAL JOIN apartments apt
             WHERE tb.guest = %s
-            AND apt.listed = true
+            AND apt.listed = TRUE
             ORDER BY tb.check_in ASC
             """,
             [email]
@@ -238,7 +238,7 @@ def get_user_rentals(email:str) -> list[dict]:
     with connection.cursor() as cursor:
         cursor.execute(
             # uses user-defined SQL function
-            "Select * FROM selected_rental(%s)",
+            "SELECT * FROM selected_rental(%s)",
             [email]
         )
         return dictfetchall_(cursor)
@@ -301,9 +301,10 @@ def get_host_apartments(email:str) -> list[dict]:
                     COALESCE(rts.avg_rating, -1) AS avg_rating,
                     COALESCE(earning.earning, 0) AS earning
                 FROM 
-                apartments apt LEFT JOIN overall_ratings rts ON apt.apartment_id = rts.apartment_id
-                LEFT JOIN
-                (
+                apartments apt LEFT JOIN
+                overall_ratings rts
+                ON apt.apartment_id = rts.apartment_id
+                LEFT JOIN (
                     SELECT apartment_id,  SUM(tp.stay_price) AS earning
                     FROM (
                         SELECT apartment_id, apt.price * (r.check_out - r.check_in + 1) AS stay_price
@@ -326,7 +327,7 @@ def get_host_bookings(email:str) -> list[dict]:
                 """
                 SELECT  apt.country, apt.city, apt.address, tb.check_in, tb.check_out, 
                         apt.price * (tb.check_out - tb.check_in + 1) AS total_price,
-                        tb.tempbooking_id
+                        tb.tempbooking_id, apt.apartment_id
                 FROM tempbookings tb NATURAL JOIN apartments apt
                 WHERE host = %s
                 ORDER BY tb.check_in ASC;
@@ -341,7 +342,8 @@ def host_upcoming_rentals(email:str) -> list[dict]:
         cursor.execute(
                 """
                 SELECT  apt.country, apt.city, apt.address, r.check_in, r.check_out, 
-                        apt.price * (r.check_out - r.check_in + 1) AS total_price
+                        apt.price * (r.check_out - r.check_in + 1) AS total_price,
+                        apt.apartment_id
                 FROM rentals r NATURAL JOIN apartments apt
                 WHERE host = %s
                 AND r.check_in > CURRENT_DATE
@@ -358,7 +360,7 @@ def host_past_rentals(email:str) -> list[dict]:
                 """
                 SELECT  apt.country, apt.city, apt.address, r.check_in, r.check_out, 
                         apt.price * (r.check_out - r.check_in + 1) AS total_price,
-                        COALESCE(r.rating, -1) AS rating
+                        COALESCE(r.rating, -1) AS rating, apt.apartment_id
                 FROM rentals r NATURAL JOIN apartments apt
                 WHERE host = %s
                 AND r.check_out < CURRENT_DATE
