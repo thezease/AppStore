@@ -110,9 +110,9 @@ def apartment(request, apt_id):
             dates_avail = queries.find_apt_availability(request.POST, apt_id)
             result_dict['dates_avail'] = dates_avail
         elif request.POST.get('action') == 'book':
-
             status = queries.user_make_booking(request.POST, apt_id)
             result_dict['status'] = status
+            
 
     return render(request,'app/apartment.html', result_dict)
 
@@ -168,6 +168,9 @@ def viewself_host(request, email):
             return redirect(reverse('edit-apt', kwargs={
                 'email':email, 'apt_id':request.POST['apartment_id']
             }))
+        elif request.POST['action'] == 'unlist-apt':
+            status = queries.host_toggle_apt_listing(request.POST['apartment_id'])
+            context['status'] = status
 
     context['apartments'] = queries.get_host_apartments(email)
     context['bookings'] = queries.get_host_bookings(email)

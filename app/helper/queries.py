@@ -298,9 +298,12 @@ def get_host_apartments(email:str) -> list[dict]:
                     apt.house_rules,
                     apt.price,
                     apt.listed,
-                    apt.avg_rating,
+                    COALESCE(rts.avg_rating, -1) AS avg_rating,
                     COALESCE(earning.earning, 0) AS earning
-                FROM get_all_apartments() apt LEFT JOIN (
+                FROM 
+                apartments apt LEFT JOIN overall_ratings rts ON apt.apartment_id = rts.apartment_id
+                LEFT JOIN
+                (
                     SELECT apartment_id,  SUM(tp.stay_price) AS earning
                     FROM (
                         SELECT apartment_id, apt.price * (r.check_out - r.check_in + 1) AS stay_price
@@ -431,7 +434,29 @@ def host_edit_apt(form:QueryDict, apt_id:int) -> str:
        
         except IntegrityError as e:
             status = str(e.__cause__)
-    
+    return status
+
+def host_toggle_apt_listing(apt_id:int) -> str:
+    """
+    Inverts columne (listed) for an apartment
+    """
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                UPDATE apartments
+                SET listed = (NOT listed)
+                WHERE apartment_id = %s;
+                """,
+                [
+                    apt_id
+                ]
+                )
+            status = 'Apartment listing status changed!'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
     return status
 
 def host_approve_booking(tempbooking_id:int) -> str:
