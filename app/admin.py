@@ -653,7 +653,8 @@ def apartments_add(request):
             else:
                 listed = "FALSE"
             with connection.cursor() as cursor:
-                cursor.execute(
+                try:
+                    cursor.execute(
                     """
                     INSERT INTO apartments (host, country, city, address, num_guests, num_beds, num_bathrooms, property_type, amenities, house_rules, price, listed) 
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)""",
@@ -672,10 +673,22 @@ def apartments_add(request):
                         listed
                     ]
                     )
+                except IntegrityError as ie:
+                    e_msg = str(ie.__cause__)
+                    #regex search to find the column that violated integrity constraint
+                    constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
+                    if str(constraint) == 'apartments_host_fkey':
+                        status = f'Violated constraint: {constraint}. Please type in a valid email.'
+                        context['status'] = status
+                    else:
+                        status = f'Violated constraint: {constraint}. Please follow the required format.'
+                        context['status'] = status 
+                    return render(request, "app/admin_apartments_add.html", context)
                 return redirect('/admin_apartments')    
 
     context['status'] = status
     return render(request, "app/admin_apartments_add.html", context)
+
 
 
 ## Admin Retals Panel
