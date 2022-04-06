@@ -803,7 +803,7 @@ def rentals_edit(request, id):
                     else:
                         status = f'Violated constraint: Wrong Format.'
                         result_dict['status'] = status
-                        
+                    return render(request, "app/admin_rentals_edit.html", result_dict)    
                 
                 
                 return render(request, "app/admin_rentals_edit.html", result_dict)
