@@ -137,7 +137,7 @@
             <th>Check-Out</th>
             <th>Total Price</th>
         </thead>
-        {% for rental in rentals %}
+        {% for rental in upcoming_rentals %}
         <tr>
             <td> {{ rental.country }} </td>
             <td> {{ rental.city }} </td>
@@ -145,6 +145,32 @@
             <td> {{ rental.check_in|date:"Y-M-d" }} </td>
             <td> {{ rental.check_out|date:"Y-M-d" }} </td>
             <td> {{ rental.total_price }} </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <br/>
+
+    <h2>Past Rentals</h2>
+    <table border=1>
+        <thead>
+            <th>Country</th>
+            <th>City</th>
+            <th>Address</th>
+            <th>Check-In</th>
+            <th>Check-Out</th>
+            <th>Total Price</th>
+            <th>Rating</th>
+        </thead>
+        {% for rental in past_rentals %}
+        <tr>
+            <td> {{ rental.country }} </td>
+            <td> {{ rental.city }} </td>
+            <td> {{ rental.address }} </td>
+            <td> {{ rental.check_in|date:"Y-M-d" }} </td>
+            <td> {{ rental.check_out|date:"Y-M-d" }} </td>
+            <td> {{ rental.total_price }} </td>
+            <td> {{ rental.rating }} </td>
         </tr>
         {% endfor %}
     </table>
