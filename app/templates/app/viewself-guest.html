@@ -76,8 +76,8 @@
         <tr>
             <td> {{ bk.country }} </td>
             <td> {{ bk.city }} </td>
-            <td> {{ bk.check_in }} </td>
-            <td> {{ bk.check_out }} </td>
+            <td> {{ bk.check_in|date:"Y-M-d" }} </td>
+            <td> {{ bk.check_out|date:"Y-M-d" }} </td>
             <td> {{ bk.total_price }} </td>
             <td>
                 <form method="POST">
@@ -112,8 +112,8 @@
         <tr>
             <td> {{ rental.country }} </td>
             <td> {{ rental.city }} </td>
-            <td> {{ rental.check_in }} </td>
-            <td> {{ rental.check_out }} </td>
+            <td> {{ rental.check_in|date:"Y-M-d" }} </td>
+            <td> {{ rental.check_out|date:"Y-M-d" }} </td>
             <td> {{ rental.total_price }} </td>
             <td> {{ rental.rating }} </td>
             <td>
