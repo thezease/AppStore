@@ -106,11 +106,13 @@ def apartment(request, apt_id):
     result_dict['apt'] = queries.get_single_apartment(apt_id)
 
     if request.POST:
-        if request.POST['action'] == 'checkavail':
+        if request.POST.get('action') == 'checkavail':
             dates_avail = queries.find_apt_availability(request.POST, apt_id)
             result_dict['dates_avail'] = dates_avail
-        if request.POST['action'] == 'book':
-            pass
+        elif request.POST.get('action') == 'book':
+
+            status = queries.user_make_booking(request.POST, apt_id)
+            result_dict['status'] = status
 
     return render(request,'app/apartment.html', result_dict)
 
@@ -130,6 +132,7 @@ def viewself(request, email):
     if request.POST:
         if request.POST['rate']:
             rental_id = request.POST['rate']
+            # TODO: implement
 
     # call method form helper module queries
     context['user'] = queries.get_single_user(email)

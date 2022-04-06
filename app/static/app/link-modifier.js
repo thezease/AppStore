@@ -28,7 +28,6 @@ function modifyLinks(email) {
     modifyUserLink(email);
     modifyUserGuestLink(email);
     modifyUserHostLink(email);
-    modifyViewAptLink(email);
     return;
 }
 
@@ -65,15 +64,6 @@ function modifyUserHostLink(email) {
     if (userLink !== null){
         userLink.setAttribute("href", '/u='+email+'~'+'/viewself-host');
     }
-    return;
-}
-
-
-function modifyViewAptLink(email) {
-    userLink = document.getElementById("viewapt");
-    if (userLink !== null){
-        userLink.setAttribute("href", '/u='+email+'~'+'/apartment/ {{ apartment.0 }}');
-    } 
     return;
 }
 
