@@ -167,15 +167,17 @@
                         Property type
                         <span class="asteriskField">*</span> 
                     </label>
-                    <div class="controls">
-                        < label for ="id_property_type" class="control-label requiredField">
+                    < label for ="id_property_type" class="control-label requiredField">
                         f'Current Property Type: {apartment.8}'
-                        </label>
+                    </label>
+                    <div class="controls">
                         
-                        <input 
+                        
+                        <p 
                             type="text" name="property_type" 
                             value="{{apartment.8}}"
                             required="" id="id_property_type">
+                        </p>
                         <input 
                             type="radio" value="Luxury Apartment" {{ t1 }}
                             name="property_type" id="id_property_type">
