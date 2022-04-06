@@ -2,9 +2,7 @@
 <html>
 <head>
     <title>Apartment Details</title>
-    <link rel = "stylesheet" href = "{% static '/app/style.css' %}">
-    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
-    
+    {% include 'header_.html' %}
 </head>    
 <body>
     <div class="topnav">
@@ -13,9 +11,11 @@
         <a href="/login" title="Login here" id="authuser">Login</a>
     </div>
 
+    <p style="color:red">{{ status|safe }}</p>
+
     <div id="apartment_bg">
 
-        <h2>Details for Apartment {{ apt.0 }}</h2>
+        <h2>Details for Apartment {{ apt.apartment_id }}</h2>
 
         <br/><br/>
 
@@ -129,7 +129,7 @@
             </a>
         </form>
         
-        <br/><br/>
+        <br/>
         <p>Days available for booking in {{ dates_avail.month }} {{ dates_avail.year }}:</p>
         <p>{{ dates_avail.dates }}</p>
 
@@ -142,12 +142,12 @@
       
             <div id="div_id_login_email" class="control-group">
                 <label for="id_login_email" class="control-label requiredField">
-                    User Email
+                    User email
                     <span class="asteriskField">*</span> 
                 </label>
                 <div class="controls">
                     <input 
-                        type="text" name="login_email" 
+                        type="text" name="email" 
                         maxlength="64" class="textinput textInput" 
                         required="" id="id_login_email">
                 </div>
@@ -164,6 +164,8 @@
                         maxlength="32" class="textinput textInput" 
                         required="" id="id_password">
                 </div>
+            </div>
+
             <div id="div_id_check_in" class ="control-group">
                 <label for = "id_check_in" class="control-label requiredField">
                     Check-in date
@@ -171,26 +173,28 @@
                 </label>
                 <div class="controls">
                     <input
-                        type="text" name="check_in"
+                        type="date" name="check_in"
+                        min={% now "Y-m-d" %}
                         class="dateinput" required=""
                         id="id_check_in">
                 </div>
-                <div id="div_id_check_out" class ="control-group">
-                    <label for = "id_check_out" class="control-label requiredField">
-                        Check-out date
-                        <span class = "asteriskField">*</span>
-                    </label>
-                    <div class="controls">
-                        <input
-                            type="text" name="check_out"
-                            class="dateinput" required=""
-                            id="id_check_out">
-                    </div>
             </div>
-            </div>
-      
 
-            <button type="submit" name="action " value="book">Book</button>
+            <div id="div_id_check_out" class ="control-group">
+                <label for = "id_check_out" class="control-label requiredField">
+                    Check-out date
+                    <span class = "asteriskField">*</span>
+                </label>
+                <div class="controls">
+                    <input
+                        type="date" name="check_out"
+                        min={% now "Y-m-d" %}
+                        class="dateinput" required=""
+                        id="id_check_out">
+                </div>
+            </div>      
+
+            <button type="submit" name="action" value="book">Book</button>
          
         </form>
         

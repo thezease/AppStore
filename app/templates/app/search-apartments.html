@@ -2,9 +2,7 @@
 <html>
 <head>
     <title>Search Apartments</title>
-    <link rel = "stylesheet" href = "{% static '/app/style.css' %}">
-    <script type="text/javascript" src="{% static 'app/link-modifier.js' %}"></script>
-    
+    {% include 'header_.html' %}
 </head> 
 <body>
     <div class="topnav">
@@ -114,7 +112,7 @@
                 <td> {{ apartment.price }} </td>
                 <td> {{ apartment.avg_rating }} </td>
                 <td> 
-                    <a href="apartment/{{ apartment.apartment_id }}" id="viewapt"><button>View</button></a> 
+                    <a href="apartment/{{apartment.apartment_id}}" id="viewapt"><button>View</button></a> 
                 </td>
             </tr>
             {% endfor %}

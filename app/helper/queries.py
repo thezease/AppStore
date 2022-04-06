@@ -457,7 +457,33 @@ def host_delete_booking(tempbooking_id:int) -> str:
     
     return status
 
+def user_make_booking(form:QueryDict, apt_id:int) -> bool:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                INSERT INTO tempbookings (
+                    apartment_id,
+                    check_in,
+                    check_out,
+                    guest
+                )
+                VALUES (%s, %s, %s, %s)
+                """,
+                [
+                    apt_id,
+                    form['check_in'],
+                    form['check_out'],
+                    form['email'],
+                ]
+            )
+            status = 'Aparment has been booked. Waiting for approval from host.'
+       
+        except IntegrityError as e:
+            status = str(e.__cause__)
 
+    return status
 
 """ Reference Data """
 # for use in queries.find_apt_availability
