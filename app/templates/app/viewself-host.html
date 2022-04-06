@@ -64,7 +64,13 @@
                         <form method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="apartment_id" value={{ apt.apartment_id }}>
-                        <button name="action" value="unlist-apt">Unlist</button>
+                        <button name="action" value="unlist-apt">
+                            {% if apt.listed %}
+                                Unlist
+                            {% else %}
+                                List
+                            {% endif %}
+                        </button>
                         </form>
                     </td>
                     </tr>
