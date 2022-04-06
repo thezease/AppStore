@@ -677,7 +677,7 @@ def apartments_add(request):
                     e_msg = str(ie.__cause__)
                     #regex search to find the column that violated integrity constraint
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    if str(constraint) == 'apartments_host_fkey':
+                    if str(constraint) == 'users':
                         status = f'Violated constraint: {constraint}. Please type in a valid email.'
                         context['status'] = status
                     else:
