@@ -757,15 +757,13 @@ def rentals_edit(request, id):
                         SET apartment_id = %s, 
                         check_in = %s, 
                         check_out = %s, 
-                        guest = %s,
-                        rating = %s
+                        guest = %s
                         WHERE rental_id = %s;""",
                         [
                             request.POST['apartment_id'],
                             request.POST['check_in'],
                             request.POST['check_out'],
                             request.POST['guest'],
-                            request.POST['rating'],
                             id
                         ]
                         )
