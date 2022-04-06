@@ -309,6 +309,7 @@ def get_host_apartments(email:str) -> list[dict]:
                     FROM (
                         SELECT apartment_id, apt.price * (r.check_out - r.check_in + 1) AS stay_price
                         FROM rentals r NATURAL JOIN apartments apt
+                        WHERE r.check_out < CURRENT_DATE
                     ) AS tp
                     GROUP BY apartment_id
                 ) AS earning
