@@ -802,6 +802,9 @@ def rentals_edit(request, id):
                     if 'prior booking' in e_msg:
                         status = f'Violated constraint: There is already a prior booking.'
                         result_dict['status'] = status
+                    else:
+                        status = f'Violated constraint: Wrong Format.'
+                        result_dict['status'] = status
                         
                 except InternalError as error:
                     with connection.cursor() as cursor:
@@ -811,8 +814,7 @@ def rentals_edit(request, id):
                             SET apartment_id = %s, 
                             check_in = %s, 
                             check_out = %s, 
-                            guest = %s,
-                            rating = NULL
+                            guest = %s
                             WHERE rental_id = %s;""",
                             [
                             request.POST['apartment_id'],
@@ -822,7 +824,7 @@ def rentals_edit(request, id):
                             id
                             ]
                             )
-                        status = f'Data edited successfully.'
+                        status = 'Data edited successfully.'
                         result_dict['status'] = status
                     
                 
