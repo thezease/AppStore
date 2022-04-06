@@ -774,11 +774,9 @@ def rentals_edit(request, id):
                     e_msg = str(e.__cause__)
                     # regex search to find the column that violated integrity constraint
                     constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
-                    if e_msg == 'unable to rate before staying':
-                        status = f'Violated constraint: {constraint}. Unable to rate before staying.Please leave the value as it is.'
-                        result_dict['status'] = status
+                    
      
-                    elif constraint == 'rentals_check':
+                    if constraint == 'rentals_check':
                         status = f'Violated constraint: {constraint}. Invalid check in/check out date.Please ensure check in date is earlier than check out date.'
                         result_dict['status'] = status
                     elif constraint == 'rentals_guest_fkey':
@@ -868,6 +866,9 @@ def rentals_add(request):
                         status = f'Violated constraint: There is already a prior booking.'
                         result_dict['status'] = status
                         
+                    elif 'unable to rate before staying' in e_msg:
+                        status = f'Violated constraint: {constraint}. Unable to rate before staying.Please leave the value as it is.'
+                        result_dict['status'] = status
                     else:
                         constraint = re.findall(r'(?<=\")[A-Za-z\_]*(?=\")', e_msg)[-1]
                         status = f'Violated constraint: {constraint}. Invalid date.Please enter a valid date.'
