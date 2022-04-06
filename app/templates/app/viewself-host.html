@@ -98,8 +98,8 @@
             <td> {{ bk.country }} </td>
             <td> {{ bk.city }} </td>
             <td> {{ bk.address }} </td>
-            <td> {{ bk.check_in }} </td>
-            <td> {{ bk.check_out }} </td>
+            <td> {{ bk.check_in|date:"Y-M-d" }} </td>
+            <td> {{ bk.check_out|date:"Y-M-d" }} </td>
             <td> {{ bk.total_price }} </td>
             <td>
                 <table>
@@ -142,8 +142,8 @@
             <td> {{ rental.country }} </td>
             <td> {{ rental.city }} </td>
             <td> {{ rental.address }} </td>
-            <td> {{ rental.check_in }} </td>
-            <td> {{ rental.check_out }} </td>
+            <td> {{ rental.check_in|date:"Y-M-d" }} </td>
+            <td> {{ rental.check_out|date:"Y-M-d" }} </td>
             <td> {{ rental.total_price }} </td>
         </tr>
         {% endfor %}
