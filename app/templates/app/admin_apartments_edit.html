@@ -113,7 +113,7 @@
 
                 <div id="div_id_num_guests" class="control-group">
                     <label for="id_num_guests" class="control-label requiredField">
-                        Number of guests (<= number of guests)
+                        Number of guests (<= number of beds)
                         <span class="asteriskField">*</span> 
                     </label>
                     <div class="controls">
@@ -135,12 +135,12 @@
                     </label>
                     <div class="controls">
                         <input 
-                            type="tel" name="num_beds" 
+                            type="number" name="num_beds" 
                             inputmode="numeric"
                             value="{{apartment.6}}"
                             minlength="1"
                             maxlength="5" class="textinput textInput"
-                            size = 5
+                            min="1" step="1"
                             required="" id="id_num_beds">
                     </div>
                 </div>
@@ -152,12 +152,12 @@
                     </label>
                     <div class="controls">
                         <input 
-                            type="tel" name="num_bathrooms"
+                            type="number" name="num_bathrooms"
                             inputmode="numeric"
                             value="{{apartment.7}}"
                             minlength="1"
                             maxlength="5" class="textinput textInput"
-                            size = 5
+                            min="1" step="1"
                             required="" id="id_num_bathrooms">
                     </div>
                 </div>
@@ -169,12 +169,23 @@
                     </label>
                     <div class="controls">
                         <input 
-                            type="text" name="property_type" 
+                            type="radio" name="property_type" 
                             value="{{apartment.8}}"
-                            minlength="1"
-                            maxlength="64" class="textinput textInput"
-                            size = 64
                             required="" id="id_property_type">
+                        <input 
+                            type="radio" value="Luxury Apartment" {{ t1 }}
+                            name="property_type" id="id_property_type">
+                        <label for="Luxury Apartment">Luxury Apartment</label>
+
+                        <input 
+                            type="radio" value="Bungalow" {{ t2 }}
+                            name="property_type" id="id_property_type">
+                        <label for="Bungalow">Bungalow</label>
+
+                        <input 
+                            type="radio" value="Apartment" {{ t3 }}
+                            name="property_type" id="id_property_type">
+                        <label for="Apartment">Apartment</label>
                     </div>
                 </div>
 
