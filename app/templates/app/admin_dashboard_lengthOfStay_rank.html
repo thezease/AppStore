@@ -42,12 +42,14 @@
         <main>
             <table border=1>
                 <thead>
+                    <th>Rank</th>
                     <th>Rental ID</th>
                     <th>Guest Email</th>
                     <th>Lengths of stay (days)</th>
                 </thead>
                 {% for rank in Records %}
                 <tr>
+                    <td> {{ rank.3 }} </td>
                     <td> {{ rank.0 }} </td>
                     <td> {{ rank.1 }} </td>
                     <td> {{ rank.2 }} </td>

@@ -164,9 +164,9 @@ def dashboard_lengthOfStay_rank(request):
     """Shows lengths of stay ranking for all rentals DESC"""
     
     with connection.cursor() as cursor:
-        cursor.execute("""SELECT rental_id, guest, (check_out-check_in) AS length_of_stay
-                        FROM rentals
-                        ORDER BY length_of_stay DESC;""")
+        cursor.execute("""SELECT rental_id, guest, (check_out-check_in) AS length_of_stay, \
+                        ROW_NUMBER() OVER (ORDER BY (check_out-check_in) DESC) AS rank \
+                        FROM rentals;""")
         rank = cursor.fetchall()
 
     result_dict = {'Records': rank}
