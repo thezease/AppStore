@@ -804,7 +804,7 @@ def rentals_edit(request, id):
                         result_dict['status'] = status
                         
                     else:
-                        with connection.cursor as cursor:
+                        with connection.cursor() as cursor:
                             cursor.execute(
                                 """
                                 UPDATE rentals
