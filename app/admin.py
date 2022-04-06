@@ -857,7 +857,8 @@ def rentals_add(request):
                     else:
                         status = f'Violated constraint: {constraint}. Please follow the required format.'
                         result_dict['status'] = status
-                  
+                     return render(request, "app/admin_rentals_add.html", result_dict)
+                
                 except DatabaseError as err:
                     e_msg = str(err.__cause__)
                     
