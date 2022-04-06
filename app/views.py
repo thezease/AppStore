@@ -241,12 +241,12 @@ def checkpw(request, email):
                     'americanexpress': 'americanexpress',
                     'mastercard': 'mastercard',
                 }
-                context = radio_helper(context, card_types, user['credit_card_type'])
+                result_dict = radio_helper(result_dict, card_types, user['credit_card_type'])
                 return render(request, "app/edit.html", result_dict)
             else:
                 status = 'Incorrect password!'
-                context = {'status': status}
-                return render(request, "app/checkpw.html", context)
+                result_dict = {'status': status}
+                return render(request, "app/checkpw.html", result_dict)
 
 
         elif request.POST['action'] == 'Update':
@@ -260,7 +260,7 @@ def checkpw(request, email):
                     'americanexpress': 'americanexpress',
                     'mastercard': 'mastercard',
                 }
-            context = radio_helper(context, card_types, user['credit_card_type'])
+            result_dict = radio_helper(result_dict, card_types, user['credit_card_type'])
 
             return render(request, "app/edit.html", result_dict)
 

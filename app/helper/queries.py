@@ -493,7 +493,7 @@ def host_approve_booking(tempbooking_id:int) -> str:
             )
             status = 'Booking approved!'
        
-        except IntegrityError as e:
+        except (IntegrityError, InternalError) as e:
             status = str(e.__cause__)
     
     return status
