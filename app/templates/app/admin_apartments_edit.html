@@ -167,32 +167,16 @@
                         Property type
                         <span class="asteriskField">*</span> 
                     </label>
-                    < label for ="id_property_type" class="control-label requiredField">
-                        string.format(Current Property Type: {apartment.8}')
-                    </label>
+                    
                     <div class="controls">
                         
-                        
-                        <p 
-                           string.format(Current Property Type: {apartment.8}')>
-                        </p>
-                        <p>
-                        string.format(Current Property Type: {apartment.8}')
-                        </p>
                         <input 
-                            type="radio" value="Luxury Apartment" {{ t1 }}
-                            name="property_type" id="id_property_type">
-                        <label for="Luxury Apartment">Luxury Apartment</label>
-
-                        <input 
-                            type="radio" value="Bungalow" {{ t2 }}
-                            name="property_type" id="id_property_type">
-                        <label for="Bungalow">Bungalow</label>
-
-                        <input 
-                            type="radio" value="Apartment" {{ t3 }}
-                            name="property_type" id="id_property_type">
-                        <label for="Apartment">Apartment</label>
+                            type="text" name="property_type" 
+                            value="{{apartment.8}}"
+                            minlength="1"
+                            maxlength="64" class="textinput textInput"
+                            size = 64
+                            required="" id="id_property_type">
                     </div>
                 </div>
 
