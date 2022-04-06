@@ -1,7 +1,7 @@
 from readline import insert_text
 from django.shortcuts import render, redirect
 from django.db import connection
-from django.db import IntegrityError, DatabaseError
+from django.db import IntegrityError, DatabaseError, Internal Error
 from django.http import HttpResponse
 
 import re
@@ -803,25 +803,25 @@ def rentals_edit(request, id):
                         status = f'Violated constraint: There is already a prior booking.'
                         result_dict['status'] = status
                         
-                    else:
-                        with connection.cursor() as cursor:
-                            cursor.execute(
-                                """
-                                UPDATE rentals
-                                SET apartment_id = %s, 
-                                check_in = %s, 
-                                check_out = %s, 
-                                guest = %s,
-                                rating = NULL
-                                WHERE rental_id = %s;""",
-                                [
-                                request.POST['apartment_id'],
-                                request.POST['check_in'],
-                                request.POST['check_out'],
-                                request.POST['guest'],
-                                id
-                                ]
-                                )
+                except InternalError as error:
+                    with connection.cursor() as cursor:
+                        cursor.execute(
+                            """
+                            UPDATE rentals
+                            SET apartment_id = %s, 
+                            check_in = %s, 
+                            check_out = %s, 
+                            guest = %s,
+                            rating = NULL
+                            WHERE rental_id = %s;""",
+                            [
+                            request.POST['apartment_id'],
+                            request.POST['check_in'],
+                            request.POST['check_out'],
+                            request.POST['guest'],
+                            id
+                            ]
+                            )
                         status = f'Data edited successfully.'
                         result_dict['status'] = status
                     
