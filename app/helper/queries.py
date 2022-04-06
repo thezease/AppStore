@@ -5,7 +5,7 @@ To be called by app/views.py
 from __future__ import annotations
 
 from django.db import connection
-from django.db import IntegrityError, DatabaseError
+from django.db import IntegrityError, InternalError, DatabaseError
 
 import re
 
@@ -222,7 +222,7 @@ def get_user_bookings(email:str) -> list[dict]:
     with connection.cursor() as cursor:
         cursor.execute(
             """
-            SELECT  apt.country, apt.city, tb.check_in, tb.check_out, 
+            SELECT  tb.tempbooking_id, apt.country, apt.city, tb.check_in, tb.check_out, 
 		            apt.price * (tb.check_out - tb.check_in + 1) AS total_price
             FROM tempbookings tb NATURAL JOIN apartments apt
             WHERE tb.guest = %s
@@ -244,7 +244,7 @@ def get_user_rentals(email:str) -> list[dict]:
         return dictfetchall_(cursor)
 
 
-def update_rental_rating(rental_id:int, new_rating:int) -> bool:
+def user_update_rental_rating(rental_id:int, new_rating:int) -> str:
     status = ''
     with connection.cursor() as cursor:
         try:
@@ -258,9 +258,27 @@ def update_rental_rating(rental_id:int, new_rating:int) -> bool:
                 )
             status = 'Rating added/updated!'
        
+        except (IntegrityError, InternalError) as e:
+            status = str(e.__cause__)
+    return status
+
+def user_delete_booking(tempbooking_id:int) -> str:
+    status = ''
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(
+                """
+                DELETE FROM tempbookings
+                WHERE tempbooking_id = %s
+                """,
+                [
+                    tempbooking_id
+                ]
+            )
+            status = 'Booking deleted.'
+       
         except IntegrityError as e:
             status = str(e.__cause__)
-
     return status
 
 def get_host_apartments(email:str) -> list[dict]:
@@ -438,24 +456,7 @@ def host_approve_booking(tempbooking_id:int) -> str:
     return status
 
 def host_delete_booking(tempbooking_id:int) -> str:
-    status = ''
-    with connection.cursor() as cursor:
-        try:
-            cursor.execute(
-                """
-                DELETE FROM tempbookings
-                WHERE tempbooking_id = %s
-                """,
-                [
-                    tempbooking_id
-                ]
-            )
-            status = 'Booking deleted.'
-       
-        except IntegrityError as e:
-            status = str(e.__cause__)
-    
-    return status
+    return user_delete_booking(tempbooking_id)
 
 def user_make_booking(form:QueryDict, apt_id:int) -> bool:
     status = ''

@@ -130,9 +130,15 @@ def viewself(request, email):
     context = {}
     
     if request.POST:
-        if request.POST['rate']:
-            rental_id = request.POST['rate']
-            # TODO: implement
+        if request.POST['action'] == 'rate':
+            status = queries.user_update_rental_rating(
+                request.POST['rental_id'],
+                request.POST['rating'],
+            )
+            context['rate_status'] = status
+        elif request.POST['action'] == 'delete_booking':
+            status = queries.user_delete_booking(request.POST['tempbooking_id'])
+            context['delete_booking_status'] = status
 
     # call method form helper module queries
     context['user'] = queries.get_single_user(email)

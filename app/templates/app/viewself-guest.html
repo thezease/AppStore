@@ -21,7 +21,7 @@
 
     <br/>
 
-    <h2>Details for {{user.0}} {{user.1}}</h2>
+    <h2>Details for {{user.first_name}} {{user.last_name}}</h2>
     
     <br/>
 
@@ -62,6 +62,7 @@
     <br/><br/>
 
     <h2>Current Bookings</h2>
+    <p style="color:red">{{ delete_booking_status|safe }}</p>
     <table border=1>
         <thead>
             <th>Country</th>
@@ -78,7 +79,17 @@
             <td> {{ bk.check_in }} </td>
             <td> {{ bk.check_out }} </td>
             <td> {{ bk.total_price }} </td>
-            <td> <button>Cancel Booking</button> </td>
+            <td>
+                <form method="POST">
+                    {% csrf_token %}
+                    <input 
+                        type="hidden" name="tempbooking_id" 
+                        value={{ bk.tempbooking_id }}>
+                    <button type="submit" name="action" value="delete_booking">
+                        Delete
+                    </button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
@@ -86,7 +97,7 @@
     <br/><br/>
 
     <h2>Rental History</h2>
-    <p style="color:red">{{ status|safe }}</p>
+    <p style="color:red">{{ rate_status|safe }}</p>
     <table border=1>
         <thead>
             <th>Country</th>
@@ -108,7 +119,13 @@
             <td>
                 <form method="POST">
                     {% csrf_token %}
-                    <button type="submit" name="rate" value={{ rental.rental_id }}>
+                    <input 
+                        type="hidden" name="rental_id" 
+                        value={{ rental.rental_id }}>
+                    <input 
+                        type="number" name="rating"
+                        min="1" max="5" step="1">
+                    <button type="submit" name="action" value="rate">
                         Add/Update Rating
                     </button>
                 </form>
@@ -116,10 +133,6 @@
         </tr>
         {% endfor %}
     </table>
-
-    <br/><br/>
-
-    <a href="/" title="Log out of the App"><button>Log Out</button></a>
 
     <br/><br/>
 
