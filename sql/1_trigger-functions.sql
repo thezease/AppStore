@@ -21,7 +21,7 @@ LANGUAGE plpgsql;
 
 --
 CREATE TRIGGER overlap
-BEFORE INSERT on rentals
+BEFORE INSERT OR UPDATE on rentals
 FOR EACH ROW
 EXECUTE FUNCTION checkoverlap();
 
