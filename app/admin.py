@@ -803,7 +803,7 @@ def rentals_edit(request, id):
                         status = f'Violated constraint: There is already a prior booking.'
                         result_dict['status'] = status
                         
-                    elif 'unable to rate before staying' in e_msg:
+                    else:
                         with connection.cursor as cursor:
                             cursor.execute(
                                 """
@@ -823,9 +823,7 @@ def rentals_edit(request, id):
                                 )
                         status = 'Unable to rate before staying. Details updated successfully'
                         result_dict['status'] = status
-                    else:
-                        status = f'Violated constraint: Wrong format. Please follow the required format.'
-                        result_dict['status'] = status
+                    
                     return render(request, "app/admin_rentals_edit.html", result_dict)
                     
             return redirect("/admin_rentals")
