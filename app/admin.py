@@ -812,6 +812,7 @@ def rentals_edit(request, id):
                                 check_in = %s, 
                                 check_out = %s, 
                                 guest = %s,
+                                rating = NULL
                                 WHERE rental_id = %s;""",
                                 [
                                 request.POST['apartment_id'],
