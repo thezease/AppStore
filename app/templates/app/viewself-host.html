@@ -29,6 +29,7 @@
     <br/>
     <table border=1>
         <thead>
+            <th>ID</th>
             <th>Country</th>
             <th>City</th>
             <th>Address</th>
@@ -40,6 +41,7 @@
         </thead>
         {% for apt in apartments %}
         <tr>
+            <td> {{ apt.apartment_id }} </td>
             <td> {{ apt.country }} </td>
             <td> {{ apt.city }} </td>
             <td> {{ apt.address }} </td>
@@ -85,6 +87,7 @@
     <h2>Approve Bookings</h2>
     <table border=1>
         <thead>
+            <th>Apt</th>
             <th>Country</th>
             <th>City</th>
             <th>Address</th>
@@ -95,6 +98,7 @@
         </thead>
         {% for bk in bookings %}
         <tr>
+            <td> {{ bk.apartment_id }} </td>
             <td> {{ bk.country }} </td>
             <td> {{ bk.city }} </td>
             <td> {{ bk.address }} </td>
@@ -130,6 +134,7 @@
     <h2>Upcoming Rentals</h2>
     <table border=1>
         <thead>
+            <th>Apt</th>
             <th>Country</th>
             <th>City</th>
             <th>Address</th>
@@ -139,6 +144,7 @@
         </thead>
         {% for rental in upcoming_rentals %}
         <tr>
+            <td> {{ rental.apartment_id }} </td>
             <td> {{ rental.country }} </td>
             <td> {{ rental.city }} </td>
             <td> {{ rental.address }} </td>
@@ -154,6 +160,7 @@
     <h2>Past Rentals</h2>
     <table border=1>
         <thead>
+            <th>Apt</th>
             <th>Country</th>
             <th>City</th>
             <th>Address</th>
@@ -164,6 +171,7 @@
         </thead>
         {% for rental in past_rentals %}
         <tr>
+            <td> {{ rental.apartment_id }} </td>
             <td> {{ rental.country }} </td>
             <td> {{ rental.city }} </td>
             <td> {{ rental.address }} </td>
