@@ -15,7 +15,7 @@ DROP TABLE IF EXISTS users CASCADE;
 -- Clear all functions
 DROP FUNCTION IF EXISTS checkdate;
 DROP FUNCTION IF EXISTS checkoverlap;
-DROP FUNCTION IF EXISTS rentals;
+DROP FUNCTION IF EXISTS add_to_rentals;
 
 DROP FUNCTION IF EXISTS get_all_apartments;
 DROP FUNCTION IF EXISTS get_apartment;
