@@ -819,7 +819,7 @@ def rentals_edit(request, id):
                                 request.POST['check_in'],
                                 request.POST['check_out'],
                                 request.POST['guest'],
-                                ,
+                                NULL,
                                 id
                                 ]
                                 )
