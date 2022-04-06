@@ -804,8 +804,26 @@ def rentals_edit(request, id):
                         result_dict['status'] = status
                         
                     else:
-                        status = f'Violated constraint: Wrong format. Please follow the required format.'
+                        with connection.cursor as cursor:
+                            cursor.execute(
+                                """
+                                UPDATE rentals
+                                SET apartment_id = %s, 
+                                check_in = %s, 
+                                check_out = %s, 
+                                guest = %s,
+                                WHERE rental_id = %s;""",
+                                [
+                                request.POST['apartment_id'],
+                                request.POST['check_in'],
+                                request.POST['check_out'],
+                                request.POST['guest'],
+                                id
+                                ]
+                                )
+                        status = 'Unable to rate before staying. Details updated successfully'
                         result_dict['status'] = status
+                    
                     return render(request, "app/admin_rentals_edit.html", result_dict)
                     
             return redirect("/admin_rentals")
