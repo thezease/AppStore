@@ -259,7 +259,7 @@ def user_update_rental_rating(rental_id:int, new_rating:int) -> str:
             status = 'Rating added/updated!'
        
         except (IntegrityError, InternalError) as e:
-            status = str(e.__cause__)
+            status = 'unable to rate before staying'
     return status
 
 def user_delete_booking(tempbooking_id:int) -> str:
